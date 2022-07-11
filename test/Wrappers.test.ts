@@ -1,4 +1,4 @@
-import { showWrapper } from './example/common'
+import { showWrapper } from './common'
 import { decode } from 'he'
 import { elementsModules, wrapperModules } from '../src/activeModules'
 import { wrapper } from '../src/modules/wrapper'

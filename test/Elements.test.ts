@@ -1,4 +1,4 @@
-import { showComponent } from './example/common'
+import { showComponent } from './common'
 import { elementsModules as activeElementModules } from '../src/activeModules'
 
 const elementModules = activeElementModules.map((em) => em.name)

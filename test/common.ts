@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { GenericComponent, WrapperModule } from '../../src/modules/Module'
+import { GenericComponent, WrapperModule } from '../src/modules/Module'
 
 const baseUrl = 'https://example.com'
 

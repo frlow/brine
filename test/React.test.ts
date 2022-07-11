@@ -1,5 +1,5 @@
 import { wrapperModules } from '../src/activeModules'
-import { manualWrapper, showWrapper } from './example/common'
+import { manualWrapper, showWrapper } from './common'
 import { decode } from 'he'
 import esbuild from 'esbuild'
 import { fakeFilePlugin } from '../src/utils/fakeFilePlugin'

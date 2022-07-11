@@ -1,4 +1,4 @@
-import { showComponent, showWrapper } from './example/common'
+import { showComponent, showWrapper } from './common'
 import { wrapperModules } from '../src/activeModules'
 
 describe('Utils', () => {
