@@ -12,6 +12,7 @@
     "start": "ts-node src/cli.ts start test/example -x ex -o test/dist",
     "build:cli": "tsc",
     "build:docs": "ts-node src/cli.ts build && pushstate-server -d ./generated/docs -f ./index.html",
+    "build:example": "ts-node src/cli.ts build test/example -x ex -o test/dist",
     "brine": "ts-node src/cli.ts",
     "test": "jest"
   },
