@@ -44,6 +44,7 @@ ${loadedSnippet}
           })
         )
       )
+      await new Promise((r) => setTimeout(() => r(''), 5))
     }
     const text = await page.evaluate(
       () => document.getElementById('app')!.children[1].textContent

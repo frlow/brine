@@ -9,10 +9,9 @@
     "dist"
   ],
   "scripts": {
-    "start": "ts-node src/cli.ts start test/example -x ex -o test/dist",
+    "start": "yon brine start test/example -x ex -o test/dist",
     "build:cli": "tsc",
-    "build:docs": "ts-node src/cli.ts build && pushstate-server -d ./generated/docs -f ./index.html",
-    "build:example": "ts-node src/cli.ts build test/example -x ex -o test/dist",
+    "build:example": "yon brine build test/example -x ex -o test/dist",
     "brine": "ts-node src/cli.ts",
     "test": "jest"
   },
@@ -60,7 +59,8 @@
     "jest": "^27.5.1",
     "jest-environment-puppeteer": "^6.0.3",
     "puppeteer": "^14.1.0",
-    "ts-jest": "^27.1.5"
+    "ts-jest": "^27.1.5",
+    "yarn-or-npm": "^3.0.1"
   },
   "bin": {
     "ucp": "./dist/cli.js"

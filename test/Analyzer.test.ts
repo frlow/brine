@@ -26,7 +26,7 @@ describe('Analyzer', () => {
       path.join('test', 'example'),
       elementsModules,
       'ex',
-      'dist',
+      path.join('test', 'dist'),
       writeFile
     )
     results = analyzerResult.analysisResults.map((ar) => ({
