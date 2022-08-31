@@ -1,15 +1,9 @@
 #!/usr/bin/env node
 import commandLineArgs, { OptionDefinition } from 'command-line-args'
 import { build } from './modules/build'
-import { bundle } from './modules/bundle'
-import { analyze } from './modules/analyze'
-import { wrapper } from './modules/wrapper'
 import { watch } from 'chokidar'
 import { docs, startReloadServer, writeDocs } from './modules/docs'
-import fs from 'fs'
 import path from 'path'
-import { importTypes } from './modules/importedTypes'
-import { elementsModules, wrapperModules } from './activeModules'
 import { writeFile } from './utils/writeFile'
 import { runStages } from './stages'
 
