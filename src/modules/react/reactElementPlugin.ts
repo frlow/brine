@@ -1,5 +1,5 @@
 import esbuild from 'esbuild'
-import { AsyncCache, getFullPath, getUrlParams } from '../../utils/pluginUtils'
+import { AsyncCache } from '../../utils/pluginUtils'
 import path from 'path'
 import { kebabize } from '../../utils/kebabize'
 import { SyntaxKind } from 'typescript'

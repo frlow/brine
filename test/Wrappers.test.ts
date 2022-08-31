@@ -1,7 +1,6 @@
 import { showWrapper } from './common'
 import { decode } from 'he'
 import { elementsModules, wrapperModules } from '../src/activeModules'
-import { wrapper } from '../src/modules/wrapper'
 import { AnalysisResult, analyze } from '../src/modules/analyze'
 import { getFileMap } from '../src/utils/findFiles'
 import path from 'path'

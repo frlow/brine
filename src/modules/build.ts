@@ -1,4 +1,4 @@
-import esbuild, { Plugin } from 'esbuild'
+import esbuild from 'esbuild'
 import path from 'path'
 import fs from 'fs'
 import { findFiles } from '../utils/findFiles'

@@ -1,4 +1,4 @@
-import esbuild, { Plugin } from 'esbuild'
+import { Plugin } from 'esbuild'
 import { AnalysisResult, AnalyzeFileFunction } from './analyze'
 import { GenerateWrapperFunction } from './wrapper'
 import { Dictionary } from '../utils/types'

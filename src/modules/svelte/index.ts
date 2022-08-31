@@ -1,7 +1,6 @@
-import { ElementsModule, WrapperModule } from '../Module'
+import { ElementsModule } from '../Module'
 import { analyzeSvelteFile } from './svelteAnalyzer'
 import { svelteElementPlugin } from './svelteElementPlugin'
-import { svelteWrapperGenerator } from './svelteWrapper'
 import glob from 'glob'
 import fs from 'fs'
 

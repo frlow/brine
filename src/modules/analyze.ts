@@ -1,4 +1,3 @@
-import { findFiles } from '../utils/findFiles'
 import { SourceFile, TypeNode } from 'typescript'
 import { HTMLDataV1, ITagData } from 'vscode-html-languageservice'
 import { kebabize } from '../utils/kebabize'

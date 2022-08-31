@@ -1,6 +1,6 @@
 import path from 'path'
 import { AnalysisResult } from './analyze'
-import { findFiles, getComponentName, getFileMap } from '../utils/findFiles'
+import { getFileMap } from '../utils/findFiles'
 import { WriteFileFunc } from '../utils/writeFile'
 
 export type WrapperFile = {

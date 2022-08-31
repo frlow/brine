@@ -3,6 +3,6 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
 module.exports = async (args) => {
-  await exec('yon build:example')
+  await exec('yarn build:example')
   await baseSetup(args)
 }

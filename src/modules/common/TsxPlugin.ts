@@ -1,5 +1,5 @@
 import esbuild from 'esbuild'
-import { AsyncCache, getFullPath, getUrlParams } from '../../utils/pluginUtils'
+import { getFullPath, getUrlParams } from '../../utils/pluginUtils'
 
 export const tsxPlugin: esbuild.Plugin = {
   name: 'ucp-tsx-plugin',
