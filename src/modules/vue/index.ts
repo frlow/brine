@@ -1,4 +1,4 @@
-import vuePlugin from './plugin'
+import { vuePlugin } from './plugin'
 import { ElementsModule, WrapperModule } from '../Module'
 import { analyzeVueFile } from './vueAnalyzer'
 import { vueWrapperGenerator } from './vueWrapper'
