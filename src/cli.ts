@@ -11,6 +11,7 @@ import path from 'path'
 import { importTypes } from './modules/importedTypes'
 import { elementsModules, wrapperModules } from './activeModules'
 import { writeFile } from './utils/writeFile'
+import { runStages } from './stages'
 
 const validateVariable = <T>(value: T, name: string): T => {
   if (!value) {
@@ -18,61 +19,6 @@ const validateVariable = <T>(value: T, name: string): T => {
     process.exit(0)
   }
   return value as T
-}
-
-async function runBuild(
-  dist: string,
-  source: string,
-  prefix: string,
-  external: string[],
-  autoImport: boolean
-) {
-  const startTime = new Date().getTime()
-  if (fs.existsSync(dist)) fs.rmSync(dist, { recursive: true })
-  const analyzerResult = await analyze(
-    source,
-    elementsModules,
-    prefix,
-    dist,
-    writeFile
-  )
-  await importTypes(analyzerResult.analysisResults, dist)
-  await wrapper(
-    dist,
-    analyzerResult.analysisResults,
-    wrapperModules.map((wm) => ({
-      name: wm.fileType,
-      wrapperFunction: wm.generateFunc,
-    })),
-    prefix,
-    false,
-    writeFile
-  )
-  await build({
-    dist,
-    source,
-    modules: elementsModules,
-    external,
-    prefix,
-    analysisResults: analyzerResult.analysisResults,
-  })
-  await bundle(dist)
-  if (autoImport) {
-    await wrapper(
-      dist,
-      analyzerResult.analysisResults,
-      wrapperModules.map((wm) => ({
-        name: wm.fileType,
-        wrapperFunction: wm.generateFunc,
-      })),
-      prefix,
-      true,
-      writeFile
-    )
-  }
-
-  const endTime = new Date().getTime()
-  console.log(`Build finished in: ${endTime - startTime} ms`)
 }
 
 ;(async () => {
@@ -108,7 +54,7 @@ async function runBuild(
     const autoImport: boolean = !!buildOptions['auto-import']
     const noDocs: boolean = !!buildOptions['no-docs']
     if (command === 'build') {
-      await runBuild(dist, source, prefix, external, autoImport)
+      await runStages(dist, source, prefix, external, autoImport)
       if (!noDocs) await writeDocs(source, prefix, prefix, dist, writeFile)
     } else if (command === 'start') {
       let timeout: NodeJS.Timeout
@@ -126,7 +72,7 @@ async function runBuild(
         clearTimeout(timeout)
         timeout = setTimeout(async () => {
           console.log('Change detected, rebuilding...')
-          await runBuild(dist, source, prefix, external, autoImport)
+          await runStages(dist, source, prefix, external, autoImport)
           reload()
         }, 50)
       })
