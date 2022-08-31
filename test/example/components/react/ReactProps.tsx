@@ -1,18 +1,16 @@
 import React from 'react'
-import type {Complex} from "../types";
 
-export default (
-  {
-    stringprop,
-    numprop,
-    complexprop,
-    optionalprop,
-  }: {
-    stringprop: string
-    numprop: number
-    complexprop: Complex,
-    optionalprop?: string
-  }) => {
+export default ({
+  stringprop,
+  numprop,
+  complexprop,
+  optionalprop,
+}: {
+  stringprop: string
+  numprop: number
+  complexprop: { value: string }
+  optionalprop?: string
+}) => {
   return (
     <div>
       <div className="stringprop">{stringprop}</div>

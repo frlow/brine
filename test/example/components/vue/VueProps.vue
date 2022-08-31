@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import type {Complex} from "../types";
 
 const {
   stringprop,
   numprop,
   complexprop,
   optionalprop
-} = defineProps<{ stringprop: string, numprop: number, complexprop: Complex, optionalprop?: string }>()
+} = defineProps<{ stringprop: string, numprop: number, complexprop: { value: string }, optionalprop?: string }>()
 </script>
 
 <template>

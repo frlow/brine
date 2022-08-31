@@ -1,7 +1,7 @@
 import path from 'path'
 import { AnalysisResult } from './analyze'
-import { getFileMap } from '../utils/findFiles'
 import { WriteFileFunc } from '../utils/writeFile'
+import glob from 'glob'
 
 export type WrapperFile = {
   code: {
@@ -14,7 +14,7 @@ export type WrapperFile = {
 export type GenerateWrapperFunction = (
   analysisResult: AnalysisResult,
   prefix: string,
-  importMap?: { [i: string]: string[] }
+  autoImport: string[]
 ) => Promise<WrapperFile>
 
 export const wrapper = async (
@@ -25,45 +25,28 @@ export const wrapper = async (
   autoImport: boolean,
   writeFile: WriteFileFunc
 ) => {
-  let importMap: { [i: string]: string[] } | undefined = undefined
-  if (autoImport) {
-    const fileMap = getFileMap(outdir)
-    const getImports = (name: string, list: string[] = []): string[] => {
-      const current = analysisResults.find((ar) => ar.name === name)!
-      const currentMap = fileMap[current.name]
-      if (list.includes(currentMap)) return list
-      list.push(currentMap)
-      for (const i of current.imported) {
-        getImports(i, list)
-      }
-      return list
-    }
-    importMap = analysisResults.reduce(
-      (acc, cur) => ({
-        ...acc,
-        [cur.name]: getImports(cur.name),
-      }),
-      {} as { [i: string]: string[] }
-    )
-  }
   for (const generator of generators) {
     const index: string[] = []
     const dTs: string[] = []
     for (const ar of analysisResults) {
+      const wrapperDir = path.join(outdir, 'wrapper', generator.name)
+      const autoImports: string[] = []
+      if (autoImport) {
+        const target = glob.sync(`${outdir}/elements/**/${ar.name}.*`)[0]
+        if (!target) throw 'Could not find autoImport target!'
+        const relative = path.relative(wrapperDir, target).replace('.js', '')
+        autoImports.push(relative)
+      }
       const wrapper = await generator
-        .wrapperFunction(ar, prefix, importMap)
+        .wrapperFunction(ar, prefix, autoImports)
         .then((r) => ({
           ...r,
           name: ar.name,
         }))
+
       wrapper.code.forEach((code) =>
         writeFile(
-          path.join(
-            outdir,
-            'wrapper',
-            generator.name,
-            `${ar.name}.${code.fileType}`
-          ),
+          path.join(wrapperDir, `${ar.name}.${code.fileType}`),
           code.content
         )
       )

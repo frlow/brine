@@ -1,9 +1,7 @@
-import type { Complex } from '../types'
-
 export default (props: {
   stringprop: string
   numprop: number
-  complexprop: Complex
+  complexprop: { value: string }
   optionalprop?: string
 }) => {
   return (

@@ -2,9 +2,7 @@
 import commandLineArgs, { OptionDefinition } from 'command-line-args'
 import { build } from './modules/build'
 import { watch } from 'chokidar'
-import { docs, startReloadServer, writeDocs } from './modules/docs'
 import path from 'path'
-import { writeFile } from './utils/writeFile'
 import { runStages } from './stages'
 
 const validateVariable = <T>(value: T, name: string): T => {
@@ -48,26 +46,19 @@ const validateVariable = <T>(value: T, name: string): T => {
     const autoImport: boolean = !!buildOptions['auto-import']
     const noDocs: boolean = !!buildOptions['no-docs']
     if (command === 'build') {
-      await runStages(dist, source, prefix, external, autoImport)
-      if (!noDocs) await writeDocs(source, prefix, prefix, dist, writeFile)
+      await runStages(dist, source, prefix, external, autoImport, !noDocs)
     } else if (command === 'start') {
       let timeout: NodeJS.Timeout
-      let reload = () => {}
-      if (!noDocs) {
-        docs(prefix, dist, source, prefix)
-        reload = startReloadServer()
-      }
       const watchDir = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
-      watch(watchDir).on('all', (event, changedPath, stats) => {
+      watch(watchDir).on('all', (event, changedPath) => {
         const distDir = path.resolve(dist)
         if (changedPath.startsWith(distDir)) return
         clearTimeout(timeout)
         timeout = setTimeout(async () => {
           console.log('Change detected, rebuilding...')
-          await runStages(dist, source, prefix, external, autoImport)
-          reload()
+          await runStages(dist, source, prefix, external, autoImport, !noDocs)
         }, 50)
       })
     }

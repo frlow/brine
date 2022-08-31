@@ -2,7 +2,6 @@ import { showWrapper } from './common'
 import { decode } from 'he'
 import { elementsModules, wrapperModules } from '../src/activeModules'
 import { AnalysisResult, analyze } from '../src/modules/analyze'
-import { getFileMap } from '../src/utils/findFiles'
 import path from 'path'
 
 describe('Wrappers', () => {
@@ -113,12 +112,6 @@ describe('Wrappers', () => {
       results = result.analysisResults
     })
 
-    test('FileMap', async () => {
-      const fileMap = getFileMap(path.join('test', 'dist'))
-      expect(fileMap.SvelteSimple).toEqual('elements/svelte/SvelteSimple.js')
-      expect(fileMap.ReactSimple).toEqual('elements/react/ReactSimple.js')
-      expect(fileMap.VueSimple).toEqual('elements/vue/VueSimple.js')
-      expect(fileMap.SolidSimple).toEqual('elements/solid/SolidSimple.solid.js')
-    })
+    test('Auto import', async () => {})
   })
 })

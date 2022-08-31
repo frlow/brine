@@ -1,9 +1,7 @@
 <script lang="ts">
-  import type {Complex} from "../types";
-
   export let stringprop: string
   export let numprop: number
-  export let complexprop: Complex
+  export let complexprop: { value: string }
   export let optionalprop: string = 'default'
 </script>
 

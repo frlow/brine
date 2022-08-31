@@ -1,13 +1,12 @@
 import { GenerateWrapperFunction, WrapperFile } from '../wrapper'
 import ts, { JsxEmit, ModuleKind } from 'typescript'
 import { camelize, kebabize } from '../../utils/kebabize'
-import path from 'path'
 import { getTypeImports } from '../importedTypes'
 
 export const reactWrapperGenerator: GenerateWrapperFunction = async (
   analysisResult,
   prefix,
-  importMap
+  autoImport
 ) => {
   const props = analysisResult.props.map(
     (prop) =>
@@ -41,13 +40,8 @@ export const reactWrapperGenerator: GenerateWrapperFunction = async (
       )
     )
     .join(', ')}}`
-  const autoImports: string[] = importMap
-    ? importMap[analysisResult.name].map((ai) =>
-        path.join('..', '..', ai).replace('.js', '')
-      )
-    : []
   const code = `import React,{useEffect, useRef} from 'react'
-${autoImports.map((ai) => `import '${ai}'`).join('\n')}
+${autoImport.map((ai) => `import '${ai}'`).join('\n')}
 export const ${analysisResult.name} = (${inputType}): JSX.Element => {
   const ref = useRef(null)
   
@@ -110,7 +104,6 @@ export const ${analysisResult.name} = (${inputType}): JSX.Element => {
     compilerOptions: { jsx: JsxEmit.React, module: ModuleKind.ES2020 },
   })
   const declaration = `import * as React from 'react';
-import type {${importedTypes.join(', ')}} from '../types'
 export declare const ${analysisResult.name}: (${inputType}) => JSX.Element;
 `
   const ret: WrapperFile = {
