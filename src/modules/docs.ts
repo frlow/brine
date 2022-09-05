@@ -1,12 +1,8 @@
-import express from 'express'
 import fs from 'fs'
 import path from 'path'
 import { findFiles } from '../utils/findFiles'
 import { exampleCode } from './docs/exCode'
-import WebSocket, { WebSocketServer } from 'ws'
 import { WriteFileFunc } from '../utils/writeFile'
-
-const compression = require('compression')
 
 const body = (source: string) => {
   const custom = findFiles(source, (str) => str.endsWith('.body.html'))
@@ -127,45 +123,16 @@ ${body(source)}
   return html
 }
 
-export const docs = (
-  name: string,
-  dist: string,
-  source: string,
-  prefix: string
-) => {
-  const app = express()
-  app.use(compression())
+export const serveDocs = (dist: string) => {
+  const liveServer = require('live-server')
 
-  app.get('/index.js.map', (req, res) => {
-    res.contentType('application/json')
-    res.send(fs.readFileSync(path.join(dist, 'bundle', 'index.js.map')))
-  })
-
-  app.get('/index.js', (req, res) => {
-    res.contentType('application/javascript')
-    res.send(fs.readFileSync(path.join(dist, 'bundle', 'index.js')))
-  })
-
-  app.get('*', (req, res) => {
-    const html = getHtml(source, name, prefix, true)
-    res.contentType('text/html')
-    res.send(html)
-  })
-  const port = 3000
-  console.log(`Listening on: http://localhost:${port}`)
-  app.listen(port)
-}
-
-export const startReloadServer = () => {
-  const wss = new WebSocketServer({ port: 3001 })
-  const connections: WebSocket[] = []
-  wss.on('connection', function connection(ws) {
-    connections.push(ws)
-    ws.on('close', function close() {
-      connections.splice(connections.indexOf(ws), 1)
-    })
-  })
-  return () => {
-    connections.forEach((c) => c.send('update'))
+  const params = {
+    port: 8080,
+    host: '0.0.0.0',
+    root: `${dist}/docs`,
+    open: false,
+    file: 'index.html',
+    logLevel: 2,
   }
+  liveServer.start(params)
 }

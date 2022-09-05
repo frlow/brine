@@ -4,6 +4,7 @@ import { build } from './modules/build'
 import { watch } from 'chokidar'
 import path from 'path'
 import { runStages } from './stages'
+import { serveDocs } from './modules/docs'
 
 const validateVariable = <T>(value: T, name: string): T => {
   if (!value) {
@@ -52,6 +53,7 @@ const validateVariable = <T>(value: T, name: string): T => {
       const watchDir = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
+      serveDocs(dist)
       watch(watchDir).on('all', (event, changedPath) => {
         const distDir = path.resolve(dist)
         if (changedPath.startsWith(distDir)) return
