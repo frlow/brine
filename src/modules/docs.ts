@@ -22,20 +22,20 @@ export function writeDocs(
   )
 }
 
+const prepareExample = (code: string) => {
+  return code
+}
+
 export function getHtml(source: string) {
   const docs = findFiles(source, (str) => str.endsWith('.docs.html')).map(
     (file) => ({
       name: path.parse(file).name.replace('.docs', ''),
-      content: fs.readFileSync(file, 'utf8'),
+      content: prepareExample(fs.readFileSync(file, 'utf8')),
     })
   )
   const styles = findFiles(source, (str) => str.endsWith('.docs.css')).map(
     (file) => fs.readFileSync(file, 'utf8')
   )
-  const example =
-    findFiles(source, (str) => str.endsWith('example.tag.html')).map((file) =>
-      fs.readFileSync(file, 'utf8')
-    )[0] || ''
   const header =
     findFiles(source, (str) => str.endsWith('header.tag.html')).map((file) =>
       fs.readFileSync(file, 'utf8')
