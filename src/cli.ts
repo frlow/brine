@@ -53,7 +53,8 @@ const validateVariable = <T>(value: T, name: string): T => {
       const watchDir = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
-      serveDocs(dist)
+      await runStages(dist, source, prefix, external, autoImport, !noDocs)
+      const bs = serveDocs(dist)
       watch(watchDir).on('all', (event, changedPath) => {
         const distDir = path.resolve(dist)
         if (changedPath.startsWith(distDir)) return
@@ -61,6 +62,7 @@ const validateVariable = <T>(value: T, name: string): T => {
         timeout = setTimeout(async () => {
           console.log('Change detected, rebuilding...')
           await runStages(dist, source, prefix, external, autoImport, !noDocs)
+          bs.reload()
         }, 50)
       })
     }

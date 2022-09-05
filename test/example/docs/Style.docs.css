@@ -1,0 +1,31 @@
+body {
+    background-color: #1c1c1c;
+    color: #cccccc;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+}
+
+nav {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+section {
+    display: none;
+    flex-direction: column;
+    padding: 0;
+}
+
+section:target {
+    display: flex;
+    padding: 1rem;
+}

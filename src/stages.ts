@@ -56,7 +56,7 @@ export async function runStages(
     writeFile
   )
   // Build docs
-  writeDocs(source, 'demo', prefix, dist, writeFile)
+  if (docs) writeDocs(source, dist, writeFile)
 
   // Log build time
   const endTime = new Date().getTime()
