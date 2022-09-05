@@ -524,7 +524,6 @@ __metadata:
     chokidar: ^3.5.3
     command-line-args: ^5.2.1
     compression: ^1.7.4
-    connect-history-api-fallback: ^2.0.0
     esbuild: ^0.14.36
     esbuild-runner: ^2.2.1
     esbuild-sass-plugin: ^2.2.6
@@ -2355,13 +2354,6 @@ __metadata:
   version: 1.6.0
   resolution: "connect-history-api-fallback@npm:1.6.0"
   checksum: 804ca2be28c999032ecd37a9f71405e5d7b7a4b3defcebbe41077bb8c5a0a150d7b59f51dcc33b2de30bc7e217a31d10f8cfad27e8e74c2fc7655eeba82d6e7e
-  languageName: node
-  linkType: hard
-
-"connect-history-api-fallback@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "connect-history-api-fallback@npm:2.0.0"
-  checksum: dc5368690f4a5c413889792f8df70d5941ca9da44523cde3f87af0745faee5ee16afb8195434550f0504726642734f2683d6c07f8b460f828a12c45fbd4c9a68
   languageName: node
   linkType: hard
 
