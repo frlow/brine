@@ -4,7 +4,7 @@ My button is awesome
 
 ```html
 
-<ex-button text="SomeText" @click="console.log('Click')"></ex-button>
+<ex-button text="SomeText" @click></ex-button>
 ```
 
 This is more text

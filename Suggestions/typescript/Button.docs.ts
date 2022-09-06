@@ -6,9 +6,7 @@ export default doc(
   My button is awesome`,
   example<Button>({
     text: 'SomeText',
-    click: () => {
-      console.log('Click')
-    },
+    click: true,
   }),
   `This is more text,
   MOAR!!!`
