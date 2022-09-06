@@ -1,11 +1,11 @@
-export type Example = {
-  example: string
+export type Example<T> = {
+  example: T
 }
 
-export const example = <T>(item: T): Example => {
-  return { example: 'sdöfoijsodif' }
+export const example = <T>(item: T): Example<T> => {
+  return { example: item }
 }
 
-export const doc = (...parts: (string | Example)[]) => {
+export const doc = (...parts: (string | Example<any>)[]) => {
   return ''
 }
