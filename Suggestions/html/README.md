@@ -7,3 +7,4 @@ Pros:
 Cons:
 - Documentation must be written in html
 - User must understand web components and how to write examples of emits
+- Must parse html to extract props
