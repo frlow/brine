@@ -62,3 +62,8 @@ a {
 code {
     font-family: var(--default-font)
 }
+
+h1 {
+    font-size: 2rem;
+    font-weight: normal;
+}

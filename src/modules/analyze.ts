@@ -43,7 +43,7 @@ const generateVsCodeCustomHtml = (
 ): HTMLDataV1 => ({
   tags: ars
     .map((ar) => getVsCodeCustomHtmlTag(ar, prefix))
-    .concat([{ name: 'code', attributes: [] }]),
+    .concat([{ name: 'ucp-example', attributes: [] }]),
   version: 1.1,
 })
 
@@ -76,7 +76,7 @@ const generateWebTypes = (
             ),
           },
         }))
-        .concat([{ name: 'code', js: { events: [] }, attributes: [] }]),
+        .concat([{ name: 'ucp-example', js: { events: [] }, attributes: [] }]),
     },
   },
 })
