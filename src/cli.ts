@@ -61,8 +61,12 @@ const validateVariable = <T>(value: T, name: string): T => {
         clearTimeout(timeout)
         timeout = setTimeout(async () => {
           console.log('Change detected, rebuilding...')
-          await runStages(dist, source, prefix, external, autoImport, !noDocs)
-          bs.reload()
+          try {
+            await runStages(dist, source, prefix, external, autoImport, !noDocs)
+            bs.reload()
+          } catch (e) {
+            console.log(e)
+          }
         }, 50)
       })
     }

@@ -1,8 +1,9 @@
 import { importMdx } from './es.cjs'
 import esbuild from 'esbuild'
-import { renderToString } from 'react-dom/server'
 
-export const compileMdx = async (file: string) => {
+export const compileMdx = async (
+  file: string
+): Promise<(args: any) => JSX.Element> => {
   const mdx = await importMdx()
   const result = await esbuild.build({
     entryPoints: [file],
@@ -13,7 +14,5 @@ export const compileMdx = async (file: string) => {
     write: false,
   })
   const code = result.outputFiles![0].text
-  const Component = eval(code).default
-  const html = renderToString(<Component />)
-  return html
+  return eval(code).default
 }

@@ -18,7 +18,7 @@ body {
 header {
     grid-area: header;
     background-color: #170a5d;
-    height: 60px;
+    padding-left: 2rem;
 }
 
 footer {
