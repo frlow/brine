@@ -10,8 +10,7 @@
   ],
   "scripts": {
     "start": "yon brine start test/example -x ex -o test/dist -a",
-    "serve:docs": "",
-    "build:cli": "tsc",
+    "build:cli": "tsc && cpy ./src/modules/es.cjs ./dist/modules --flat",
     "build:example": "yon brine build test/example -x ex -o test/dist",
     "brine": "ts-node src/cli.ts",
     "test": "jest"
@@ -56,6 +55,7 @@
     "@types/he": "^1.1.2",
     "@types/jest": "^27.5.1",
     "@types/jest-environment-puppeteer": "^5.0.2",
+    "cpy-cli": "^4.2.0",
     "esbuild-runner": "^2.2.1",
     "he": "^1.2.0",
     "jest": "^27.5.1",
