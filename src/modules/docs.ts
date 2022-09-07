@@ -3,13 +3,14 @@ import path from 'path'
 import { findFiles } from '../utils/findFiles'
 import { WriteFileFunc } from '../utils/writeFile'
 import { create } from 'browser-sync'
+import { fixMdx } from './mdx'
 
-export function writeDocs(
+export async function writeDocs(
   source: string,
   dist: string,
   writeFile: WriteFileFunc
 ) {
-  const html = getHtml(source)
+  const html = await getHtml(source)
   writeFile(path.join(dist, 'docs', 'index.html'), html)
   writeFile(path.join(dist, 'docs', '404.html'), html)
   writeFile(
@@ -22,16 +23,16 @@ export function writeDocs(
   )
 }
 
-const prepareExample = (code: string) => {
-  return code
+const prepareExample = (file: string) => {
+  return fixMdx(file)
 }
 
-export function getHtml(source: string) {
-  const docs = findFiles(source, (str) => str.endsWith('.docs.html')).map(
-    (file) => ({
+export async function getHtml(source: string) {
+  const docs = await Promise.all(
+    findFiles(source, (str) => str.endsWith('.mdx')).map(async (file) => ({
       name: path.parse(file).name.replace('.docs', ''),
-      content: prepareExample(fs.readFileSync(file, 'utf8')),
-    })
+      content: await prepareExample(file),
+    }))
   )
   const styles = findFiles(source, (str) => str.endsWith('.docs.css')).map(
     (file) => fs.readFileSync(file, 'utf8')

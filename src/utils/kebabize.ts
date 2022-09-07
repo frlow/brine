@@ -1,5 +1,5 @@
-export const kebabize = (str: string) => {
-  return str
+export const kebabize = (str: string) =>
+  str
     .split('')
     .map((letter, idx) => {
       return letter.toUpperCase() === letter
@@ -7,7 +7,6 @@ export const kebabize = (str: string) => {
         : letter
     })
     .join('')
-}
 
 export const camelize = (str: string) => {
   return str
