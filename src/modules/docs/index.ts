@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import { findFiles } from '../utils/findFiles'
-import { WriteFileFunc } from '../utils/writeFile'
+import { findFiles } from '../../utils/findFiles'
+import { WriteFileFunc } from '../../utils/writeFile'
 import { create } from 'browser-sync'
 import { fixMdx } from './mdx'
 
