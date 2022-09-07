@@ -1,20 +1,10 @@
-import {Example, ReactBool} from './types'
+import {Example, ReactBool, ReactSlots} from '../../../dist/DocsTypes'
 
 # Bool
 ### React
 <Example>
-    <ReactBool></ReactBool>
-    <p><ReactBool></ReactBool></p>
-</Example>
-
-<Example>
-    <ReactBool enable onClick></ReactBool>
-</Example>
-
-<Example>
-    <ReactBool enable={true}></ReactBool>
-</Example>
-
-<Example>
-    <ReactBool enable={false}></ReactBool>
+    <ReactSlots>
+        <div>In default slot</div>
+        <div slot="named">In named slot</div>
+    </ReactSlots>
 </Example>

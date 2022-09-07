@@ -14,5 +14,6 @@ export const compileMdx = async (file: string) => {
   })
   const code = result.outputFiles![0].text
   const Component = eval(code).default
-  return renderToString(<Component />)
+  const html = renderToString(<Component />)
+  return html
 }

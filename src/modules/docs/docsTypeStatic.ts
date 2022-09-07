@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+export const docsTypeStatic = `import React, { ReactNode } from 'react'
 
 type NodeInfo = {
   type?: string
@@ -16,8 +16,9 @@ const getInfo = (node: ReactNode, prefix: string): NodeInfo[] => {
     )
     const emits = Object.keys(propValues).filter((key) => key.match(/on[A-Z]/))
     return {
-      tag: el.type.name ? undefined : el.type,
-      type: el.type.name ? el.type.name : undefined,
+      content: typeof el==="string"? el: undefined,
+      tag: el.type?.name ? undefined : el.type,
+      type: el.type?.name ? el.type.name : undefined,
       props: Object.keys(props).length > 0 ? props : undefined,
       emits: emits.length > 0 ? emits : undefined,
       children: children ? getInfo(children, prefix) : undefined,
@@ -35,16 +36,4 @@ const CreateExample =
         <div style={{ border: '1px dotted white' }}>{JSON.stringify(info)}</div>
       </div>
     )
-  }
-
-export const Example = CreateExample('ex')
-
-export const ReactBool = ({
-  enable,
-  onClick,
-}: {
-  enable?: boolean
-  onClick?: boolean
-}) => {
-  return <ex-react-bool enable={enable}></ex-react-bool>
-}
+  }`

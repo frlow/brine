@@ -57,7 +57,7 @@ export async function runStages(
   )
   // Build docs
   if (docs) {
-    await generateDocsTypes()
+    await generateDocsTypes(analyzerResult.analysisResults, dist, prefix)
     await writeDocs(source, dist)
   }
 
