@@ -1,6 +1,3 @@
-const importES = async (name) =>
-    await import(name)
+const importMdx = async () => (await import("@mdx-js/esbuild")).default
 
-const importMdx = async () => (await importES("@mdx-js/esbuild")).default
-
-module.exports = {importMdx, importES}
+module.exports = {importMdx}

@@ -5,7 +5,7 @@ import { writeFile } from './utils/writeFile'
 import { wrapper } from './modules/wrapper'
 import { build } from './modules/build'
 import { bundle } from './modules/bundle'
-import { writeDocs } from './modules/docs'
+import { generateDocsTypes, writeDocs } from './modules/docs'
 
 export async function runStages(
   dist: string,
@@ -56,7 +56,10 @@ export async function runStages(
     writeFile
   )
   // Build docs
-  if (docs) await writeDocs(source, dist, writeFile)
+  if (docs) {
+    await generateDocsTypes()
+    await writeDocs(source, dist)
+  }
 
   // Log build time
   const endTime = new Date().getTime()

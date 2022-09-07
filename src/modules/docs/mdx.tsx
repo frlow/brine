@@ -2,7 +2,7 @@ import { importMdx } from './es.cjs'
 import esbuild from 'esbuild'
 import { renderToString } from 'react-dom/server'
 
-export const fixMdx = async (file: string) => {
+export const compileMdx = async (file: string) => {
   const mdx = await importMdx()
   const result = await esbuild.build({
     entryPoints: [file],
