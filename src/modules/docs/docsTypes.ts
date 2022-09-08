@@ -50,7 +50,11 @@ export const generateDocsTypesImplementation = ({
     const props = ar.props
       .map(
         (p) =>
-          `${p.name}={args.${p.name} ? JSON.stringify(args.${p.name}) : undefined}`
+          `${p.name}={args.${p.name} ? ${
+            p.type.getText(ar.sourceFile) === 'string'
+              ? `args.${p.name}`
+              : `JSON.stringify(args.${p.name})`
+          } : undefined}`
       )
       .join(' ')
     return `export const ${ar.name} = (args: any)=><${tag} ${props}>{args.children}</${tag}>`
