@@ -88,7 +88,7 @@ const validateVariable = <T>(value: T, name: string): T => {
       stopAtFirstUnknown: false,
     })
     const source = buildOptions.source || path.join(__dirname, 'example')
-    const outDir: string = buildOptions.outdir || '.'
+    const outDir: string = buildOptions.outdir || './src'
     await init(source, outDir)
   }
 })()
