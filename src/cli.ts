@@ -29,31 +29,30 @@ const validateVariable = <T>(value: T, name: string): T => {
       { name: 'prefix', alias: 'x', type: String },
       { name: 'outdir', alias: 'o', type: String },
       { name: 'no-docs', type: Boolean },
-      { name: 'exclude', type: String, multiple: true },
-      { name: 'auto-import', alias: 'a', type: Boolean },
+      { name: 'no-auto-import', type: Boolean },
     ]
     const buildOptions = commandLineArgs(buildDefinitions, {
       argv,
       stopAtFirstUnknown: false,
     })
-    const source: string = validateVariable(buildOptions.source, 'source dir')
-    const dist: string = validateVariable(buildOptions.outdir, '--outdir (-o)')
+    const source: string = buildOptions.source || '.'
+    const dist: string = buildOptions.outdir || 'dist'
 
     const prefix: string = validateVariable(
       buildOptions.prefix,
       '--prefix (-x)'
     )
     const external: string[] = buildOptions.external || []
-    const autoImport: boolean = !!buildOptions['auto-import']
+    const noAutoImport: boolean = !!buildOptions['no-auto-import']
     const noDocs: boolean = !!buildOptions['no-docs']
     if (command === 'build') {
-      await runStages(dist, source, prefix, external, autoImport, !noDocs)
+      await runStages(dist, source, prefix, external, !noAutoImport, !noDocs)
     } else if (command === 'start') {
       let timeout: NodeJS.Timeout
       const watchDir = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
-      await runStages(dist, source, prefix, external, autoImport, !noDocs)
+      await runStages(dist, source, prefix, external, !noAutoImport, !noDocs)
       const bs = serveDocs(dist)
       watch(watchDir).on('all', (event, changedPath) => {
         const distDir = path.resolve(dist)
@@ -62,7 +61,14 @@ const validateVariable = <T>(value: T, name: string): T => {
         timeout = setTimeout(async () => {
           console.log('Change detected, rebuilding...')
           try {
-            await runStages(dist, source, prefix, external, autoImport, !noDocs)
+            await runStages(
+              dist,
+              source,
+              prefix,
+              external,
+              !noAutoImport,
+              !noDocs
+            )
             bs.reload()
           } catch (e) {
             console.log(e)
