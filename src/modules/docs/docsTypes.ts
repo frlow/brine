@@ -33,6 +33,12 @@ ${ar.props
     (p) => `${p.name}${p.optional ? '?' : ''}:${p.type.getText(ar.sourceFile)}`
   )
   .join(',')}
+${ar.emits.map(
+  (e) =>
+    `${'on' + e.name.substring(0, 1).toUpperCase() + e.name.substring(1)}${
+      e.optional ? '?' : ''
+    }:boolean`
+)}
   children?: React.ReactNode
 }) => JSX.Element`
   )
@@ -92,7 +98,8 @@ const getReact = (info: any[])=>{
         if(i.content) return i.content
         const tag = i.type || i.tag
         const props = i.props ? " "+Object.entries(i.props).map(([key, value])=>\`\${key}={\${JSON.stringify(value)}}\`).join(" "): ""
-        return \`<\${tag}\${props}>\${i.children ? getReact(i.children) : ''}</\${tag}>\` 
+        const emits = i.emits ? " "+i.emits.map(e=>\`\${e}={ arg =>{ log(arg) }}\`).join(" ") : ''
+        return \`<\${tag}\${props}\${emits}>\${i.children ? getReact(i.children) : ''}</\${tag}>\` 
     }).join("\\n")
 }
 const getVue = (info: any[])=>{
@@ -100,8 +107,8 @@ const getVue = (info: any[])=>{
         if(i.content) return i.content
         const tag = i.type || i.tag
         const props = i.props ? " "+Object.entries(i.props).map(([key, value])=>\`\${key}='\${JSON.stringify(value)}'\`).join(" "): ""
-        debugger
-        return \`<\${tag}\${props}>\${i.children ? getVue(i.children) : ''}</\${tag}>\` 
+        const emits = i.emits ? " "+i.emits.map(e=>\`@\${e.substring(2,3).toLowerCase()+e.substring(3)}="arg =>{ log(arg) }"\`).join(" ") : ''
+        return \`<\${tag}\${props}\${emits}>\${i.children ? getVue(i.children) : ''}</\${tag}>\` 
     }).join("\\n")
 }
 const getCode = (info: any)=>{
