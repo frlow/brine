@@ -61,10 +61,13 @@ export async function getHtml(
     )
   }
   const rendered = renderToString(<Body />)
+  const head =
+    findFiles(source, (str) => str.endsWith(`Head.tag.html`)).map((file) =>
+      fs.readFileSync(file, 'utf8')
+    )[0] || ''
   const html = `<!DOCTYPE html>
 <html lang="en" x-data="{ demo: 'someDemo' }">
     <head>
-        <title>Docs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src='/index.js'></script>
         <script src="//unpkg.com/alpinejs" defer></script>
@@ -72,6 +75,7 @@ export async function getHtml(
         <script>
             if(!window.location.hash) window.location.hash="${docs[0].name}"
         </script>
+        ${head}
     </head>
 ${rendered}
 </html>`
