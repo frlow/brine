@@ -60,6 +60,15 @@ export const generateDocsTypesImplementation = ({
     return `export const ${ar.name} = (args: any)=><${tag} ${props}>{args.children}</${tag}>`
   })
   return `import React from 'react'
+const kebabize = (str: string) =>
+  str
+    .split('')
+    .map((letter: any, idx: any) => {
+      return letter.toUpperCase() === letter
+        ? idx !== 0 ? '-' : ''+letter.toLowerCase()
+        : letter
+    })
+    .join('')
 const getInfo = (node: ReactNode): any => {
   const elements = (Array.isArray(node) ? node : [node]) as any
   return elements.map((el) => {
@@ -78,11 +87,33 @@ const getInfo = (node: ReactNode): any => {
     }
   })
 }
+const getReact = (info: any[])=>{
+    return info.map(i=>{
+        if(i.content) return i.content
+        const tag = i.type || i.tag
+        const props = i.props ? " "+Object.entries(i.props).map(([key, value])=>\`\${key}={\${JSON.stringify(value)}}\`).join(" "): ""
+        return \`<\${tag}\${props}>\${i.children ? getReact(i.children) : ''}</\${tag}>\` 
+    }).join("\\n")
+}
+const getVue = (info: any[])=>{
+    return info.map(i=>{
+        if(i.content) return i.content
+        const tag = i.type || i.tag
+        const props = i.props ? " "+Object.entries(i.props).map(([key, value])=>\`\${key}='\${JSON.stringify(value)}'\`).join(" "): ""
+        debugger
+        return \`<\${tag}\${props}>\${i.children ? getVue(i.children) : ''}</\${tag}>\` 
+    }).join("\\n")
+}
+const getCode = (info: any)=>{
+    return {
+        react: getReact(info),
+        vue: getVue(info)
+    }
+}
   import {DocsExample} from './DocsExample'
   export const Example = ({children}: any)=>{
-    const code = {vue: "vue code", react: "react code"}
     const info = getInfo(children)
-    return <DocsExample code={code} info={info}>{children}</DocsExample>
+    return <DocsExample code={getCode(info)} info={info}>{children}</DocsExample>
   }
   ${components.join('\n')}
 `

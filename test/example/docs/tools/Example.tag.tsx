@@ -16,12 +16,6 @@ export const DocsExample = ({ children, code, info }: ExampleArgs) => (
             <div>React:</div>
             <div>{code.react}</div>
           </p>
-          <p>
-            <div>Structure:</div>
-            <div style={{ whiteSpace: 'pre-wrap' }}>
-              {JSON.stringify(info, null, 2)}
-            </div>
-          </p>
         </div>
       </template>
     </div>
