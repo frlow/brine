@@ -1,4 +1,4 @@
-import { importMdx } from './es.cjs'
+import { importMdx } from '../../utils/es.cjs'
 import esbuild, { Plugin } from 'esbuild'
 import path from 'path'
 import { generateDocsTypesImplementation } from './docsTypes'

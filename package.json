@@ -10,10 +10,11 @@
   ],
   "scripts": {
     "start": "yon brine start test/example -x ex -o test/dist",
-    "build:cli": "tsc && cpy ./src/modules/es.cjs ./dist/modules --flat",
-    "build:example": "yon brine build test/example -x ex -o test/dist",
+    "build": "tsc && cpy ./src/utils/es.cjs ./dist/utils --flat && cpy . --cwd test/example ../../dist/example",
     "brine": "ts-node src/cli.ts",
-    "test": "jest"
+    "test": "jest",
+    "init": "yon brine init test/example -o dist/example",
+    "local": "yon build && npm pack && npm i -g --force ./frlow-brine* && rm frlow-brine*"
   },
   "dependencies": {
     "@babel/core": "^7.17.12",
@@ -22,6 +23,7 @@
     "@types/babel__core": "^7.1.17",
     "@types/command-line-args": "^5.2.0",
     "@types/express": "^4.17.13",
+    "@types/fs-extra": "^9.0.13",
     "@types/glob": "^7.2.0",
     "@types/node": "^17.0.23",
     "@types/react": "^18.0.8",
@@ -34,6 +36,7 @@
     "compression": "^1.7.4",
     "esbuild": "^0.14.36",
     "esbuild-sass-plugin": "^2.2.6",
+    "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
     "prettier": "^2.6.2",
     "pushstate-server": "^3.1.0",

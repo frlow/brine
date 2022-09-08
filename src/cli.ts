@@ -5,6 +5,7 @@ import { watch } from 'chokidar'
 import path from 'path'
 import { runStages } from './stages'
 import { serveDocs } from './modules/docs'
+import { init } from './modules/init'
 
 const validateVariable = <T>(value: T, name: string): T => {
   if (!value) {
@@ -76,5 +77,18 @@ const validateVariable = <T>(value: T, name: string): T => {
         }, 50)
       })
     }
+  }
+  if (command === 'init') {
+    const buildDefinitions = [
+      { name: 'source', defaultOption: true },
+      { name: 'outdir', alias: 'o', type: String },
+    ]
+    const buildOptions = commandLineArgs(buildDefinitions, {
+      argv,
+      stopAtFirstUnknown: false,
+    })
+    const source = buildOptions.source || path.join(__dirname, 'example')
+    const outDir: string = buildOptions.outdir || '.'
+    await init(source, outDir)
   }
 })()
