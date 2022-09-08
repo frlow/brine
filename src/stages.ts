@@ -57,8 +57,11 @@ export async function runStages(
   )
   // Build docs
   if (docs) {
-    await generateDocsTypes(analyzerResult.analysisResults, dist, prefix)
-    await writeDocs(source, dist)
+    await generateDocsTypes(analyzerResult.analysisResults, dist)
+    await writeDocs(source, dist, {
+      prefix,
+      analysisResults: analyzerResult.analysisResults,
+    })
   }
 
   // Log build time

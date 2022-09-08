@@ -1,19 +1,34 @@
 import React from 'react'
 import { findFiles } from '../../utils/findFiles'
 import path from 'path'
-import { compileMdx } from './mdx'
+import { evalMdx, DocTypePluginOptions, compileMdx } from './mdx'
 import fs from 'fs'
 import { renderToString } from 'react-dom/server'
 
-export async function getHtml(source: string) {
-  const compileNamed = async (name: string) =>
-    await compileMdx(
-      findFiles(source, (str) => str.endsWith(`${name}.tag.mdx`))[0] || ''
+export async function getHtml(
+  source: string,
+  docTypePluginOptions: Pick<DocTypePluginOptions, 'prefix' | 'analysisResults'>
+) {
+  const compileNamed = async (
+    name: string,
+    docTypePluginOptions?: DocTypePluginOptions
+  ) =>
+    await evalMdx(
+      findFiles(source, (str) => str.endsWith(`${name}.tag.mdx`))[0] || '',
+      docTypePluginOptions
     )
+  const example =
+    findFiles(source, (str) => str.endsWith(`Example.tag.tsx`)).map((file) =>
+      fs.readFileSync(file, 'utf8')
+    )[0] || ''
   const docs = await Promise.all(
     findFiles(source, (str) => str.endsWith('.docs.mdx')).map(async (file) => ({
       name: path.parse(file).name.replace('.docs', ''),
-      content: await compileMdx(file),
+      content: await evalMdx(file, {
+        prefix: docTypePluginOptions.prefix,
+        analysisResults: docTypePluginOptions.analysisResults,
+        example,
+      }),
     }))
   )
 
@@ -33,8 +48,8 @@ export async function getHtml(source: string) {
           <Nav links={docs.map((d) => d.name)} />
         </nav>
         <main>
-          {docs.map((doc) => (
-            <section key={doc.name} id={doc.name}>
+          {docs.map((doc, index) => (
+            <section key={index} id={doc.name}>
               <doc.content />
             </section>
           ))}
@@ -47,11 +62,12 @@ export async function getHtml(source: string) {
   }
   const rendered = renderToString(<Body />)
   const html = `<!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="{ demo: 'someDemo' }">
     <head>
         <title>Docs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src='/index.js'></script>
+        <script src="//unpkg.com/alpinejs" defer></script>
         <style>${styles.join('\n')}</style>
         <script>
             if(!window.location.hash) window.location.hash="${docs[0].name}"
