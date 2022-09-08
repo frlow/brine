@@ -65,7 +65,7 @@
     "yarn-or-npm": "^3.0.1"
   },
   "bin": {
-    "ucp": "./dist/cli.js"
+    "brine": "./dist/cli.js"
   },
   "web-types": "./test/dist/web-types.json"
 }
