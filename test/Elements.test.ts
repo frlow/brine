@@ -1,9 +1,10 @@
-import { showComponent } from './common'
+import { buildExample, showComponent } from './common'
 import { elementsModules as activeElementModules } from '../src/activeModules'
 
 const elementModules = activeElementModules.map((em) => em.name)
-
+jest.setTimeout(30000)
 describe('Elements', () => {
+  beforeAll(async () => await buildExample(true))
   describe('Simple', () => {
     for (const em of elementModules) {
       test(em, async () => {

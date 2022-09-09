@@ -2,14 +2,22 @@ import * as fs from 'fs'
 import * as path from 'path'
 import esbuild from 'esbuild'
 import { fakeFilePlugin } from '../src/utils/fakeFilePlugin'
-import { findFiles } from '../src/utils/findFiles'
+
+const util = require('util')
+const exec = util.promisify(require('child_process').exec)
 
 const baseUrl = 'https://example.com'
 
-const bundle = fs.readFileSync(
-  path.join('test', 'dist', 'bundle', 'index.js'),
-  'utf8'
-)
+const loadBundle = () =>
+  fs.readFileSync(path.join(__dirname, 'dist', 'bundle', 'index.js'), 'utf8')
+
+export const buildExample = async (autoImport: boolean) => {
+  await exec(
+    `yarn brine build test/example -x ex -o test/dist ${
+      autoImport ? '' : '--no-auto-import'
+    }`
+  )
+}
 
 export const getTestHtml = (component: string) => `<!DOCTYPE html>
 <html>
@@ -28,7 +36,7 @@ export const getTestHtml = (component: string) => `<!DOCTYPE html>
 
 export const showComponent = async (
   component: string,
-  code: string = bundle
+  code: string = loadBundle()
 ) => {
   await jestPuppeteer.resetPage()
   await page.setRequestInterception(true)

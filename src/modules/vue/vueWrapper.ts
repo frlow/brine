@@ -1,15 +1,12 @@
 import { SyntaxKind } from 'typescript'
 import { kebabize } from '../../utils/kebabize'
 import { GenerateWrapperFunction } from '../wrapper'
-import path from 'path'
-import { getTypeImports } from '../importedTypes'
 
 export const vueWrapperGenerator: GenerateWrapperFunction = async (
   analysisResult,
   prefix,
   autoImport
 ) => {
-  const importedTypes = getTypeImports(analysisResult.sourceFile)
   const code = `<script setup lang='ts'>
 ${autoImport.map((ai) => `import '${ai}'`).join('\n')}
 ${

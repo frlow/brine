@@ -1,7 +1,6 @@
 import { GenerateWrapperFunction, WrapperFile } from '../wrapper'
 import ts, { JsxEmit, ModuleKind } from 'typescript'
 import { camelize, kebabize } from '../../utils/kebabize'
-import { getTypeImports } from '../importedTypes'
 
 export const reactWrapperGenerator: GenerateWrapperFunction = async (
   analysisResult,
@@ -28,7 +27,6 @@ export const reactWrapperGenerator: GenerateWrapperFunction = async (
     slot: 'string',
     children: 'React.ReactNode',
   }
-  const importedTypes = getTypeImports(analysisResult.sourceFile)
   const inputType = `{${propNames
     .concat(emitNames)
     .concat(Object.keys(standardAttributes))

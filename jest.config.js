@@ -5,7 +5,7 @@ module.exports = {
   },
   // testEnvironment: 'jsdom',
   testMatch: ['**/*.test.ts'],
-  globalSetup: './test/setup',
+  globalSetup: 'jest-environment-puppeteer/setup',
   globalTeardown: 'jest-environment-puppeteer/teardown',
   testEnvironment: 'jest-environment-puppeteer',
 }

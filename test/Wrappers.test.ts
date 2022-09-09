@@ -1,5 +1,10 @@
 import { wrapperModules } from '../src/activeModules'
-import { buildTestApp, getTestHtml, showComponent } from './common'
+import {
+  buildExample,
+  buildTestApp,
+  getTestHtml,
+  showComponent,
+} from './common'
 import * as fs from 'fs'
 import path from 'path'
 
@@ -18,7 +23,7 @@ test('Dummy', async () => {
   // Run this to generate a page to test manually
   jest.setTimeout(1000000)
   const html = getTestHtml('<div id="app">Loading...</div>')
-  const code = await buildTestApp('react', 'Slots')
+  const code = await buildTestApp('vue', 'Props')
   const dir = path.join('test', 'dist', 'dummy')
   if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true })
   fs.mkdirSync(dir)
@@ -26,7 +31,9 @@ test('Dummy', async () => {
   fs.writeFileSync(path.join(dir, 'index.js'), code, 'utf8')
 })
 
+jest.setTimeout(30000)
 describe('Wrappers', () => {
+  beforeAll(async () => await buildExample(false))
   describe('Simple', () => {
     for (const wm of wrapperModules) {
       test(wm.name, async () =>
