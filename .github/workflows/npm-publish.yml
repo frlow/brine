@@ -17,6 +17,7 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
+          cache: 'yarn'
       - run: node ./version.js
       - run: yarn
       - run: yarn test
