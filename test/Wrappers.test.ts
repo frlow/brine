@@ -1,41 +1,47 @@
-import { showWrapper } from './common'
-import { decode } from 'he'
-import { elementsModules, wrapperModules } from '../src/activeModules'
-import { AnalysisResult, analyze } from '../src/modules/analyze'
+import { wrapperModules } from '../src/activeModules'
+import { buildTestApp, getTestHtml, showComponent } from './common'
+import * as fs from 'fs'
 import path from 'path'
+
+const showWrapper = async (framework: string, testCase: string) => {
+  const code = await buildTestApp(framework, testCase)
+  await showComponent('<div id="app">Loading...</div>', code)
+  await page.waitForSelector('#test')
+}
+
+const evaluateWrapper = async (framework: string, testCase: string) => {
+  await showWrapper(framework, testCase)
+  return await page.evaluate(() => document.getElementById('test')!.innerHTML)
+}
+
+test('Dummy', async () => {
+  // Run this to generate a page to test manually
+  jest.setTimeout(1000000)
+  const html = getTestHtml('<div id="app">Loading...</div>')
+  const code = await buildTestApp('react', 'Slots')
+  const dir = path.join('test', 'dist', 'dummy')
+  if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true })
+  fs.mkdirSync(dir)
+  fs.writeFileSync(path.join(dir, 'index.html'), html, 'utf8')
+  fs.writeFileSync(path.join(dir, 'index.js'), code, 'utf8')
+})
 
 describe('Wrappers', () => {
   describe('Simple', () => {
     for (const wm of wrapperModules) {
-      test(wm.name, async () => {
-        await showWrapper({ name: 'SvelteSimple' }, wm)
-        const content = await page.evaluate(
-          () => document.getElementById('app')!.firstElementChild!.outerHTML
+      test(wm.name, async () =>
+        expect(await evaluateWrapper(wm.name, 'Simple')).toEqual(
+          `<ex-svelte-simple></ex-svelte-simple>`
         )
-        expect(content).toEqual(`<ex-svelte-simple></ex-svelte-simple>`)
-      })
+      )
     }
   })
-
   describe('Props', () => {
     for (const wm of wrapperModules) {
       test(wm.name, async () => {
-        await showWrapper(
-          {
-            name: 'SvelteProps',
-            props: {
-              stringprop: 'str',
-              numprop: 6,
-              complexprop: { value: 'val' },
-            },
-          },
-          wm
-        )
-        const content = await page.evaluate(
-          () => document.getElementById('app')!.firstElementChild!.outerHTML
-        )
-        expect(decode(content)).toEqual(
-          `<ex-svelte-props stringprop="str" numprop="6" complexprop="{\"value\":\"val\"}"></ex-svelte-props>`
+        const result = await evaluateWrapper(wm.name, 'Props')
+        expect(result).toEqual(
+          `<ex-svelte-props stringprop="str" numprop="6" complexprop=\"{&quot;value&quot;:&quot;val&quot;}\"></ex-svelte-props>`
         )
       })
     }
@@ -44,32 +50,25 @@ describe('Wrappers', () => {
   describe('Emits', () => {
     for (const wm of wrapperModules) {
       test(wm.name, async () => {
-        const component = {
-          name: 'SvelteEmits',
-          emits: {
-            stringevent: 'str',
-            numevent: 4,
-            objevent: { value: 'val' },
-            click: null,
-          },
+        const emits = [
+          { name: 'stringevent', value: 'str' },
+          { name: 'numevent', value: 4 },
+          { name: 'objevent', value: { value: 'val' } },
+          { name: 'click', value: null },
+        ]
+        await showWrapper(wm.name, 'Emits')
+        for (const emit of emits) {
+          await page.evaluate(
+            ({ key, value }) =>
+              document.getElementById('test')!.firstElementChild!.dispatchEvent(
+                new CustomEvent('ex-' + key, {
+                  detail: [value],
+                  bubbles: true,
+                })
+              ),
+            { key: emit.name, value: emit.value }
+          )
         }
-        await showWrapper(component, wm)
-        await Promise.all(
-          Object.entries(component.emits || {}).map(([key, value]) => {
-            return page.evaluate(
-              ({ key, value }) =>
-                document
-                  .getElementById('app')!
-                  .firstElementChild!.dispatchEvent(
-                    new CustomEvent('ex-' + key, {
-                      detail: [value],
-                      bubbles: true,
-                    })
-                  ),
-              { key, value }
-            )
-          })
-        )
         const log = await page.evaluate(() => (window as any).log)
         expect(log).toMatchObject(['str', 4, { value: 'val' }, null])
       })
@@ -79,39 +78,10 @@ describe('Wrappers', () => {
   describe('Slots', () => {
     for (const wm of wrapperModules) {
       test(wm.name, async () => {
-        await showWrapper(
-          {
-            name: 'SvelteSlots',
-            children: [
-              { name: 'SvelteSimple' },
-              { name: 'ReactSimple', slot: 'named' },
-            ],
-          },
-          wm
-        )
-        const content = await page.evaluate(
-          () => document.getElementById('app')!.firstElementChild!.outerHTML
-        )
-        expect(decode(content)).toEqual(
-          `<ex-svelte-slots><ex-svelte-simple></ex-svelte-simple><ex-react-simple slot="named"></ex-react-simple></ex-svelte-slots>`
+        expect(await evaluateWrapper(wm.name, 'Slots')).toEqual(
+          `<ex-svelte-slots><ex-svelte-simple></ex-svelte-simple><ex-svelte-simple slot="named"></ex-svelte-simple></ex-svelte-slots>`
         )
       })
     }
-  })
-
-  describe('Auto import', () => {
-    let results: AnalysisResult[]
-    beforeAll(async () => {
-      const result = await analyze(
-        'test/example',
-        elementsModules,
-        'ex',
-        'dist',
-        (filePath) => {}
-      )
-      results = result.analysisResults
-    })
-
-    test('Auto import', async () => {})
   })
 })

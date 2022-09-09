@@ -23,12 +23,10 @@ export type GenericComponent = {
   emits?: Dictionary<any>
   children?: GenericComponent[]
 }
-export type BuildTestAppFunc = (component: GenericComponent) => Promise<string>
 export type WrapperModule = {
   name: string
   fileType: string
   generateFunc: GenerateWrapperFunction
-  buildTestApp: BuildTestAppFunc
 }
 export type TestAppConfig = {
   [i: string]: GenericComponent

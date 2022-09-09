@@ -26,7 +26,3 @@ export const generateJsx = (
     component.slot ? `slot="${component.slot}"` : ''
   }>${children}</${component.name}>`
 }
-
-export const loadedSnippet = `const loadedElement = document.createElement("div")
-loadedElement.id = 'isLoaded'
-document.body.appendChild(loadedElement)`

@@ -2,7 +2,6 @@ import { ElementsModule, WrapperModule } from '../Module'
 import { reactElementPlugin } from './reactElementPlugin'
 import { analyzeReactFile } from './reactAnalyzer'
 import { reactWrapperGenerator } from './reactWrapper'
-import { buildReactTestApp } from './reactTestBuilder'
 import glob from 'glob'
 import fs from 'fs'
 
@@ -21,5 +20,4 @@ export const reactWrapperModule: WrapperModule = {
   name: 'react',
   fileType: 'react',
   generateFunc: reactWrapperGenerator,
-  buildTestApp: buildReactTestApp,
 }
