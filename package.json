@@ -69,6 +69,8 @@
     "ts-jest": "^27.1.5",
     "yarn-or-npm": "^3.0.1"
   },
-  "bin": "./dist/cli.js",
+  "bin": {
+    "brine": "./dist/cli.js"
+  },
   "web-types": "./test/dist/web-types.json"
 }
