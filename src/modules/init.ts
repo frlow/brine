@@ -1,5 +1,4 @@
 import fse from 'fs-extra'
-import { version } from '../../package.json'
 import fs from 'fs'
 import path from 'path'
 
@@ -13,7 +12,7 @@ const packageJson = {
     build: 'brine build -x my src',
   },
   dependencies: {
-    '@frlow/brine': `^${version}`,
+    '@frlow/brine': '^0.0.0',
   },
 }
 
