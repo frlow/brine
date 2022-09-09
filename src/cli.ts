@@ -17,13 +17,13 @@ const validateVariable = <T>(value: T, name: string): T => {
 
 ;(async () => {
   const mainDefinitions: OptionDefinition[] = [
-    { name: 'name', defaultOption: true },
+    { name: 'command', defaultOption: true },
   ]
   const mainCommand = commandLineArgs(mainDefinitions, {
     stopAtFirstUnknown: true,
   })
   let argv = mainCommand._unknown || []
-  const command = validateVariable<string>(mainCommand.name, 'Command')
+  const command = mainCommand.command
   if (command === 'build' || command === 'start') {
     const buildDefinitions = [
       { name: 'source', defaultOption: true },
@@ -80,15 +80,20 @@ const validateVariable = <T>(value: T, name: string): T => {
   }
   if (command === 'init') {
     const buildDefinitions = [
-      { name: 'source', defaultOption: true },
-      { name: 'outdir', alias: 'o', type: String },
+      { name: 'outdir', defaultOption: true },
+      { name: 'source', alias: 's', type: String },
     ]
     const buildOptions = commandLineArgs(buildDefinitions, {
       argv,
       stopAtFirstUnknown: false,
     })
     const source = buildOptions.source || path.join(__dirname, 'example')
-    const outDir: string = buildOptions.outdir || './src'
+    const outDir: string = buildOptions.outdir || '.'
     await init(source, outDir)
-  }
+  } else
+    console.log(`Brine
+Syntax:
+ - brine init <target>
+ - brine start -x <prefix>
+ - brine build -x <prefix>`)
 })()
