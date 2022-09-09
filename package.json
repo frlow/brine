@@ -12,7 +12,7 @@
     "start": "yon brine start test/example -x ex -o test/dist",
     "build": "tsc && cpy ./src/utils/es.cjs ./dist/utils --flat && cpy . --cwd test/example ../../dist/example",
     "brine": "ts-node src/cli.ts",
-    "test": "jest --runInBand",
+    "test": "jest",
     "init": "yon brine init dist/example -s test/example",
     "local": "yon build && npm pack && npm i -g --force ./frlow-brine* && rm frlow-brine*",
     "generate-test": "ts-node test/generateTestPage.ts"

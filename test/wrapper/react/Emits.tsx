@@ -1,15 +1,15 @@
 import React from 'react'
-import { SvelteEmits } from '../../dist/wrapper/react'
+import { SvelteEmits } from '../../dist/wrapper/react/SvelteEmits'
 
 export default () => {
-  const log = (window as any).log as (msg: any) => void
+  const log = (e: any) => (window as any).log.push(e)
   return (
     <div id={'test'}>
       <SvelteEmits
-        onStringevent={log}
-        onClick={log}
-        onNumevent={log}
-        onObjevent={log}
+        onStringevent={(e) => log(e)}
+        onClick={(e) => log(e)}
+        onNumevent={(e) => log(e)}
+        onObjevent={(e) => log(e)}
       ></SvelteEmits>
     </div>
   )

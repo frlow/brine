@@ -1,5 +1,5 @@
 import React from 'react'
-import { SvelteSimple } from '../../dist/wrapper/react'
+import { SvelteSimple } from '../../dist/wrapper/react/SvelteSimple'
 
 export default () => {
   return (

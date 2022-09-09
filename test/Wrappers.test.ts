@@ -1,23 +1,12 @@
 import { wrapperModules } from '../src/activeModules'
 import {
-  buildExample,
   buildTestApp,
+  evaluateWrapper,
   getTestHtml,
-  showComponent,
+  showWrapper,
 } from './common'
 import * as fs from 'fs'
 import path from 'path'
-
-const showWrapper = async (framework: string, testCase: string) => {
-  const code = await buildTestApp(framework, testCase)
-  await showComponent('<div id="app">Loading...</div>', code)
-  await page.waitForSelector('#test')
-}
-
-const evaluateWrapper = async (framework: string, testCase: string) => {
-  await showWrapper(framework, testCase)
-  return await page.evaluate(() => document.getElementById('test')!.innerHTML)
-}
 
 test.skip('Dummy', async () => {
   const framework = 'react'
@@ -34,9 +23,7 @@ test.skip('Dummy', async () => {
   fs.writeFileSync(path.join(dir, 'index.js'), code, 'utf8')
 })
 
-jest.setTimeout(30000)
 describe('Wrappers', () => {
-  beforeAll(async () => await buildExample(false))
   describe('Simple', () => {
     for (const wm of wrapperModules) {
       test(wm.name, async () =>

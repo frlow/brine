@@ -41,14 +41,14 @@ export const reactWrapperGenerator: GenerateWrapperFunction = async (
   const code = `import React,{useEffect, useRef} from 'react'
 ${autoImport.map((ai) => `import '${ai}'`).join('\n')}
 export const ${analysisResult.name} = (${inputType}): JSX.Element => {
-  const ref = useRef(null)
+  const ref = useRef<HTMLElement>(null)
   
   ${analysisResult.emits
     .map(
       (emit) =>
         `const on${camelize(
           emit.name
-        )}Callback = React.useCallback((ev)=>on${camelize(
+        )}Callback = React.useCallback((ev: any)=>on${camelize(
           emit.name
         )}&&on${camelize(emit.name)}(ev.detail && ev.detail[0]),[on${camelize(
           emit.name
@@ -58,6 +58,7 @@ export const ${analysisResult.name} = (${inputType}): JSX.Element => {
   
   useEffect(() => {
     const { current } = ref
+    if (!current) return
     ${analysisResult.emits
       .map(
         (emit) =>
@@ -108,6 +109,7 @@ export declare const ${analysisResult.name}: (${inputType}) => JSX.Element;
     code: [
       { content: transpiled.outputText, fileType: 'js' },
       { content: declaration, fileType: 'd.ts' },
+      { content: code, fileType: 'tsx' },
     ],
     exportCodeLine: `export * from './${analysisResult.name}'`,
     declarationLine: `export * from './${analysisResult.name}'`,

@@ -70,9 +70,9 @@ const app = createApp(App);
 app.mount("#app");`
     case 'react':
       return `import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import App from "./${testCase}";
-ReactDOM.render(<App />, document.getElementById("app"));`
+createRoot(document.getElementById('app')!).render(<App/>);`
     default:
       throw `Wrapper testing of ${framework} is not implemented`
   }
@@ -94,4 +94,15 @@ const bundleTestApp = async (main: string, framework: string) => {
 export const buildTestApp = async (framework: string, testCase: string) => {
   const main = getWrapperMain(framework, testCase)
   return await bundleTestApp(main, framework)
+}
+
+export const showWrapper = async (framework: string, testCase: string) => {
+  const code = await buildTestApp(framework, testCase)
+  await showComponent('<div id="app">Loading...</div>', code)
+  await page.waitForSelector('#test')
+}
+
+export const evaluateWrapper = async (framework: string, testCase: string) => {
+  await showWrapper(framework, testCase)
+  return await page.evaluate(() => document.getElementById('test')!.innerHTML)
 }
