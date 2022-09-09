@@ -27,7 +27,7 @@ const tsconfigJson = {
     strict: true,
     skipLibCheck: true,
     resolveJsonModule: true,
-    jsx: 'preserve',
+    jsx: 'react-jsx',
     noEmit: true,
   },
 }

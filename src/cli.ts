@@ -77,8 +77,7 @@ const validateVariable = <T>(value: T, name: string): T => {
         }, 50)
       })
     }
-  }
-  if (command === 'init') {
+  } else if (command === 'init') {
     const buildDefinitions = [
       { name: 'outdir', defaultOption: true },
       { name: 'source', alias: 's', type: String },
