@@ -23,7 +23,7 @@ type PluginData = {
   script?: sfc.SFCScriptBlock
 }
 
-const vuePlugin = (
+export const vuePlugin = (
   opts: Options = {},
   { prefix, analysisResults }: PluginOptions
 ) =>
@@ -155,17 +155,17 @@ customElements.define("${prefix}-${kebabize(fileName)}", StyledElement);`
 
             let source = descriptor.template.content
 
-            if (descriptor.template.lang === 'pug') {
-              const pug = await tryAsync(
-                () => import('pug'),
-                'pug',
-                'Pug template rendering'
-              )
-              source = pug.render(descriptor.template.content)
-
-              // Fix #default="#default" and v-else="v-else"
-              source = source.replace(/(\B#.*?|\bv-.*?)="\1"/g, '$1')
-            }
+            // if (descriptor.template.lang === 'pug') {
+            //   const pug = await tryAsync(
+            //     () => import('pug'),
+            //     'pug',
+            //     'Pug template rendering'
+            //   )
+            //   source = pug.render(descriptor.template.content)
+            //
+            //   // Fix #default="#default" and v-else="v-else"
+            //   source = source.replace(/(\B#.*?|\bv-.*?)="\1"/g, '$1')
+            // }
 
             const result = sfc.compileTemplate({
               id,
@@ -351,5 +351,3 @@ customElements.define("${prefix}-${kebabize(fileName)}", StyledElement);`
       )
     },
   }
-
-export = vuePlugin

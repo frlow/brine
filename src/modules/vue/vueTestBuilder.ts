@@ -3,7 +3,7 @@ import esbuild from 'esbuild'
 import path from 'path'
 import { fakeFilePlugin } from '../../utils/fakeFilePlugin'
 import { generateJsx, loadedSnippet } from '../../utils/testBuilderUtils'
-import vuePlugin from './plugin'
+import { vuePlugin } from './plugin'
 
 export const buildVueTestApp: BuildTestAppFunc = async (component) => {
   const imports = Object.keys(getImportsFromComponent(component))

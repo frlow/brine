@@ -13,3 +13,7 @@ yarn add @frlow/brine
 # Initialize a Brine project using
 brine init
 ```
+
+TODO:
+- [ ] Add tsconfig to init
+- [ ] Add package.json to init

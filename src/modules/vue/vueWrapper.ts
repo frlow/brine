@@ -7,17 +7,11 @@ import { getTypeImports } from '../importedTypes'
 export const vueWrapperGenerator: GenerateWrapperFunction = async (
   analysisResult,
   prefix,
-  importMap
+  autoImport
 ) => {
-  const autoImports: string[] = importMap
-    ? importMap[analysisResult.name].map((ai) =>
-        path.join('..', '..', ai).replace('.js', '')
-      )
-    : []
   const importedTypes = getTypeImports(analysisResult.sourceFile)
   const code = `<script setup lang='ts'>
-import type {${importedTypes.join(', ')}} from '../types'
-${autoImports.map((ai) => `import '${ai}'`).join('\n')}
+${autoImport.map((ai) => `import '${ai}'`).join('\n')}
 ${
   analysisResult.props.length > 0
     ? `defineProps<{${analysisResult.props

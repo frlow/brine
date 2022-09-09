@@ -2,10 +2,10 @@
 import commandLineArgs, { OptionDefinition } from 'command-line-args'
 import { build } from './modules/build'
 import { watch } from 'chokidar'
-import { docs, startReloadServer, writeDocs } from './modules/docs'
 import path from 'path'
-import { writeFile } from './utils/writeFile'
 import { runStages } from './stages'
+import { serveDocs } from './modules/docs'
+import { init } from './modules/init'
 
 const validateVariable = <T>(value: T, name: string): T => {
   if (!value) {
@@ -17,59 +17,83 @@ const validateVariable = <T>(value: T, name: string): T => {
 
 ;(async () => {
   const mainDefinitions: OptionDefinition[] = [
-    { name: 'name', defaultOption: true },
+    { name: 'command', defaultOption: true },
   ]
   const mainCommand = commandLineArgs(mainDefinitions, {
     stopAtFirstUnknown: true,
   })
   let argv = mainCommand._unknown || []
-  const command = validateVariable<string>(mainCommand.name, 'Command')
+  const command = mainCommand.command
   if (command === 'build' || command === 'start') {
     const buildDefinitions = [
       { name: 'source', defaultOption: true },
       { name: 'prefix', alias: 'x', type: String },
       { name: 'outdir', alias: 'o', type: String },
       { name: 'no-docs', type: Boolean },
-      { name: 'exclude', type: String, multiple: true },
-      { name: 'auto-import', alias: 'a', type: Boolean },
+      { name: 'no-auto-import', type: Boolean },
     ]
     const buildOptions = commandLineArgs(buildDefinitions, {
       argv,
       stopAtFirstUnknown: false,
     })
-    const source: string = validateVariable(buildOptions.source, 'source dir')
-    const dist: string = validateVariable(buildOptions.outdir, '--outdir (-o)')
+    const source: string = buildOptions.source || '.'
+    const dist: string = buildOptions.outdir || 'dist'
 
     const prefix: string = validateVariable(
       buildOptions.prefix,
       '--prefix (-x)'
     )
     const external: string[] = buildOptions.external || []
-    const autoImport: boolean = !!buildOptions['auto-import']
+    const noAutoImport: boolean = !!buildOptions['no-auto-import']
     const noDocs: boolean = !!buildOptions['no-docs']
     if (command === 'build') {
-      await runStages(dist, source, prefix, external, autoImport)
-      if (!noDocs) await writeDocs(source, prefix, prefix, dist, writeFile)
+      await runStages(dist, source, prefix, external, !noAutoImport, !noDocs)
     } else if (command === 'start') {
       let timeout: NodeJS.Timeout
-      let reload = () => {}
-      if (!noDocs) {
-        docs(prefix, dist, source, prefix)
-        reload = startReloadServer()
-      }
       const watchDir = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
-      watch(watchDir).on('all', (event, changedPath, stats) => {
+      await runStages(dist, source, prefix, external, !noAutoImport, !noDocs)
+      const bs = serveDocs(dist)
+      watch(watchDir).on('all', (event, changedPath) => {
         const distDir = path.resolve(dist)
         if (changedPath.startsWith(distDir)) return
         clearTimeout(timeout)
         timeout = setTimeout(async () => {
           console.log('Change detected, rebuilding...')
-          await runStages(dist, source, prefix, external, autoImport)
-          reload()
+          try {
+            await runStages(
+              dist,
+              source,
+              prefix,
+              external,
+              !noAutoImport,
+              !noDocs
+            )
+            bs.reload()
+          } catch (e) {
+            console.log(e)
+          }
         }, 50)
       })
     }
   }
+  if (command === 'init') {
+    const buildDefinitions = [
+      { name: 'outdir', defaultOption: true },
+      { name: 'source', alias: 's', type: String },
+    ]
+    const buildOptions = commandLineArgs(buildDefinitions, {
+      argv,
+      stopAtFirstUnknown: false,
+    })
+    const source = buildOptions.source || path.join(__dirname, 'example')
+    const outDir: string = buildOptions.outdir || '.'
+    await init(source, outDir)
+  } else
+    console.log(`Brine
+Syntax:
+ - brine init <target>
+ - brine start -x <prefix>
+ - brine build -x <prefix>`)
 })()

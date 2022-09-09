@@ -1,6 +1,6 @@
 {
   "name": "@frlow/brine",
-  "version": "1.1.52",
+  "version": "1.0.0",
   "repository": "https://github.com/frlow/brine",
   "author": "Fredrik Löwenhamn <fredrik.lowenhamn@gmail.com>",
   "license": "MIT",
@@ -9,30 +9,34 @@
     "dist"
   ],
   "scripts": {
-    "start": "yon brine start test/example -x ex -o test/dist -a",
-    "build:cli": "tsc",
-    "build:example": "yon brine build test/example -x ex -o test/dist",
+    "start": "yon brine start test/example -x ex -o test/dist",
+    "build": "tsc && cpy ./src/utils/es.cjs ./dist/utils --flat && cpy . --cwd test/example ../../dist/example",
     "brine": "ts-node src/cli.ts",
-    "test": "jest"
+    "test": "jest",
+    "init": "yon brine init dist/example -s test/example",
+    "local": "yon build && npm pack && npm i -g --force ./frlow-brine* && rm frlow-brine*"
   },
   "dependencies": {
     "@babel/core": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
+    "@mdx-js/esbuild": "^2.1.3",
     "@types/babel__core": "^7.1.17",
     "@types/command-line-args": "^5.2.0",
     "@types/express": "^4.17.13",
+    "@types/fs-extra": "^9.0.13",
     "@types/glob": "^7.2.0",
     "@types/node": "^17.0.23",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
     "@types/ws": "^8.5.3",
     "babel-preset-solid": "^1.4.0",
+    "browser-sync": "^2.27.10",
     "chokidar": "^3.5.3",
     "command-line-args": "^5.2.1",
     "compression": "^1.7.4",
     "esbuild": "^0.14.36",
     "esbuild-sass-plugin": "^2.2.6",
-    "express": "^4.17.3",
+    "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
     "prettier": "^2.6.2",
     "pushstate-server": "^3.1.0",
@@ -47,13 +51,14 @@
     "typescript": "^4.6.3",
     "vscode-html-languageservice": "^4.2.4",
     "vue": "^3.2.33",
-    "wc-react": "^0.5.0",
-    "ws": "^8.6.0"
+    "wc-react": "^0.5.0"
   },
   "devDependencies": {
+    "@types/browser-sync": "^2.26.3",
     "@types/he": "^1.1.2",
     "@types/jest": "^27.5.1",
     "@types/jest-environment-puppeteer": "^5.0.2",
+    "cpy-cli": "^4.2.0",
     "esbuild-runner": "^2.2.1",
     "he": "^1.2.0",
     "jest": "^27.5.1",
@@ -63,7 +68,7 @@
     "yarn-or-npm": "^3.0.1"
   },
   "bin": {
-    "ucp": "./dist/cli.js"
+    "brine": "./dist/cli.js"
   },
   "web-types": "./test/dist/web-types.json"
 }
