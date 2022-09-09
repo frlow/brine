@@ -19,11 +19,14 @@ const evaluateWrapper = async (framework: string, testCase: string) => {
   return await page.evaluate(() => document.getElementById('test')!.innerHTML)
 }
 
-test('Dummy', async () => {
+test.skip('Dummy', async () => {
+  const framework = 'react'
+  const testCase = 'Emits'
+
   // Run this to generate a page to test manually
   jest.setTimeout(1000000)
   const html = getTestHtml('<div id="app">Loading...</div>')
-  const code = await buildTestApp('vue', 'Props')
+  const code = await buildTestApp(framework, testCase)
   const dir = path.join('test', 'dist', 'dummy')
   if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true })
   fs.mkdirSync(dir)
