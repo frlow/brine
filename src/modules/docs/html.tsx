@@ -1,9 +1,11 @@
 import React from 'react'
 import { findFiles } from '../../utils/findFiles'
 import path from 'path'
-import { evalMdx, DocTypePluginOptions, compileMdx } from './mdx'
+import { DocTypePluginOptions, evalMdx } from './mdx'
 import fs from 'fs'
+import ts, { JsxEmit, ModuleKind } from 'typescript'
 import { renderToString } from 'react-dom/server'
+import glob from 'glob'
 
 export async function getHtml(
   source: string,
@@ -12,11 +14,20 @@ export async function getHtml(
   const compileNamed = async (
     name: string,
     docTypePluginOptions?: DocTypePluginOptions
-  ) =>
-    await evalMdx(
-      findFiles(source, (str) => str.endsWith(`${name}.tag.mdx`))[0] || '',
-      docTypePluginOptions
-    )
+  ) => {
+    const file = glob.sync(`${source}/**/${name}.tag.@(mdx|tsx)`)[0]
+    if (!file) return () => <></>
+    else if (file.endsWith('.mdx'))
+      return await evalMdx(file, docTypePluginOptions)
+    else {
+      const code = ts.transpileModule(fs.readFileSync(file, 'utf8'), {
+        compilerOptions: { module: ModuleKind.CommonJS, jsx: JsxEmit.ReactJSX },
+      }).outputText
+      const Component = eval(code)
+      return (args: any) => <Component {...args} />
+    }
+  }
+
   const example =
     findFiles(source, (str) => str.endsWith(`Example.tag.tsx`)).map((file) =>
       fs.readFileSync(file, 'utf8')
@@ -61,10 +72,8 @@ export async function getHtml(
     )
   }
   const rendered = renderToString(<Body />)
-  const head =
-    findFiles(source, (str) => str.endsWith(`Head.tag.html`)).map((file) =>
-      fs.readFileSync(file, 'utf8')
-    )[0] || ''
+  const Head = await compileNamed('Head')
+  const renderedHead = renderToString(<Head />)
   const html = `<!DOCTYPE html>
 <html lang="en" x-data="{ demo: 'someDemo' }">
     <head>
@@ -75,7 +84,7 @@ export async function getHtml(
         <script>
             if(!window.location.hash) window.location.hash="${docs[0].name}"
         </script>
-        ${head}
+        ${renderedHead}
     </head>
 ${rendered}
 </html>`
