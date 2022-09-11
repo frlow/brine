@@ -12,7 +12,7 @@ export async function runStages(
   source: string,
   prefix: string,
   external: string[],
-  autoImport: boolean,
+  // autoImport: boolean,
   docs: boolean
 ) {
   // Log start time
@@ -52,7 +52,6 @@ export async function runStages(
       wrapperFunction: wm.generateFunc,
     })),
     prefix,
-    autoImport,
     writeFile
   )
   // Build docs

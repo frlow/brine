@@ -17,19 +17,23 @@ export type GenerateWrapperFunction = (
   autoImport: string[]
 ) => Promise<WrapperFile>
 
-export const wrapper = async (
-  outdir: string,
-  analysisResults: AnalysisResult[],
+async function generateWrappers(
   generators: { name: string; wrapperFunction: GenerateWrapperFunction }[],
+  analysisResults: AnalysisResult[],
+  outdir: string,
   prefix: string,
-  autoImport: boolean,
-  writeFile: WriteFileFunc
-) => {
+  writeFile: (filePath: string, contents: string) => void,
+  autoImport: boolean
+) {
+  const wrapperRootDir = path.join(
+    outdir,
+    autoImport ? 'wrapper' : 'lite-wrapper'
+  )
   for (const generator of generators) {
     const index: string[] = []
     const dTs: string[] = []
     for (const ar of analysisResults) {
-      const wrapperDir = path.join(outdir, 'wrapper', generator.name)
+      const wrapperDir = path.join(wrapperRootDir, generator.name)
       const autoImports: string[] = []
       if (autoImport) {
         const target = glob.sync(`${outdir}/elements/**/${ar.name}.*`)[0]
@@ -55,12 +59,37 @@ export const wrapper = async (
       dTs.push(wrapper.declarationLine)
     }
     writeFile(
-      path.join(outdir, 'wrapper', generator.name, 'index.js'),
+      path.join(wrapperRootDir, generator.name, 'index.js'),
       index.join('\n')
     )
     writeFile(
-      path.join(outdir, 'wrapper', generator.name, 'index.d.ts'),
+      path.join(wrapperRootDir, generator.name, 'index.d.ts'),
       dTs.join('\n')
     )
   }
+}
+
+export const wrapper = async (
+  outdir: string,
+  analysisResults: AnalysisResult[],
+  generators: { name: string; wrapperFunction: GenerateWrapperFunction }[],
+  prefix: string,
+  writeFile: WriteFileFunc
+) => {
+  await generateWrappers(
+    generators,
+    analysisResults,
+    outdir,
+    prefix,
+    writeFile,
+    true
+  )
+  await generateWrappers(
+    generators,
+    analysisResults,
+    outdir,
+    prefix,
+    writeFile,
+    false
+  )
 }

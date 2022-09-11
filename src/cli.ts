@@ -30,7 +30,6 @@ const validateVariable = <T>(value: T, name: string): T => {
       { name: 'prefix', alias: 'x', type: String },
       { name: 'outdir', alias: 'o', type: String },
       { name: 'no-docs', type: Boolean },
-      { name: 'no-auto-import', type: Boolean },
     ]
     const buildOptions = commandLineArgs(buildDefinitions, {
       argv,
@@ -44,17 +43,16 @@ const validateVariable = <T>(value: T, name: string): T => {
       '--prefix (-x)'
     )
     const external: string[] = buildOptions.external || []
-    const noAutoImport: boolean = !!buildOptions['no-auto-import']
     const noDocs: boolean = !!buildOptions['no-docs']
     if (command === 'build') {
-      await runStages(dist, source, prefix, external, !noAutoImport, !noDocs)
+      await runStages(dist, source, prefix, external, !noDocs)
     } else if (command === 'start') {
       let timeout: NodeJS.Timeout
       const watchDir = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
-      await runStages(dist, source, prefix, external, !noAutoImport, !noDocs)
-      const bs = serveDocs(dist)
+      await runStages(dist, source, prefix, external, !noDocs)
+      const bs = noDocs ? { reload: () => {} } : serveDocs(dist)
       watch(watchDir).on('all', (event, changedPath) => {
         const distDir = path.resolve(dist)
         if (changedPath.startsWith(distDir)) return
@@ -62,14 +60,7 @@ const validateVariable = <T>(value: T, name: string): T => {
         timeout = setTimeout(async () => {
           console.log('Change detected, rebuilding...')
           try {
-            await runStages(
-              dist,
-              source,
-              prefix,
-              external,
-              !noAutoImport,
-              !noDocs
-            )
+            await runStages(dist, source, prefix, external, !noDocs)
             bs.reload()
           } catch (e) {
             console.log(e)
