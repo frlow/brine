@@ -1,5 +1,5 @@
 import React from 'react'
-import { SvelteEmits } from '../../dist/wrapper/react/SvelteEmits'
+import { SvelteEmits } from '../../dist/lite-wrapper/react/SvelteEmits'
 
 export default () => {
   const log = (e: any) => (window as any).log.push(e)

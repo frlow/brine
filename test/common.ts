@@ -11,12 +11,8 @@ const baseUrl = 'https://example.com'
 const loadBundle = () =>
   fs.readFileSync(path.join(__dirname, 'dist', 'bundle', 'index.js'), 'utf8')
 
-export const buildExample = async (autoImport: boolean) => {
-  await exec(
-    `yarn brine build test/example -x ex -o test/dist ${
-      autoImport ? '' : '--no-auto-import'
-    }`
-  )
+export const buildExample = async () => {
+  await exec(`yarn brine build test/example -x ex -o test/dist`)
 }
 
 export const getTestHtml = (component: string) => `<!DOCTYPE html>

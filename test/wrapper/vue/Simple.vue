@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SvelteSimple from '../../dist/wrapper/vue/SvelteSimple.vue'
+import SvelteSimple from '../../dist/lite-wrapper/vue/SvelteSimple.vue'
 </script>
 <template>
   <div id="test">

@@ -1,6 +1,6 @@
 import React from 'react'
-import { SvelteSlots } from '../../dist/wrapper/react/SvelteSlots'
-import { SvelteSimple } from '../../dist/wrapper/react/SvelteSimple'
+import { SvelteSlots } from '../../dist/lite-wrapper/react/SvelteSlots'
+import { SvelteSimple } from '../../dist/lite-wrapper/react/SvelteSimple'
 
 export default () => {
   return (
