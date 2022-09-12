@@ -26,7 +26,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - run: yarn build:example
-      - run: yarn pages
+      - name: Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist-example/docs
+          token: ${{secrets.GH_TOKEN}}
+          branch: main
       - run: cd dist-example && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

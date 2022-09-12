@@ -15,8 +15,7 @@
     "brine": "ts-node src/cli.ts",
     "test": "jest",
     "init": "yon brine init dist/example -s test/example",
-    "local": "yon build && npm pack && npm i -g --force ./frlow-brine* && rm frlow-brine*",
-    "pages": "gh-pages -d dist-example/docs -r https://github.com/frlow/frlow.github.io -b main"
+    "local": "yon build && npm pack && npm i -g --force ./frlow-brine* && rm frlow-brine*"
   },
   "dependencies": {
     "@babel/core": "^7.17.12",
