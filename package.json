@@ -11,12 +11,12 @@
   "scripts": {
     "start": "yon brine start test/example -x ex -o test/dist",
     "build": "tsc && cpy ./src/utils/es.cjs ./dist/utils --flat && cpy . --cwd test/example ../../dist/example",
-    "build:example": "yon brine build test/example -o dist-example -x ex && node example.js dist-example",
+    "build:example": "yon brine build test/example -o dist-example -x ex && node example.js dist-example && cpy --cwd dist-example/docs index.html . --rename='404.html'",
     "brine": "ts-node src/cli.ts",
     "test": "jest",
     "init": "yon brine init dist/example -s test/example",
     "local": "yon build && npm pack && npm i -g --force ./frlow-brine* && rm frlow-brine*",
-    "generate-test": "ts-node test/generateTestPage.ts"
+    "pages": "gh-pages -d dist-example/docs -r https://github.com/frlow/frlow.github.io -b main"
   },
   "dependencies": {
     "@babel/core": "^7.17.12",
@@ -63,6 +63,7 @@
     "cpy-cli": "^4.2.0",
     "esbuild-plugin-vue3": "^0.3.0",
     "esbuild-runner": "^2.2.1",
+    "gh-pages": "^4.0.0",
     "he": "^1.2.0",
     "jest": "^27.5.1",
     "jest-environment-puppeteer": "^6.0.3",

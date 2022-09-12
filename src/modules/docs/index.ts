@@ -15,7 +15,6 @@ export async function writeDocs(
 ) {
   const html = await getHtml(source, docTypePluginOptions)
   writeFile(path.join(dist, 'docs', 'index.html'), html)
-  writeFile(path.join(dist, 'docs', '404.html'), html)
   writeFile(
     path.join(dist, 'docs', 'index.js'),
     fs.readFileSync(path.join(dist, 'bundle', 'index.js'), 'utf8')
