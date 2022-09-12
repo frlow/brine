@@ -18,14 +18,14 @@ export const DocsExample = ({ children, code, info }: ExampleArgs) => (
       <button x-on:click="show=!show">Toggle Code</button>
       <template x-if="show">
         <div>
-          <p>
-            <div>Vue:</div>
-            <div>{code.vue}</div>
-          </p>
-          <p>
-            <div>React:</div>
-            <div>{code.react}</div>
-          </p>
+          {['Vue', 'React'].map((fw) => (
+            <p key={fw}>
+              <div>{fw}:</div>
+              <div style={{ whiteSpace: 'pre-wrap' }}>
+                {code[fw.toLowerCase()]}
+              </div>
+            </p>
+          ))}
         </div>
       </template>
     </div>

@@ -12,14 +12,14 @@ export async function runStages(
   source: string,
   prefix: string,
   external: string[],
-  // autoImport: boolean,
-  docs: boolean
+  docs: boolean,
+  clearDist: boolean
 ) {
   // Log start time
   const startTime = new Date().getTime()
 
-  // Create dist dir
-  if (fs.existsSync(dist)) fs.rmSync(dist, { recursive: true })
+  // Remove dist dir
+  if (clearDist && fs.existsSync(dist)) fs.rmSync(dist, { recursive: true })
 
   // Analyze components
   const analyzerResult = await analyze(

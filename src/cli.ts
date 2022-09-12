@@ -45,14 +45,18 @@ const validateVariable = <T>(value: T, name: string): T => {
     const external: string[] = buildOptions.external || []
     const noDocs: boolean = !!buildOptions['no-docs']
     if (command === 'build') {
-      await runStages(dist, source, prefix, external, !noDocs)
+      await runStages(dist, source, prefix, external, !noDocs, true)
     } else if (command === 'start') {
       let timeout: NodeJS.Timeout
       const watchDir = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
-      await runStages(dist, source, prefix, external, !noDocs)
-      const bs = noDocs ? { reload: () => {} } : serveDocs(dist)
+      await runStages(dist, source, prefix, external, !noDocs, true)
+      const bs = noDocs
+        ? {
+            reload: () => {},
+          }
+        : serveDocs(dist)
       watch(watchDir).on('all', (event, changedPath) => {
         const distDir = path.resolve(dist)
         if (changedPath.startsWith(distDir)) return
@@ -60,7 +64,7 @@ const validateVariable = <T>(value: T, name: string): T => {
         timeout = setTimeout(async () => {
           console.log('Change detected, rebuilding...')
           try {
-            await runStages(dist, source, prefix, external, !noDocs)
+            await runStages(dist, source, prefix, external, !noDocs, false)
             bs.reload()
           } catch (e) {
             console.log(e)
