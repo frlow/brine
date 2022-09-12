@@ -82,6 +82,9 @@ const getEmits = (sourceFile: SourceFile): PropDefinition[] => {
           kind: SyntaxKind.VoidKeyword,
           getText: () => 'void',
         },
+    optional: !!p.type.types?.some(
+      (t: any) => t.kind === SyntaxKind.UndefinedKeyword
+    ),
   }))
 }
 

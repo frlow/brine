@@ -3,7 +3,7 @@ const emit = defineEmits<{
   (e: 'stringevent', value: string): void
   (e: 'numevent', value: number): void
   (e: 'objevent', value: { value: string }): void
-  (e: 'click'): void
+  (e: 'click'): void | undefined
 }>()
 </script>
 

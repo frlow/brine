@@ -5,7 +5,7 @@
     stringevent: string,
     numevent: number,
     objevent: { value: string },
-    click: void
+    click?: void
   }>();
 </script>
 

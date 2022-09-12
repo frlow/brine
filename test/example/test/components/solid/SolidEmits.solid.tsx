@@ -2,7 +2,7 @@ export default (props: {
   onStringevent: (val: string) => void
   onNumevent: (val: number) => void
   onObjevent: (val: { value: string }) => void
-  onClick: () => void
+  onClick?: () => void
 }) => {
   return (
     <button
@@ -10,7 +10,7 @@ export default (props: {
         props.onStringevent('demo')
         props.onNumevent(5)
         props.onObjevent({ value: 'val' })
-        props.onClick()
+        if (props.onClick) props.onClick()
       }}
     >
       Solid Send event

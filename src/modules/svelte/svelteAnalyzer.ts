@@ -1,4 +1,4 @@
-import {preprocess} from 'svelte/compiler'
+import { preprocess } from 'svelte/compiler'
 import fs from 'fs'
 import ts, {
   CallExpression,
@@ -11,7 +11,7 @@ import ts, {
 } from 'typescript'
 import ScriptTarget = ts.ScriptTarget
 import path from 'path'
-import {AnalyzeFileFunction, PropDefinition} from '../analyze'
+import { AnalyzeFileFunction, PropDefinition } from '../analyze'
 
 const getProps = (sourceFile: SourceFile): PropDefinition[] => {
   if (!sourceFile.statements) return []
@@ -32,7 +32,7 @@ const getProps = (sourceFile: SourceFile): PropDefinition[] => {
   return variables.map((v) => ({
     name: v.name.getText(sourceFile),
     type: v.type!,
-    optional: !!v.initializer
+    optional: !!v.initializer,
   }))
 }
 
@@ -55,7 +55,8 @@ function getEmits(sourceFile: ts.SourceFile): PropDefinition[] {
   const args = dispatch.typeArguments![0] as TypeLiteralNode
   const emits = args?.members.map((p) => ({
     name: p.name!.getText(sourceFile),
-    type: (p as any).type as TypeNode
+    type: (p as any).type as TypeNode,
+    optional: !!p.questionToken,
   }))
   return emits
 }
@@ -67,18 +68,14 @@ export const analyzeSvelteFile: AnalyzeFileFunction = async (
   let sourceFile: SourceFile = {} as SourceFile
   let slots: string[] | undefined = undefined
   await preprocess(code, {
-    markup: ({content}) => {
+    markup: ({ content }) => {
       slots = content
         .match(/<slot(.*?)>/g)
         ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
         .filter((d) => d)
     },
-    script: ({content}) => {
-      sourceFile = ts.createSourceFile(
-        filePath,
-        content,
-        ScriptTarget.ESNext
-      )
+    script: ({ content }) => {
+      sourceFile = ts.createSourceFile(filePath, content, ScriptTarget.ESNext)
     },
   })
   const props = getProps(sourceFile)
@@ -89,6 +86,6 @@ export const analyzeSvelteFile: AnalyzeFileFunction = async (
     emits,
     name: path.parse(filePath).name,
     slots,
-    imported: []
+    imported: [],
   }
 }

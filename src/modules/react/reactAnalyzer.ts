@@ -65,6 +65,7 @@ export const analyzeReactFile: AnalyzeFileFunction = async (
           name.substring(0, 1).toLowerCase() + name.substring(1)
         return {
           name: lowercaseName,
+          optional: !!e.questionToken,
           type: e.type.parameters[0]?.type || {
             kind: SyntaxKind.VoidKeyword,
             getText: () => 'void',

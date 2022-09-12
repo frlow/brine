@@ -91,18 +91,25 @@ describe('Analyzer', () => {
         const expected: Result = {
           name,
           emits: [
-            { name: 'stringevent', type: 'string' },
+            {
+              name: 'stringevent',
+              type: 'string',
+              optional: false,
+            },
             {
               name: 'numevent',
               type: 'number',
+              optional: false,
             },
             {
               name: 'objevent',
               type: '{ value: string }',
+              optional: false,
             },
             {
               name: 'click',
               type: 'void',
+              optional: true,
             },
           ],
           props: [],
