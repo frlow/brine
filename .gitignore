@@ -14,3 +14,4 @@ yarn-error.log
 **/logs/
 **/.DS_Store
 generated/
+dist-example/

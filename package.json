@@ -11,6 +11,7 @@
   "scripts": {
     "start": "yon brine start test/example -x ex -o test/dist",
     "build": "tsc && cpy ./src/utils/es.cjs ./dist/utils --flat && cpy . --cwd test/example ../../dist/example",
+    "build:example": "yon brine build test/example -o dist-example -x ex && node example.js dist-example",
     "brine": "ts-node src/cli.ts",
     "test": "jest",
     "init": "yon brine init dist/example -s test/example",
