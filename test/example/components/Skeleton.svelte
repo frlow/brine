@@ -1,0 +1,62 @@
+<div class="skeleton">
+    <div class="skeleton__block"></div>
+    <div class="skeleton__block"></div>
+    <div class="skeleton__block"></div>
+</div>
+<script lang="ts"></script>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 1rem;
+        min-height: 100vh;
+    }
+
+
+    .skeleton {
+        --surface: hsl(0 0% 90%);
+        --block: hsl(280 80% 80%);
+        --loader: hsl(35 100% 80%);
+        --padding: 1rem;
+        padding: var(--padding);
+        border-radius: calc(var(--padding) * 1.5);
+        gap: calc(var(--padding) * 0.5);
+        width: clamp(200px, 50vmin, 20rem);
+        display: grid;
+        grid-template: 1fr 1fr / 25% 1fr;
+        background: var(--surface);
+    }
+
+    .skeleton__block {
+        background: linear-gradient(
+                -75deg,
+                transparent 40%,
+                var(--loader),
+                transparent 60%
+        ) 0 0 / 200% 100%,
+        var(--block);
+        border-radius: calc(var(--padding) * 0.5);
+        animation: load 2s infinite linear;
+        background-attachment: fixed;
+    }
+
+    @keyframes load {
+        to {
+            background-position: 200% 0;
+        }
+    }
+
+    .skeleton__block:first-of-type {
+        grid-row: 1 / -1;
+        aspect-ratio: 1;
+    }
+
+    .skeleton__block:last-of-type {
+        width: 65%;
+    }
+</style>
