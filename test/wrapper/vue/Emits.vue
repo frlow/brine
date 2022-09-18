@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SvelteEmits from '../../dist/lite-wrapper/vue/SvelteEmits.vue'
+import SvelteEmits from '../../dist/wrapper/vue/SvelteEmits.lite.vue'
 
 function log(e: any) {
   (window as any).log.push(e)

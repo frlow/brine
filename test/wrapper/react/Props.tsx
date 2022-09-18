@@ -1,5 +1,5 @@
 import React from 'react'
-import { SvelteProps } from '../../dist/lite-wrapper/react/SvelteProps'
+import { SvelteProps } from '../../dist/wrapper/react/SvelteProps.lite'
 
 export default () => {
   return (

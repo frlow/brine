@@ -27,7 +27,7 @@ async function generateWrappers(
 ) {
   const wrapperRootDir = path.join(
     outdir,
-    autoImport ? 'wrapper' : 'lite-wrapper'
+    'wrapper'
   )
   for (const generator of generators) {
     const index: string[] = []
@@ -50,7 +50,7 @@ async function generateWrappers(
 
       wrapper.code.forEach((code) =>
         writeFile(
-          path.join(wrapperDir, `${ar.name}.${code.fileType}`),
+          path.join(wrapperDir, `${ar.name}${autoImport?'':'.lite'}.${code.fileType}`),
           code.content
         )
       )

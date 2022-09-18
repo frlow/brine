@@ -1,5 +1,5 @@
 import React from 'react'
-import { SvelteEmits } from '../../dist/lite-wrapper/react'
+import { SvelteEmits } from '../../dist/wrapper/react/SvelteEmits.lite'
 
 export default () => {
   const [count, setCount] = React.useState(0)
