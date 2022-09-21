@@ -20,6 +20,5 @@
   }
 </script>
 
-<div on:mouseover={()=>lazyLoad('hover')}>
-    <slot></slot>
-</div>
+<slot on:mouseover={()=>lazyLoad('hover')}></slot>
+
