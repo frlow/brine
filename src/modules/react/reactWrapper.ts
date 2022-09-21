@@ -1,11 +1,12 @@
-import { GenerateWrapperFunction, WrapperFile } from '../wrapper'
-import ts, { JsxEmit, ModuleKind } from 'typescript'
-import { camelize, kebabize } from '../../utils/kebabize'
+import {GenerateWrapperFunction, WrapperFile} from '../wrapper'
+import ts, {JsxEmit, ModuleKind} from 'typescript'
+import {camelize, kebabize} from '../../utils/kebabize'
 
 export const reactWrapperGenerator: GenerateWrapperFunction = async (
   analysisResult,
   prefix,
-  autoImport
+  importMode,
+  importFile
 ) => {
   const props = analysisResult.props.map(
     (prop) =>
@@ -39,7 +40,7 @@ export const reactWrapperGenerator: GenerateWrapperFunction = async (
     )
     .join(', ')}}`
   const code = `import React,{useEffect, useRef} from 'react'
-${autoImport.map((ai) => `import '${ai}'`).join('\n')}
+${importMode === 'auto' ? `import '${importFile}'` : ''}
 export const ${analysisResult.name} = (${inputType}): JSX.Element => {
   const ref = useRef<HTMLElement>(null)
   
@@ -57,29 +58,32 @@ export const ${analysisResult.name} = (${inputType}): JSX.Element => {
     .join('\n')}
   
   useEffect(() => {
+    ${importMode === 'lazy' ? `// @ts-ignore
+    import('${importFile}')` : ''}
     const { current } = ref
     if (!current) return
     ${analysisResult.emits
-      .map(
-        (emit) =>
-          `current.addEventListener('${prefix}-${emit.name}', on${camelize(
-            emit.name
-          )}Callback)`
-      )
-      .join('\n')}
+    .map(
+      (emit) =>
+        `current.addEventListener('${prefix}-${emit.name}', on${camelize(
+          emit.name
+        )}Callback)`
+    )
+    .join('\n')}
     return () => {
       ${analysisResult.emits
-        .map(
-          (emit) =>
-            `current.removeEventListener('${prefix}-${emit.name}', on${camelize(
-              emit.name
-            )}Callback)`
-        )
-        .join('\n')}
+    .map(
+      (emit) =>
+        `current.removeEventListener('${prefix}-${emit.name}', on${camelize(
+          emit.name
+        )}Callback)`
+    )
+    .join('\n')}
     }
   },[${analysisResult.emits
     .map((emit) => `on${camelize(emit.name)}`)
     .join(',')}])
+  // @ts-ignore
   return <${prefix}-${kebabize(
     analysisResult.name
   )} ref={ref} ${analysisResult.props
@@ -100,16 +104,16 @@ export const ${analysisResult.name} = (${inputType}): JSX.Element => {
 }
 `
   const transpiled = ts.transpileModule(code, {
-    compilerOptions: { jsx: JsxEmit.React, module: ModuleKind.ES2020 },
+    compilerOptions: {jsx: JsxEmit.React, module: ModuleKind.ES2020},
   })
   const declaration = `import * as React from 'react';
 export declare const ${analysisResult.name}: (${inputType}) => JSX.Element;
 `
   const ret: WrapperFile = {
     code: [
-      { content: transpiled.outputText, fileType: 'js' },
-      { content: declaration, fileType: 'd.ts' },
-      { content: code, fileType: 'tsx' },
+      {content: transpiled.outputText, fileType: 'js'},
+      {content: declaration, fileType: 'd.ts'},
+      {content: code, fileType: 'tsx'},
     ],
     exportCodeLine: `export * from './${analysisResult.name}'`,
     declarationLine: `export * from './${analysisResult.name}'`,

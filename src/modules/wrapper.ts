@@ -1,6 +1,6 @@
 import path from 'path'
-import { AnalysisResult } from './analyze'
-import { WriteFileFunc } from '../utils/writeFile'
+import {AnalysisResult} from './analyze'
+import {WriteFileFunc} from '../utils/writeFile'
 import glob from 'glob'
 
 export type WrapperFile = {
@@ -11,19 +11,46 @@ export type WrapperFile = {
   exportCodeLine: string
   declarationLine: string
 }
+
+export type ImportMode = 'auto' | 'lite' | 'lazy'
+
 export type GenerateWrapperFunction = (
   analysisResult: AnalysisResult,
   prefix: string,
-  autoImport: string[]
+  importMode: ImportMode,
+  importFile: string
 ) => Promise<WrapperFile>
+
+async function writeWrapper(
+  wrapperFunction: GenerateWrapperFunction,
+  ar: AnalysisResult,
+  prefix: string,
+  importFile: string,
+  writeFile: WriteFileFunc,
+  wrapperDir: string,
+  importMode: ImportMode) {
+  const wrapper = await wrapperFunction(ar, prefix, importMode, importFile)
+    .then((r) => ({
+      ...r,
+      name: ar.name,
+    }))
+
+  const fileNameFix = importMode === 'auto' ? '' : importMode === 'lite' ? '.lite' : '.lazy'
+  wrapper.code.forEach((code) =>
+    writeFile(
+      path.join(wrapperDir, `${ar.name}${fileNameFix}.${code.fileType}`),
+      code.content
+    )
+  )
+  return wrapper;
+}
 
 async function generateWrappers(
   generators: { name: string; wrapperFunction: GenerateWrapperFunction }[],
   analysisResults: AnalysisResult[],
   outdir: string,
   prefix: string,
-  writeFile: (filePath: string, contents: string) => void,
-  autoImport: boolean
+  writeFile: (filePath: string, contents: string) => void
 ) {
   const wrapperRootDir = path.join(
     outdir,
@@ -34,26 +61,12 @@ async function generateWrappers(
     const dTs: string[] = []
     for (const ar of analysisResults) {
       const wrapperDir = path.join(wrapperRootDir, generator.name)
-      const autoImports: string[] = []
-      if (autoImport) {
-        const target = glob.sync(`${outdir}/elements/**/${ar.name}.*`)[0]
-        if (!target) throw 'Could not find autoImport target!'
-        const relative = path.relative(wrapperDir, target).replace('.js', '')
-        autoImports.push(relative)
-      }
-      const wrapper = await generator
-        .wrapperFunction(ar, prefix, autoImports)
-        .then((r) => ({
-          ...r,
-          name: ar.name,
-        }))
-
-      wrapper.code.forEach((code) =>
-        writeFile(
-          path.join(wrapperDir, `${ar.name}${autoImport?'':'.lite'}.${code.fileType}`),
-          code.content
-        )
-      )
+      const target = glob.sync(`${outdir}/elements/**/${ar.name}.*`)[0]
+      if (!target) throw 'Could not find autoImport target!'
+      const importFile = path.relative(wrapperDir, target).replace('.js', '')
+      const wrapper = await writeWrapper(generator.wrapperFunction, ar, prefix, importFile, writeFile, wrapperDir, 'auto');
+      await writeWrapper(generator.wrapperFunction, ar, prefix, importFile, writeFile, wrapperDir, 'lite');
+      await writeWrapper(generator.wrapperFunction, ar, prefix, importFile, writeFile, wrapperDir, 'lazy');
 
       index.push(wrapper.exportCodeLine)
       dTs.push(wrapper.declarationLine)
@@ -81,15 +94,6 @@ export const wrapper = async (
     analysisResults,
     outdir,
     prefix,
-    writeFile,
-    true
-  )
-  await generateWrappers(
-    generators,
-    analysisResults,
-    outdir,
-    prefix,
-    writeFile,
-    false
+    writeFile
   )
 }

@@ -5,10 +5,11 @@ import { GenerateWrapperFunction } from '../wrapper'
 export const vueWrapperGenerator: GenerateWrapperFunction = async (
   analysisResult,
   prefix,
-  autoImport
+  importMode,
+  importFile
 ) => {
   const code = `<script setup lang='ts'>
-${autoImport.map((ai) => `import '${ai}'`).join('\n')}
+${importMode === 'auto' ? `import '${importFile}'`:''}
 ${
   analysisResult.props.length > 0
     ? `defineProps<{${analysisResult.props
@@ -34,6 +35,9 @@ ${
         .join(', ')} }>()`
     : ''
 }
+${importMode==='lazy' ? `import {onMounted} from 'vue'
+// @ts-ignore
+onMounted(()=>{import('${importFile}')})`: ''}
 </script>
 
 <template>
