@@ -3,7 +3,6 @@ import path from 'path'
 import { writeFile } from '../../utils/writeFile'
 import { create } from 'browser-sync'
 import { getHtml } from './html'
-import { AnalysisResult } from '../analyze'
 import { DocTypePluginOptions } from './mdx'
 
 export { generateDocsTypes } from './docsTypes'

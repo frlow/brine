@@ -11,4 +11,14 @@ export const bundle = async (dist: string) => {
     minify: false,
     watch: false,
   })
+  await esbuild.build({
+    entryPoints: [path.join(dist, 'elements', 'index.js')],
+    bundle: true,
+    format: 'esm',
+    sourcemap: true,
+    outfile: path.join(dist, 'bundle', 'index.mjs'),
+    write: true,
+    minify: false,
+    watch: false,
+  })
 }

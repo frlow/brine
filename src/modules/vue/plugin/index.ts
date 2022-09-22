@@ -13,7 +13,6 @@ import {
   AsyncCache,
   getFullPath,
   getUrlParams,
-  tryAsync,
 } from '../../../utils/pluginUtils'
 import { PluginOptions } from '../../Module'
 
