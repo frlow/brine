@@ -56,6 +56,8 @@ export async function runStages(
   )
   // Build docs
   if (docs) {
+    if (fs.lstatSync(source).isFile())
+      throw '--no-docs must be used when targeting single file'
     await generateDocsTypes(analyzerResult.analysisResults, dist)
     await writeDocs(source, dist, {
       prefix,

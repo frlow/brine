@@ -9,11 +9,18 @@ export const reactElementsModule: ElementsModule = {
   name: 'react',
   plugin: reactElementPlugin,
   analyzeFunc: analyzeReactFile,
-  findMatchingFiles: (dir) =>
-    glob.sync(`${dir}/**/*.tsx`).filter((file) => {
-      const code = fs.readFileSync(file, 'utf8')
-      return code.includes('export default') && code.includes('import React')
-    }),
+  findMatchingFiles: (source) =>
+    fs.lstatSync(source).isFile()
+      ? source.endsWith('.tsx') &&
+        fs.readFileSync(source, 'utf8').includes('import React')
+        ? [source]
+        : []
+      : glob.sync(`${source}/**/*.tsx`).filter((file) => {
+          const code = fs.readFileSync(file, 'utf8')
+          return (
+            code.includes('export default') && code.includes('import React')
+          )
+        }),
 }
 
 export const reactWrapperModule: WrapperModule = {

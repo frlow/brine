@@ -8,10 +8,14 @@ export const svelteElementsModule: ElementsModule = {
   name: 'svelte',
   analyzeFunc: analyzeSvelteFile,
   plugin: svelteElementPlugin,
-  findMatchingFiles: (dir) =>
-    glob
-      .sync(`${dir}/**/*.svelte`)
-      .filter(
-        (file) => !fs.readFileSync(file, 'utf8').includes('<!--exclude-->')
-      ),
+  findMatchingFiles: (source) =>
+    fs.lstatSync(source).isFile()
+      ? source.endsWith('.svelte')
+        ? [source]
+        : []
+      : glob
+          .sync(`${source}/**/*.svelte`)
+          .filter(
+            (file) => !fs.readFileSync(file, 'utf8').includes('<!--exclude-->')
+          ),
 }

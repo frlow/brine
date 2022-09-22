@@ -9,12 +9,16 @@ export const vueElementsModule: ElementsModule = {
   name: 'vue',
   analyzeFunc: analyzeVueFile,
   plugin: (opts) => vuePlugin({}, opts),
-  findMatchingFiles: (dir) =>
-    glob
-      .sync(`${dir}/**/*.vue`)
-      .filter(
-        (file) => !fs.readFileSync(file, 'utf8').includes('<!--exclude-->')
-      ),
+  findMatchingFiles: (source) =>
+    fs.lstatSync(source).isFile()
+      ? source.endsWith('.vue')
+        ? [source]
+        : []
+      : glob
+          .sync(`${source}/**/*.vue`)
+          .filter(
+            (file) => !fs.readFileSync(file, 'utf8').includes('<!--exclude-->')
+          ),
 }
 
 export const vueWrapperModule: WrapperModule = {

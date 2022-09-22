@@ -8,10 +8,14 @@ export const solidElementsModule: ElementsModule = {
   name: 'solid',
   plugin: solidElementPlugin,
   analyzeFunc: analyzeReactFile,
-  findMatchingFiles: (dir) =>
-    glob
-      .sync(`${dir}/**/*.solid.tsx`)
-      .filter((file) =>
-        fs.readFileSync(file, 'utf8').includes('export default')
-      ),
+  findMatchingFiles: (source) =>
+    fs.lstatSync(source).isFile()
+      ? source.endsWith('.solid.tsx')
+        ? [source]
+        : []
+      : glob
+          .sync(`${source}/**/*.solid.tsx`)
+          .filter((file) =>
+            fs.readFileSync(file, 'utf8').includes('export default')
+          ),
 }

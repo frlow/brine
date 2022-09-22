@@ -82,7 +82,7 @@ const generateWebTypes = (
 })
 
 export const analyze = async (
-  dir: string,
+  source: string,
   modules: ElementsModule[],
   prefix: string,
   dist: string,
@@ -90,7 +90,7 @@ export const analyze = async (
 ) => {
   const results = await Promise.all(
     modules.flatMap((module) =>
-      module.findMatchingFiles(dir).map((file) => module.analyzeFunc(file))
+      module.findMatchingFiles(source).map((file) => module.analyzeFunc(file))
     )
   )
   const vscodeCustom = generateVsCodeCustomHtml(results, prefix)
