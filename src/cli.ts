@@ -51,11 +51,17 @@ const validateVariable = <T>(value: T, name: string): T => {
       const watchDir = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
-      try {
-        await runStages(dist, source, prefix, external, !noDocs, true)
-      } catch (e) {
-        console.log(e)
+      for (let i = 0; i < 5; i++) {
+        try {
+          await runStages(dist, source, prefix, external, !noDocs, true)
+          break
+        } catch (e) {
+          console.log(e)
+          console.log(`Retrying build: ${i + 1}/5`)
+          await new Promise((r) => setTimeout(() => r(''), 1000))
+        }
       }
+
       const bs = noDocs
         ? {
             reload: () => {},
