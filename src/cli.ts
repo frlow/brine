@@ -51,7 +51,11 @@ const validateVariable = <T>(value: T, name: string): T => {
       const watchDir = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
-      await runStages(dist, source, prefix, external, !noDocs, true)
+      try {
+        await runStages(dist, source, prefix, external, !noDocs, true)
+      } catch (e) {
+        console.log(e)
+      }
       const bs = noDocs
         ? {
             reload: () => {},
