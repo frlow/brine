@@ -1,9 +1,8 @@
 <script lang="ts">
-  type Mode = 'rendered' | 'hover'
-  export let mode: Mode = 'rendered'
+  export let mode: 'rendered' | 'hover' = 'rendered'
   export let name: string
   let primed = true
-  const lazyLoad = async (changedMode: Mode) => {
+  const lazyLoad = async (changedMode: any) => {
     if (changedMode === mode && name && primed) {
       const overrides = JSON.parse(localStorage.getItem("lazy-overrides") || '{}')
       const lazyLoadFunc: (name: string) => Promise<string> = (window as any).lazyLoad || ((name) => {
@@ -20,5 +19,6 @@
   }
 </script>
 
-<slot on:mouseover={()=>lazyLoad('hover')}></slot>
-
+<div on:mouseover={()=>lazyLoad('hover')}>
+    <slot></slot>
+</div>>
