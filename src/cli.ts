@@ -6,6 +6,7 @@ import path from 'path'
 import { runStages } from './stages'
 import { serveDocs } from './modules/docs'
 import { init } from './modules/init'
+import fs from 'fs'
 
 const validateVariable = <T>(value: T, name: string): T => {
   if (!value) {
@@ -51,9 +52,12 @@ const validateVariable = <T>(value: T, name: string): T => {
       await runStages(dist, source, prefix, external, !noDocs, true)
     } else if (command === 'start') {
       let timeout: NodeJS.Timeout
-      const watchDir = path.isAbsolute(source)
+      const watchTarget = path.isAbsolute(source)
         ? source
         : path.join(process.cwd(), source)
+      const watchDir = fs.lstatSync(watchTarget).isDirectory()
+        ? watchTarget
+        : path.parse(watchTarget).dir
       for (let i = 0; i < 5; i++) {
         try {
           await runStages(dist, source, prefix, external, !noDocs, true)
