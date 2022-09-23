@@ -5,7 +5,7 @@ import path from 'path'
 const packageJson = {
   name: 'brine-demo',
   version: '1.0.0',
-  main: 'index.js',
+  main: 'dist/module/index.js',
   license: 'MIT',
   scripts: {
     start: 'brine start -x my src',

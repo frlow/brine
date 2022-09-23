@@ -79,7 +79,7 @@ export const build = async ({
   analysisResults: AnalysisResult[]
   isProduction: boolean
 }) => {
-  const outDir = path.join(dist, 'elements')
+  const outDir = path.join(dist, 'module')
   const files = modules.flatMap((module) =>
     module.findMatchingFiles(source).map((file) => ({ file, module }))
   )

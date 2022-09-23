@@ -6,7 +6,7 @@ const outDir = process.argv[2]
 const examplePackage = {
   name: '@frlow/brine-example',
   version: packageJson.version,
-  main: './elements/index.js',
+  main: './module/index.js',
 }
 
 fs.writeFileSync(path.join(outDir, '.npmrc'), fs.readFileSync('.npmrc'))

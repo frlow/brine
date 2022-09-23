@@ -1,6 +1,6 @@
 import path from 'path'
-import {AnalysisResult} from './analyze'
-import {WriteFileFunc} from '../utils/writeFile'
+import { AnalysisResult } from './analyze'
+import { WriteFileFunc } from '../utils/writeFile'
 import glob from 'glob'
 
 export type WrapperFile = {
@@ -28,21 +28,27 @@ async function writeWrapper(
   importFile: string,
   writeFile: WriteFileFunc,
   wrapperDir: string,
-  importMode: ImportMode) {
-  const wrapper = await wrapperFunction(ar, prefix, importMode, importFile)
-    .then((r) => ({
-      ...r,
-      name: ar.name,
-    }))
+  importMode: ImportMode
+) {
+  const wrapper = await wrapperFunction(
+    ar,
+    prefix,
+    importMode,
+    importFile
+  ).then((r) => ({
+    ...r,
+    name: ar.name,
+  }))
 
-  const fileNameFix = importMode === 'auto' ? '' : importMode === 'lite' ? '.lite' : '.lazy'
+  const fileNameFix =
+    importMode === 'auto' ? '' : importMode === 'lite' ? '.lite' : '.lazy'
   wrapper.code.forEach((code) =>
     writeFile(
       path.join(wrapperDir, `${ar.name}${fileNameFix}.${code.fileType}`),
       code.content
     )
   )
-  return wrapper;
+  return wrapper
 }
 
 async function generateWrappers(
@@ -52,21 +58,42 @@ async function generateWrappers(
   prefix: string,
   writeFile: (filePath: string, contents: string) => void
 ) {
-  const wrapperRootDir = path.join(
-    outdir,
-    'wrapper'
-  )
+  const wrapperRootDir = path.join(outdir, 'wrapper')
   for (const generator of generators) {
     const index: string[] = []
     const dTs: string[] = []
     for (const ar of analysisResults) {
       const wrapperDir = path.join(wrapperRootDir, generator.name)
-      const target = glob.sync(`${outdir}/elements/**/${ar.name}.*`)[0]
+      const target = glob.sync(`${outdir}/module/**/${ar.name}.*`)[0]
       if (!target) throw 'Could not find autoImport target!'
       const importFile = path.relative(wrapperDir, target).replace('.js', '')
-      const wrapper = await writeWrapper(generator.wrapperFunction, ar, prefix, importFile, writeFile, wrapperDir, 'auto');
-      await writeWrapper(generator.wrapperFunction, ar, prefix, importFile, writeFile, wrapperDir, 'lite');
-      await writeWrapper(generator.wrapperFunction, ar, prefix, importFile, writeFile, wrapperDir, 'lazy');
+      const wrapper = await writeWrapper(
+        generator.wrapperFunction,
+        ar,
+        prefix,
+        importFile,
+        writeFile,
+        wrapperDir,
+        'auto'
+      )
+      await writeWrapper(
+        generator.wrapperFunction,
+        ar,
+        prefix,
+        importFile,
+        writeFile,
+        wrapperDir,
+        'lite'
+      )
+      await writeWrapper(
+        generator.wrapperFunction,
+        ar,
+        prefix,
+        importFile,
+        writeFile,
+        wrapperDir,
+        'lazy'
+      )
 
       index.push(wrapper.exportCodeLine)
       dTs.push(wrapper.declarationLine)
@@ -89,11 +116,5 @@ export const wrapper = async (
   prefix: string,
   writeFile: WriteFileFunc
 ) => {
-  await generateWrappers(
-    generators,
-    analysisResults,
-    outdir,
-    prefix,
-    writeFile
-  )
+  await generateWrappers(generators, analysisResults, outdir, prefix, writeFile)
 }
