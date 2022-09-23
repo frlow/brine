@@ -43,8 +43,9 @@ const validateVariable = <T>(value: T, name: string): T => {
       buildOptions.prefix,
       '--prefix (-x)'
     )
-    const external: string[] =
-      buildOptions.external.flatMap((d: string) => d.split(',')) || []
+    const external: string[] = (buildOptions.external || []).flatMap(
+      (d: string) => d.split(',')
+    )
     const noDocs: boolean = !!buildOptions['no-docs']
     if (command === 'build') {
       await runStages(dist, source, prefix, external, !noDocs, true)
