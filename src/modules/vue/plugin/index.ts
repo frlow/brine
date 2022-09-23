@@ -24,7 +24,7 @@ type PluginData = {
 
 export const vuePlugin = (
   opts: Options = {},
-  { prefix, analysisResults }: PluginOptions
+  { prefix, analysisResults, styles }: PluginOptions
 ) =>
   <esbuild.Plugin>{
     name: 'vue',
@@ -82,18 +82,19 @@ export const vuePlugin = (
       // Load stub when .vue is requested
       build.onLoad({ filter: /.*/, namespace: 'sfc-entrypoint' }, (args) =>
         cache.get([args.path, args.namespace], async () => {
+          const style = styles[path.parse(args.path.split('?')[0]).name] || ''
           const fileName = path.parse(args.path).name
           const ar = analysisResults.find((a) => a.name === fileName)
           if (!ar) throw `Analysis results could not be found for '${fileName}'`
           const contents = `import {defineCustomElement} from 'vue'
 import Component from './${fileName}.vue'
-import style from './${fileName}.style'
+// import style from './${fileName}.style'
 const Element = defineCustomElement(Component);
 class StyledElement extends Element {
   constructor(args) {
     super(args)
     const styleElement = document.createElement('style')
-    styleElement.innerHTML = style
+    styleElement.innerHTML = \`${style}\`
     this.shadowRoot.appendChild(styleElement)
     ${ar.emits
       .map(

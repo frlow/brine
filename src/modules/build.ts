@@ -1,4 +1,4 @@
-import esbuild from 'esbuild'
+import esbuild, { Plugin } from 'esbuild'
 import path from 'path'
 import fs from 'fs'
 import { findFiles } from '../utils/findFiles'
@@ -7,6 +7,7 @@ import sassPlugin from 'esbuild-sass-plugin'
 import { AnalysisResult } from './analyze'
 import { tsxPlugin } from './common/TsxPlugin'
 import { nativeEventsPlugin } from './common/NativeEventsPlugin'
+import { Dictionary } from '../utils/types'
 
 const transformCssFiles = (dist: string) => {
   const jsFiles = findFiles(
@@ -31,22 +32,23 @@ const transformCssFiles = (dist: string) => {
   })
 }
 
-const styleExternalPlugin: esbuild.Plugin = {
-  name: 'style-external',
-  setup(build) {
-    build.onResolve({ filter: /\.style/ }, async (args) => {
-      return { external: true }
-    })
-  },
-}
+// const styleExternalPlugin: esbuild.Plugin = {
+//   name: 'style-external',
+//   setup(build) {
+//     build.onResolve({ filter: /\.style/ }, async (args) => {
+//       return { external: true }
+//     })
+//   },
+// }
 
 export const getPlugins = (
   modules: ElementsModule[],
   prefix: string,
   dist: string,
-  analysisResults: AnalysisResult[]
+  analysisResults: AnalysisResult[],
+  styles: Dictionary<string>
 ) => [
-  styleExternalPlugin,
+  // styleExternalPlugin,
   sassPlugin(),
   tsxPlugin,
   nativeEventsPlugin,
@@ -55,6 +57,7 @@ export const getPlugins = (
       prefix,
       dist,
       analysisResults,
+      styles,
     })
   ),
 ]
@@ -78,30 +81,66 @@ export const build = async ({
   const files = modules.flatMap((module) =>
     module.findMatchingFiles(source).map((file) => ({ file, module }))
   )
-  const plugins = getPlugins(modules, prefix, dist, analysisResults)
   const entryFiles = files.map(
     (file) => `${file.file}?type=entry-point&module=${file.module.name}`
   )
-  const result = await esbuild.build({
-    entryPoints: [...entryFiles],
-    bundle: true,
-    splitting: true,
-    format: 'esm',
-    sourcemap: true,
-    define: { 'process.env.NODE_ENV': '"production"' },
-    outdir: outDir,
+  const runBuild = async ({
+    sourcemap,
+    metafile,
     plugins,
-    chunkNames: 'chunks/[name]-[hash]',
-    write: true,
-    minify: false,
-    metafile: true,
-    external: [...external, '*.style'],
+  }: {
+    sourcemap: boolean
+    metafile: boolean
+    plugins: Plugin[]
+  }) =>
+    await esbuild.build({
+      entryPoints: [...entryFiles],
+      bundle: true,
+      splitting: true,
+      format: 'esm',
+      sourcemap,
+      define: { 'process.env.NODE_ENV': '"production"' },
+      outdir: outDir,
+      plugins,
+      chunkNames: 'chunks/[name]-[hash]',
+      write: false,
+      minify: false,
+      metafile,
+      external: [...external],
+    })
+  const preResult = await runBuild({
+    sourcemap: false,
+    metafile: false,
+    plugins: getPlugins(modules, prefix, dist, analysisResults, {}),
   })
+  const styles = (preResult.outputFiles || []).reduce((acc, cur) => {
+    if (cur.path.endsWith('.css')) {
+      const fixed = cur.text.replace(/\/\*.*?\*\//g, '')
+      acc[path.parse(cur.path).name] = fixed.trim()
+    }
+    return acc
+  }, {} as Dictionary<string>)
+  const result = await runBuild({
+    sourcemap: true,
+    metafile: true,
+    plugins: getPlugins(modules, prefix, dist, analysisResults, styles),
+  })
+  await Promise.all(
+    result.outputFiles
+      .filter((f) => f.path.endsWith('.js') || f.path.endsWith('.js.map'))
+      .map((of) =>
+        fs.promises
+          .mkdir(path.parse(of.path).dir, { recursive: true })
+          .then(() =>
+            fs.promises.writeFile(of.path, of.contents, { encoding: 'utf8' })
+          )
+      )
+  )
   fs.writeFileSync(
     path.join(outDir, 'meta.json'),
     JSON.stringify(result.metafile)
   )
-  transformCssFiles(path.join(dist, 'elements'))
+  // transformCssFiles(path.join(dist, 'elements'))
   const processDir = (dir: string) => {
     const files = fs
       .readdirSync(dir)

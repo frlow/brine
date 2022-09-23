@@ -9,6 +9,7 @@ import { getComponentName } from '../../utils/findFiles'
 
 export const reactElementPlugin = ({
   prefix,
+  styles,
 }: PluginOptions): esbuild.Plugin => ({
   name: 'ucp-react-plugin',
   setup(build) {
@@ -21,6 +22,7 @@ export const reactElementPlugin = ({
       },
       (args) =>
         cache.get([args.path, args.namespace], async () => {
+          const style = styles[path.parse(args.path.split('?')[0]).name] || ''
           const propType = getPropsType(args.path)
           const members = propType?.type?.members?.map((m: any) => ({
             name: m.name.text,
@@ -46,7 +48,6 @@ export const reactElementPlugin = ({
           const contents = `import React from 'react'
           import {createRoot} from 'react-dom'
 import Component from './${name}'
-import style from './${name}.style'
 class ReactWc extends HTMLElement {
   render() {
     const args = {
@@ -55,7 +56,7 @@ class ReactWc extends HTMLElement {
     this.shadowRoot!.innerHTML = ''
     this.root.render(<Component {...args} />)
     const styleElement = document.createElement('style')
-    styleElement.innerHTML = style
+    styleElement.innerHTML = \`${style}\`
     this.shadowRoot!.appendChild(styleElement)
   }
 

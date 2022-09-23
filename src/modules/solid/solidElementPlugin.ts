@@ -12,7 +12,7 @@ const solid = require('babel-preset-solid')
 const ts = require('@babel/preset-typescript')
 
 export const solidElementPlugin = ({
-  dist,
+  styles,
   prefix,
   analysisResults,
 }: PluginOptions): esbuild.Plugin => ({
@@ -28,6 +28,7 @@ export const solidElementPlugin = ({
       (args) =>
         cache.get([args.path, args.namespace], async () => {
           const componentName = getComponentName(args.path)
+          const style = styles[path.parse(args.path.split('?')[0]).name] || ''
           const ar = analysisResults.find((a) => a.name === componentName)
           if (!ar)
             throw `Analysis results could not be found for '${componentName}'`
@@ -37,13 +38,12 @@ export const solidElementPlugin = ({
           const contents = `import { customElement } from 'solid-element';
 import { mergeProps, splitProps } from "solid-js";
 import Component from './${componentName}.solid'
-import style from './${componentName}.solid.style'
 customElement('${prefix}-${kebabize(componentName)}', {${ar.props
             .map((p) => `${p.name}:undefined`)
             .join(', ')}}, (props, { element }) => {
             element.attachShadow({ mode: 'open' })
             const styleElement = document.createElement('style')
-            styleElement.innerHTML = style
+            styleElement.innerHTML = \`${style}\`
             element.shadowRoot.appendChild(styleElement)
             let mergedEvents = mergeProps({ ${ar.emits
               .map(

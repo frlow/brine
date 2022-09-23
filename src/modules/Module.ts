@@ -7,6 +7,7 @@ export type PluginOptions = {
   dist: string
   prefix: string
   analysisResults: AnalysisResult[]
+  styles: Dictionary<string>
 }
 
 export type ElementsModule = {
