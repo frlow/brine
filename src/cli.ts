@@ -25,9 +25,10 @@ const validateVariable = <T>(value: T, name: string): T => {
   let argv = mainCommand._unknown || []
   const command = mainCommand.command
   if (command === 'build' || command === 'start') {
-    const buildDefinitions = [
+    const buildDefinitions: OptionDefinition[] = [
       { name: 'source', defaultOption: true },
       { name: 'prefix', alias: 'x', type: String },
+      { name: 'external', alias: 'e', type: String, multiple: true },
       { name: 'outdir', alias: 'o', type: String },
       { name: 'no-docs', type: Boolean },
     ]
@@ -42,7 +43,8 @@ const validateVariable = <T>(value: T, name: string): T => {
       buildOptions.prefix,
       '--prefix (-x)'
     )
-    const external: string[] = buildOptions.external || []
+    const external: string[] =
+      buildOptions.external.flatMap((d: string) => d.split(',')) || []
     const noDocs: boolean = !!buildOptions['no-docs']
     if (command === 'build') {
       await runStages(dist, source, prefix, external, !noDocs, true)
