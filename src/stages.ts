@@ -13,7 +13,8 @@ export async function runStages(
   prefix: string,
   external: string[],
   docs: boolean,
-  clearDist: boolean
+  clearDist: boolean,
+  isProduction: boolean
 ) {
   // Log start time
   const startTime = new Date().getTime()
@@ -38,10 +39,11 @@ export async function runStages(
     external,
     prefix,
     analysisResults: analyzerResult.analysisResults,
+    isProduction,
   })
 
   // Build full bundle
-  await bundle(dist)
+  await bundle(dist, isProduction)
 
   // Build wrappers
   await wrapper(

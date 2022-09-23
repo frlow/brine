@@ -49,7 +49,7 @@ const validateVariable = <T>(value: T, name: string): T => {
     )
     const noDocs: boolean = !!buildOptions['no-docs']
     if (command === 'build') {
-      await runStages(dist, source, prefix, external, !noDocs, true)
+      await runStages(dist, source, prefix, external, !noDocs, true, true)
     } else if (command === 'start') {
       let timeout: NodeJS.Timeout
       const watchTarget = path.isAbsolute(source)
@@ -60,7 +60,7 @@ const validateVariable = <T>(value: T, name: string): T => {
         : path.parse(watchTarget).dir
       for (let i = 0; i < 5; i++) {
         try {
-          await runStages(dist, source, prefix, external, !noDocs, true)
+          await runStages(dist, source, prefix, external, !noDocs, true, false)
           break
         } catch (e) {
           console.log(e)
@@ -81,7 +81,15 @@ const validateVariable = <T>(value: T, name: string): T => {
         timeout = setTimeout(async () => {
           console.log('Change detected, rebuilding...')
           try {
-            await runStages(dist, source, prefix, external, !noDocs, false)
+            await runStages(
+              dist,
+              source,
+              prefix,
+              external,
+              !noDocs,
+              false,
+              false
+            )
             bs.reload()
           } catch (e) {
             console.log(e)

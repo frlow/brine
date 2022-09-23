@@ -69,6 +69,7 @@ export const build = async ({
   external,
   prefix,
   analysisResults,
+  isProduction,
 }: {
   dist: string
   source: string
@@ -76,6 +77,7 @@ export const build = async ({
   external: string[]
   prefix: string
   analysisResults: AnalysisResult[]
+  isProduction: boolean
 }) => {
   const outDir = path.join(dist, 'elements')
   const files = modules.flatMap((module) =>
@@ -104,7 +106,7 @@ export const build = async ({
       plugins,
       chunkNames: 'chunks/[name]-[hash]',
       write: false,
-      minify: false,
+      minify: isProduction,
       metafile,
       external: [...external],
     })
