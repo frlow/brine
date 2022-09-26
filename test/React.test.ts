@@ -13,7 +13,7 @@ describe('React specific problems', () => {
           })
         )
       )
-      await new Promise((r) => setTimeout(() => r(''), 25))
+      await new Promise((r) => setTimeout(() => r(''), 5))
     }
     const text = await page.evaluate(
       () => document.getElementById('count')!.innerText
