@@ -9,7 +9,7 @@ export const vueWrapperGenerator: GenerateWrapperFunction = async (
   importFile
 ) => {
   const code = `<script setup lang='ts'>
-${importMode === 'auto' ? `import '${importFile}'`:''}
+${importMode === 'auto' ? `import '${importFile}'` : ''}
 ${
   analysisResult.props.length > 0
     ? `defineProps<{${analysisResult.props
@@ -35,9 +35,13 @@ ${
         .join(', ')} }>()`
     : ''
 }
-${importMode==='lazy' ? `import {onMounted} from 'vue'
+${
+  importMode === 'lazy'
+    ? `import {onMounted} from 'vue'
 // @ts-ignore
-onMounted(()=>{import('${importFile}')})`: ''}
+onMounted(()=>{import('${importFile}')})`
+    : ''
+}
 </script>
 
 <template>
@@ -54,7 +58,7 @@ onMounted(()=>{import('${importFile}')})`: ''}
     .map((e) =>
       e.type.kind === SyntaxKind.VoidKeyword
         ? `@${prefix}-${e.name}='()=>emit(\"${e.name}\")'`
-        : `@${prefix}-${e.name}='(ev)=>emit(\"${e.name}\", ev.detail[0])'`
+        : `@${prefix}-${e.name}='emit(\"${e.name}\", $event.detail[0])'`
     )
     .join(' ')}><slot></slot></${prefix}-${kebabize(analysisResult.name)}>
 </template>`
