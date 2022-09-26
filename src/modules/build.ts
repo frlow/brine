@@ -8,6 +8,7 @@ import { AnalysisResult } from './analyze'
 import { tsxPlugin } from './common/TsxPlugin'
 import { nativeEventsPlugin } from './common/NativeEventsPlugin'
 import { Dictionary } from '../utils/types'
+import { externalGlobalPlugin } from './common/ExternalPlugin'
 
 const transformCssFiles = (dist: string) => {
   const jsFiles = findFiles(
@@ -32,23 +33,15 @@ const transformCssFiles = (dist: string) => {
   })
 }
 
-// const styleExternalPlugin: esbuild.Plugin = {
-//   name: 'style-external',
-//   setup(build) {
-//     build.onResolve({ filter: /\.style/ }, async (args) => {
-//       return { external: true }
-//     })
-//   },
-// }
-
 export const getPlugins = (
   modules: ElementsModule[],
   prefix: string,
   dist: string,
   analysisResults: AnalysisResult[],
-  styles: Dictionary<string>
+  styles: Dictionary<string>,
+  externals: Dictionary<string>
 ) => [
-  // styleExternalPlugin,
+  externalGlobalPlugin(externals),
   sassPlugin(),
   tsxPlugin,
   nativeEventsPlugin,
@@ -74,7 +67,7 @@ export const build = async ({
   dist: string
   source: string
   modules: ElementsModule[]
-  external: string[]
+  external: string | undefined
   prefix: string
   analysisResults: AnalysisResult[]
   isProduction: boolean
@@ -86,6 +79,9 @@ export const build = async ({
   const entryFiles = files.map(
     (file) => `${file.file}?type=entry-point&module=${file.module.name}`
   )
+  const externals: Dictionary<string> = external
+    ? JSON.parse(fs.readFileSync(external, 'utf8'))
+    : {}
   const runBuild = async ({
     sourcemap,
     metafile,
@@ -108,12 +104,12 @@ export const build = async ({
       write: false,
       minify: isProduction,
       metafile,
-      external: [...external],
+      external: Object.keys(externals),
     })
   const preResult = await runBuild({
     sourcemap: false,
     metafile: false,
-    plugins: getPlugins(modules, prefix, dist, analysisResults, {}),
+    plugins: getPlugins(modules, prefix, dist, analysisResults, {}, externals),
   })
   const styles = (preResult.outputFiles || []).reduce((acc, cur) => {
     if (cur.path.endsWith('.css')) {
@@ -125,7 +121,14 @@ export const build = async ({
   const result = await runBuild({
     sourcemap: true,
     metafile: true,
-    plugins: getPlugins(modules, prefix, dist, analysisResults, styles),
+    plugins: getPlugins(
+      modules,
+      prefix,
+      dist,
+      analysisResults,
+      styles,
+      externals
+    ),
   })
   await Promise.all(
     result.outputFiles

@@ -11,7 +11,7 @@ export async function runStages(
   dist: string,
   source: string,
   prefix: string,
-  external: string[],
+  external: string | undefined,
   docs: boolean,
   clearDist: boolean,
   isProduction: boolean
