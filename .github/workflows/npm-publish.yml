@@ -25,14 +25,3 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-      - run: yarn build:example
-      - name: Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: dist-example/docs
-          token: ${{secrets.GH_TOKEN}}
-          branch: main
-          repository-name: frlow/frlow.github.io
-      - run: cd dist-example && npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
