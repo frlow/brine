@@ -1,5 +1,5 @@
 import React from 'react'
-import { ExampleArgs } from '../../dist/DocsTypes'
+import { ExampleArgs } from '../../../dist/DocsTypes'
 
 export const DocsExample = ({ children, code, info }: ExampleArgs) => (
   <div x-data="{ show: false }">
