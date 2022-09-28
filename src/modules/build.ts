@@ -32,15 +32,6 @@ const transformCssFiles = (dist: string) => {
   })
 }
 
-// const styleExternalPlugin: esbuild.Plugin = {
-//   name: 'style-external',
-//   setup(build) {
-//     build.onResolve({ filter: /\.style/ }, async (args) => {
-//       return { external: true }
-//     })
-//   },
-// }
-
 export const getPlugins = (
   modules: ElementsModule[],
   prefix: string,
@@ -48,7 +39,6 @@ export const getPlugins = (
   analysisResults: AnalysisResult[],
   styles: Dictionary<string>
 ) => [
-  // styleExternalPlugin,
   sassPlugin(),
   tsxPlugin,
   nativeEventsPlugin,
