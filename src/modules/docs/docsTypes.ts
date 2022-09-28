@@ -106,7 +106,7 @@ const getVue = (info: any[])=>{
     return info.map(i=>{
         if(i.content) return i.content
         const tag = i.type || i.tag
-        const props = i.props ? " "+Object.entries(i.props).map(([key, value])=>\`\${key}='\${JSON.stringify(value)}'\`).join(" "): ""
+        const props = i.props ? " "+Object.entries(i.props).map(([key, value])=>\`:\${key}='\${JSON.stringify(value)}'\`).join(" "): ""
         const emits = i.emits ? " "+i.emits.map(e=>\`@\${e.substring(2,3).toLowerCase()+e.substring(3)}="arg =>{ log(arg) }"\`).join(" ") : ''
         return \`<\${tag}\${props}\${emits}>\${i.children ? getVue(i.children) : ''}</\${tag}>\` 
     }).join("\\n")
