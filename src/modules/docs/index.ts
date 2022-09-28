@@ -30,6 +30,7 @@ export const serveDocs = (dist: string) => {
     server: `${dist}/docs/`,
     single: true,
     open: false,
+    ui: false,
   })
   return bs
 }
