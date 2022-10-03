@@ -6,6 +6,7 @@ import { wrapper } from './modules/wrapper'
 import { build } from './modules/build'
 import { bundle } from './modules/bundle'
 import { generateDocsTypes, writeDocs } from './modules/docs'
+import { renderNewDocs } from './modules/docs/newDocs'
 
 export async function runStages(
   dist: string,
@@ -65,6 +66,7 @@ export async function runStages(
       prefix,
       analysisResults: analyzerResult.analysisResults,
     })
+    // await renderNewDocs(source)
   }
 
   // Log build time
