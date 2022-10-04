@@ -33,14 +33,11 @@ nav {
 
 main {
     grid-area: main;
+    padding-bottom: 2rem;
 }
 
 footer {
     grid-area: footer;
-}
-footer:before {
-    content: "My foot";
-    font-size: 2rem;
 }
 
 
@@ -74,4 +71,18 @@ footer:before {
 
 .example-code-react{
     display: none;
+}
+
+.docs-info{
+    margin-right: 2rem;
+}
+.docs-info-table{
+    width: 100%;
+    border: 1px solid #535353;
+    background-color: #383838;
+    padding: 1rem;
+}
+
+.docs-info-table tr{
+    text-align: left;
 }

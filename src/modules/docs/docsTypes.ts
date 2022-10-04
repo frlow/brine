@@ -83,9 +83,9 @@ export const generateDocsTypesImplementation = ({
     }))
     const propsElements =
       props.length > 0
-        ? `<div>
-<h3>Properties</h3>
-<table className="info-table">
+        ? `<div className="docs-info-props">
+<h2>Properties</h2>
+<table className="docs-info-table">
 <tr>
     <th>Name</th>
     <th>Optional</th>
@@ -105,9 +105,9 @@ ${props
         : ''
     const emitsElements =
       emits.length > 0
-        ? `<div>
-<h3>Emits</h3>
-<table className="info-table">
+        ? `<div className="docs-info-emits">
+<h2>Emits</h2>
+<table className="docs-info-table">
 <tr>
     <th>Name</th>
     <th>Optional</th>
@@ -129,7 +129,7 @@ ${emits
 props='${JSON.stringify(props)}'
 emits='${JSON.stringify(emits)}'
 >
-<div>
+<div className="docs-info">
 ${propsElements}
 ${emitsElements}
 </div>
