@@ -6,7 +6,7 @@ const {
   complexprop,
   optionalprop,
   selectprop
-} = defineProps<{ stringprop: string, numprop: number, complexprop: { value: string }, selectprop: 'a'|'b', optionalprop?: string }>()
+} = defineProps<{ stringprop: string, numprop: number, complexprop: { value: string }, selectprop: 'a' | 'b', optionalprop?: string }>()
 </script>
 
 <template>

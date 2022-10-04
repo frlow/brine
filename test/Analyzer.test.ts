@@ -73,6 +73,7 @@ describe('Analyzer', () => {
             { name: 'stringprop', type: 'string', optional: false },
             { name: 'numprop', type: 'number', optional: false },
             { name: 'complexprop', type: '{ value: string }', optional: false },
+            { name: 'selectprop', type: "'a' | 'b'", optional: false },
             { name: 'optionalprop', type: 'string', optional: true },
           ],
           slots: undefined,
