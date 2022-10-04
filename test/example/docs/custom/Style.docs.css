@@ -1,6 +1,7 @@
 * {
     overflow-anchor: none;
 }
+
 body {
     display: grid;
     grid-template:
@@ -15,13 +16,15 @@ body {
     font-family: Avenir, Helvetica, Arial, sans-serif;
 }
 
-a{
+a {
     color: whitesmoke;
 }
-header{
+
+header {
     grid-area: header;
     padding: 1rem;
 }
+
 header:before {
     content: "Component library";
     font-size: 2rem;
@@ -41,48 +44,61 @@ footer {
 }
 
 
-.docs-page{
+.docs-page {
     display: none;
 }
-.docs-page:target{
+
+.docs-page:target {
     display: flex;
     flex-direction: column;
 }
 
-.example-code{
+.example-code {
     border: 1px solid #535353;
     background-color: #535353;
     padding: 1rem;
     white-space: pre-wrap;
 }
 
-.example-content{
+.example-content {
     border: 1px solid #535353;
     background-color: #383838;
     padding: 1rem;
 }
 
-.example{
+.example {
     border-radius: 5px;
     overflow: hidden;
     margin-right: 2rem;
     margin-bottom: 1rem;
 }
 
-.example-code-react{
-    display: none;
+.example-code-react {
+    display: block;
+}
+.example-code-react label {
+    color: #61DBFB;
 }
 
-.docs-info{
+.example-code-vue {
+    margin-top: 1rem;
+    display: block;
+}
+.example-code-vue label{
+    color: #42b883;
+}
+
+.docs-info {
     margin-right: 2rem;
 }
-.docs-info-table{
+
+.docs-info-table {
     width: 100%;
     border: 1px solid #535353;
     background-color: #383838;
     padding: 1rem;
 }
 
-.docs-info-table tr{
+.docs-info-table tr {
     text-align: left;
 }
