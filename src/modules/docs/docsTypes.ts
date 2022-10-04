@@ -117,7 +117,7 @@ const getCode = (info: any)=>{
         vue: getVue(info)
     }
 }
-  import {DocsExample} from './DocsExample'
+  import {DocsExample} from './DocsExampleInternal'
   export const Example = ({children}: any)=>{
     const info = getInfo(children)
     return <DocsExample code={getCode(info)} info={info}>{children}</DocsExample>

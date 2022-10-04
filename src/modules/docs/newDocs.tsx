@@ -8,7 +8,6 @@ import { generateDocsTypesImplementation } from './docsTypes'
 import { getFullPath } from '../../utils/pluginUtils'
 import { Dictionary } from '../../utils/types'
 import { renderToString } from 'react-dom/server'
-import fs from 'fs'
 
 const internalFilesPlugin = (
   files: { filter: RegExp; content: string }[]
@@ -85,27 +84,53 @@ export default () => <html lang="en">
   <head>
     <title>Some Title</title>
     <script src='/index.js'></script>
+    <link rel="stylesheet" href="/index.css"/>
   </head>
   <body>
+    <header>
+        <${prefix}-docs-header></${prefix}-docs-header>
+    </header>
     <nav>
+        <${prefix}-docs-nav links='${JSON.stringify(groupedLinks)}'>
         <ul>
 ${links}
         </ul>
+        </${prefix}-docs-nav>
     </nav>
     <main>
+    <${prefix}-docs-main>
 ${mdxFiles
   .map(
-    (m) => `      <div className="docs-page ${kebabize(m.name)}">
+    (m) => `      <div className="docs-page ${kebabize(m.name)}" id="${
+      m.fullName
+    }">
         <${m.name}/>
       </div>`
   )
   .join('\n')}
+    </${prefix}-docs-main>
     </main>
+    <footer>
+        <${prefix}-docs-footer></${prefix}-docs-footer>
+    </footer>
   </body>
 </html>
   `
   const example = `import React from 'react'
-export const DocsExample = ({children, code, info}:any)=><example-example x-info={JSON.stringify(info)} x-code={JSON.stringify(code)} className="example">{children}</example-example>`
+export const DocsExample = ({children, code, info}:any)=><${prefix}-docs-example info={JSON.stringify(info)} code={JSON.stringify(code)} className="example">
+<div className="example">
+<div className="example-content">
+{children}
+</div>
+<div className="example-code">
+{Object.keys(code).map(key=><div className={'example-code-'+key}>
+<label>{key}</label>
+<div >{code[key]}</div>
+</div>)}
+</div>
+</div>
+</${prefix}-docs-example>`
+
   const result = await build({
     entryPoints: ['docsMain.tsx'],
     bundle: true,
@@ -134,6 +159,5 @@ export const DocsExample = ({children, code, info}:any)=><example-example x-info
     throw e
   })
   const Component = eval(result.outputFiles[0].text).default
-  const html = renderToString(<Component />)
-  fs.writeFileSync(path.join(dist, 'docs', 'new.html'), html, 'utf8')
+  return renderToString(<Component />)
 }

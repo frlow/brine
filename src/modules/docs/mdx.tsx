@@ -6,7 +6,7 @@ import { AnalysisResult } from '../analyze'
 import { getFullPath } from '../../utils/pluginUtils'
 
 const docsTypeFilter = { filter: /DocsTypes/ }
-const docsExampleFilter = { filter: /DocsExample/ }
+const docsExampleFilter = { filter: /DocsExampleInternal/ }
 export type DocTypePluginOptions = {
   prefix: string
   analysisResults: AnalysisResult[]

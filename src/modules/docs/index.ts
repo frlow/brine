@@ -1,9 +1,10 @@
-import fs from 'fs'
+import fs, { writeFileSync } from 'fs'
 import path from 'path'
 import { writeFile } from '../../utils/writeFile'
-import { create } from 'browser-sync'
 import { getHtml } from './html'
 import { DocTypePluginOptions } from './mdx'
+import { renderNewDocs } from './newDocs'
+import glob from 'glob'
 
 export { generateDocsTypes } from './docsTypes'
 
@@ -12,7 +13,13 @@ export async function writeDocs(
   dist: string,
   docTypePluginOptions: Pick<DocTypePluginOptions, 'prefix' | 'analysisResults'>
 ) {
-  const html = await getHtml(source, docTypePluginOptions)
+  const html = await renderNewDocs(
+    source,
+    docTypePluginOptions.analysisResults,
+    docTypePluginOptions.prefix,
+    dist
+  )
+
   writeFile(path.join(dist, 'docs', 'index.html'), html)
   writeFile(
     path.join(dist, 'docs', 'index.js'),
@@ -22,15 +29,11 @@ export async function writeDocs(
     path.join(dist, 'docs', 'index.js.map'),
     fs.readFileSync(path.join(dist, 'bundle', 'index.js.map'), 'utf8')
   )
-}
-
-export const serveDocs = (dist: string) => {
-  const bs = create()
-  bs.init({
-    server: `${dist}/docs/`,
-    single: true,
-    open: false,
-    ui: false,
-  })
-  return bs
+  writeFile(
+    path.join(dist, 'docs', 'index.css'),
+    glob
+      .sync(`${source}/**/*.docs.css`)
+      .map((f) => fs.readFileSync(f, 'utf8'))
+      .join('\n')
+  )
 }

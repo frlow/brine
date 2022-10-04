@@ -4,9 +4,9 @@ import { build } from './modules/build'
 import { watch } from 'chokidar'
 import path from 'path'
 import { runStages } from './stages'
-import { serveDocs } from './modules/docs'
 import { init } from './modules/init'
 import fs from 'fs'
+import { serveDocs } from './modules/docs/serveDocs'
 
 const validateVariable = <T>(value: T, name: string): T => {
   if (!value) {
