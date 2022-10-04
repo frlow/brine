@@ -123,7 +123,7 @@ export const DocsExample = ({children, code, info}:any)=><${prefix}-docs-example
 {children}
 </div>
 <div className="example-code">
-{Object.keys(code).map(key=><div className={'example-code-'+key}>
+{Object.keys(code).map(key=><div key={key} className={'example-code-'+key}>
 <label>{key}</label>
 <div >{code[key]}</div>
 </div>)}

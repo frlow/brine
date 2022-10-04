@@ -1,7 +1,6 @@
 import fs, { writeFileSync } from 'fs'
 import path from 'path'
 import { writeFile } from '../../utils/writeFile'
-import { getHtml } from './html'
 import { DocTypePluginOptions } from './mdx'
 import { renderNewDocs } from './newDocs'
 import glob from 'glob'

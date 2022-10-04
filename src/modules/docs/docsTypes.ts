@@ -8,6 +8,27 @@ export const generateDocsTypes = async (
   analysisResults: AnalysisResult[],
   dist: string
 ) => {
+  const components = analysisResults
+    .map(
+      (ar) => `export declare const ${ar.name}: (args: {
+${ar.props
+  .map(
+    (p) => `${p.name}${p.optional ? '?' : ''}:${p.type.getText(ar.sourceFile)}`
+  )
+  .join(',')}
+${ar.emits.map(
+  (e) =>
+    `${'on' + e.name.substring(0, 1).toUpperCase() + e.name.substring(1)}${
+      e.optional ? '?' : ''
+    }:boolean`
+)}
+  children?: React.ReactNode
+}) => JSX.Element`
+    )
+    .join('\n\n')
+  const componentInfos = analysisResults
+    .map((ar) => `export declare const ${ar.name}Info : ()=>JSX.Element`)
+    .join('\n\n')
   const code = `import * as React from 'react'
 export declare type NodeInfo = {
   type?: string
@@ -25,24 +46,9 @@ export declare const Example: (args: {
   children?: React.ReactNode
 }) => JSX.Element
 
-${analysisResults
-  .map(
-    (ar) => `export declare const ${ar.name}: (args: {
-${ar.props
-  .map(
-    (p) => `${p.name}${p.optional ? '?' : ''}:${p.type.getText(ar.sourceFile)}`
-  )
-  .join(',')}
-${ar.emits.map(
-  (e) =>
-    `${'on' + e.name.substring(0, 1).toUpperCase() + e.name.substring(1)}${
-      e.optional ? '?' : ''
-    }:boolean`
-)}
-  children?: React.ReactNode
-}) => JSX.Element`
-  )
-  .join('\n\n')}`
+${components}
+
+${componentInfos}`
 
   fs.writeFileSync(path.join(dist, 'DocsTypes.d.ts'), code, 'utf8')
 }
@@ -65,7 +71,70 @@ export const generateDocsTypesImplementation = ({
       .join(' ')
     return `export const ${ar.name} = (args: any)=><${tag} ${props}>{args.children}</${tag}>`
   })
-  return `import React from 'react'
+  const componentInfos = analysisResults.map((ar) => {
+    const props = ar.props.map((p) => ({
+      ...p,
+      type: p.type.getText(ar.sourceFile),
+    }))
+    const emits = ar.emits.map((e) => ({
+      ...e,
+      type: e.type.getText(ar.sourceFile),
+    }))
+    const propsElements =
+      props.length > 0
+        ? `<div>
+<div>Properties</div>
+<table>
+<tr>
+    <th>Name</th>
+    <th>Optional</th>
+    <th>Type</th>
+</tr>
+${props
+  .map(
+    (p) => `<tr>
+<td>${p.name}</td>
+<td>${p.optional ? 'x' : ''}</td>
+<td>{'${p.type}'}</td>
+</tr>`
+  )
+  .join('\n')}
+</table>
+</div>`
+        : ''
+    const emitsElements =
+      emits.length > 0
+        ? `<div>
+<div>Emits</div>
+<table>
+<tr>
+    <th>Name</th>
+    <th>Optional</th>
+    <th>Type</th>
+</tr>
+${emits
+  .map(
+    (e) => `<tr>
+<td>${e.name}</td>
+<td>${e.optional ? 'x' : ''}</td>
+<td>{'${e.type}'}</td>
+</tr>`
+  )
+  .join('\n')}
+</table>
+</div>`
+        : ''
+    return `export const ${ar.name}Info = () => <${prefix}-docs-info 
+props='${JSON.stringify(props)}'
+emits='${JSON.stringify(emits)}'
+>
+<div>
+${propsElements}
+${emitsElements}
+</div>
+</${prefix}-docs-info>`
+  })
+  const code = `import React from 'react'
 const kebabize = (str: string) =>
   str
     .split('')
@@ -123,5 +192,7 @@ const getCode = (info: any)=>{
     return <DocsExample code={getCode(info)} info={info}>{children}</DocsExample>
   }
   ${components.join('\n')}
+  ${componentInfos.join('\n')}
 `
+  return code
 }
