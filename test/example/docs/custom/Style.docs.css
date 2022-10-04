@@ -10,7 +10,7 @@ body {
         "nav footer";
     margin: 0;
     grid-template-columns: 200px auto;
-    grid-template-rows: 48px auto;
+    grid-template-rows: 0 auto 0;
     background-color: #18232c;
     color: white;
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -22,21 +22,21 @@ a {
 
 header {
     grid-area: header;
-    padding: 1rem;
-}
-
-header:before {
-    content: "Component library";
-    font-size: 2rem;
 }
 
 nav {
     grid-area: nav;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 main {
     grid-area: main;
-    padding-bottom: 2rem;
+    height: calc(100vh - 2rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
 }
 
 footer {
@@ -99,6 +99,38 @@ footer {
     padding: 1rem;
 }
 
+.docs-info-table td {
+   width: 7rem;
+}
+
 .docs-info-table tr {
     text-align: left;
+}
+nav ul{
+    list-style-type: none;
+    padding-inline-start: 10px;
+}
+
+.docs-nav-root{
+    margin-top: 1rem;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #3e3737;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

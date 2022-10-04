@@ -63,13 +63,14 @@ export const renderNewDocs = async (
     .map(([key, value]) => {
       const name = key.replace('_', '')
       if (typeof value === 'string') {
-        return `<li><a href="${value}">${name}</a></li>`
+        return `<li className="docs-nav-root"><a href="${value}">${name}</a></li>`
       } else {
-        return `<li>${name}</li>
+        return `<li className="docs-nav-root">${name}</li>
 <ul>
 ${Object.entries(value)
   .map(
-    ([linkKey, linkValue]) => `<li><a href="${linkValue}">${linkKey}</a></li>`
+    ([linkKey, linkValue]) =>
+      `<li className="docs-nav-sub"><a href="${linkValue}">${linkKey}</a></li>`
   )
   .join('\n')}
 </ul>`
