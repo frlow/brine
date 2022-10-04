@@ -75,11 +75,11 @@ export const generateDocsTypesImplementation = ({
   const componentInfos = analysisResults.map((ar) => {
     const props = ar.props.map((p) => ({
       ...p,
-      type: p.type.getText(ar.sourceFile),
+      type: Buffer.from(p.type.getText(ar.sourceFile)).toString('base64'),
     }))
     const emits = ar.emits.map((e) => ({
       ...e,
-      type: e.type.getText(ar.sourceFile),
+      type: Buffer.from(e.type.getText(ar.sourceFile)).toString('base64'),
     }))
     const propsElements =
       props.length > 0
@@ -96,7 +96,7 @@ ${props
     (p) => `<tr>
 <td>${p.name}</td>
 <td>${p.optional ? 'x' : ''}</td>
-<td>{'${p.type}'}</td>
+<td>{Buffer.from(\`${p.type}\`,'base64').toString()}</td>
 </tr>`
   )
   .join('\n')}
@@ -118,7 +118,7 @@ ${emits
     (e) => `<tr>
 <td>${e.name}</td>
 <td>${e.optional ? 'x' : ''}</td>
-<td>{'${e.type}'}</td>
+<td>{Buffer.from(\`${e.type}\`,'base64').toString()}</td>
 </tr>`
   )
   .join('\n')}

@@ -34,26 +34,35 @@ describe('Elements', () => {
 stringprop="str" 
 numprop="5" 
 complexprop='{"value":"complex"}'
+selectprop="a"
 optionalprop="optional"
 ></ex-${em}-props>`)
-        const { stringprop, numprop, complexprop, optionalprop, length } =
-          await page.evaluate(() => {
-            const children = Array.from(
-              document.body.firstElementChild?.shadowRoot?.children!
-            ).find((d) => d.tagName === 'DIV')!.children!
-            return {
-              stringprop: children[0].textContent,
-              numprop: children[1].textContent,
-              complexprop: children[2].textContent,
-              optionalprop: children[3].textContent,
-              length: children.length,
-            }
-          })
+        const {
+          stringprop,
+          numprop,
+          complexprop,
+          optionalprop,
+          selectprop,
+          length,
+        } = await page.evaluate(() => {
+          const children = Array.from(
+            document.body.firstElementChild?.shadowRoot?.children!
+          ).find((d) => d.tagName === 'DIV')!.children!
+          return {
+            stringprop: children[0].textContent,
+            numprop: children[1].textContent,
+            complexprop: children[2].textContent,
+            selectprop: children[3].textContent,
+            optionalprop: children[4].textContent,
+            length: children.length,
+          }
+        })
         expect(stringprop).toContain('str')
         expect(numprop).toContain('6')
         expect(complexprop).toContain('complex')
         expect(optionalprop).toContain('optional')
-        expect(length).toEqual(4)
+        expect(selectprop).toContain('a')
+        expect(length).toEqual(5)
       })
     }
   })

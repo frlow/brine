@@ -2,6 +2,7 @@
   export let stringprop: string
   export let numprop: number
   export let complexprop: { value: string }
+  export let selectprop: 'a' | 'b'
   export let optionalprop: string = 'default'
 </script>
 
@@ -9,5 +10,6 @@
     <div class="stringprop">{stringprop}</div>
     <div class="numprop">{numprop + 1}</div>
     <div class="complexprop">{complexprop?.value}</div>
+    <div class="selectprop">{selectprop}</div>
     <div class="optionalprop">{optionalprop}</div>
 </div>
