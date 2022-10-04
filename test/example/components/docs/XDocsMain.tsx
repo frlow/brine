@@ -23,9 +23,7 @@ export default () => {
   return (
     <main
       ref={mainRef}
-      // dangerouslySetInnerHTML={{ __html: el?.innerHTML || '' }}
-    >
-      <slot></slot>
-    </main>
+      dangerouslySetInnerHTML={{ __html: el?.innerHTML || '' }}
+    ></main>
   )
 }

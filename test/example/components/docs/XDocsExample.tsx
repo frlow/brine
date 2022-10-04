@@ -6,8 +6,8 @@ export default ({ code, info }: { code: any; info: any }) => {
   return (
     <div>
       <slot></slot>
-      {/*<button onClick={() => setShowCode(!showCode)}>Show Code</button>*/}
-      {/*{showCode && <div style={{ whiteSpace: 'pre-wrap' }}>{code[fw]}</div>}*/}
+      <button onClick={() => setShowCode(!showCode)}>Show Code</button>
+      {showCode && <div style={{ whiteSpace: 'pre-wrap' }}>{code[fw]}</div>}
     </div>
   )
 }

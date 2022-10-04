@@ -1,3 +1,6 @@
+* {
+    overflow-anchor: none;
+}
 body {
     display: grid;
     grid-template:
@@ -7,7 +10,6 @@ body {
     margin: 0;
     grid-template-columns: 200px auto;
     grid-template-rows: 48px auto;
-    overflow-anchor: none;
     background-color: #18232c;
     color: white;
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -16,9 +18,13 @@ body {
 a{
     color: whitesmoke;
 }
-
-header {
+header{
     grid-area: header;
+    padding: 1rem;
+}
+header:before {
+    content: "Component library";
+    font-size: 2rem;
 }
 
 nav {
@@ -32,6 +38,11 @@ main {
 footer {
     grid-area: footer;
 }
+footer:before {
+    content: "My foot";
+    font-size: 2rem;
+}
+
 
 .docs-page{
     display: none;
