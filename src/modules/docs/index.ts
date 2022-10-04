@@ -12,11 +12,18 @@ export async function writeDocs(
   dist: string,
   docTypePluginOptions: Pick<DocTypePluginOptions, 'prefix' | 'analysisResults'>
 ) {
+  const favicon = glob.sync(`${source}/**/favicon.ico`)[0]
+  if (favicon)
+    writeFile(
+      path.join(dist, 'docs', 'favicon.ico'),
+      fs.readFileSync(favicon),
+      'binary'
+    )
   const html = await renderNewDocs(
     source,
     docTypePluginOptions.analysisResults,
     docTypePluginOptions.prefix,
-    dist
+    !!favicon
   )
 
   writeFile(path.join(dist, 'docs', 'index.html'), html)

@@ -3,8 +3,12 @@ import path from 'path'
 
 export type WriteFileFunc = typeof writeFile
 
-export function writeFile(filePath: string, contents: string) {
+export function writeFile(
+  filePath: string,
+  contents: any,
+  encoding: BufferEncoding = 'utf8'
+) {
   if (!fs.existsSync(path.dirname(filePath)))
     fs.mkdirSync(path.dirname(filePath), { recursive: true })
-  fs.writeFileSync(filePath, contents, 'utf8')
+  fs.writeFileSync(filePath, contents, encoding)
 }

@@ -47,7 +47,7 @@ export const renderNewDocs = async (
   source: string,
   ar: AnalysisResult[],
   prefix: string,
-  dist: string
+  favicon: boolean
 ) => {
   const mdxPlugin = await importMdx()
   const mdxFiles = glob.sync(`${source}/**/*.docs.mdx`).map((f) => ({
@@ -83,7 +83,10 @@ ${imports.map((i) => `import ${i.name} from '${i.importPath}'`).join('\n')}
 
 export default () => <html lang="en">
   <head>
-    <title>Some Title</title>
+    <title>Brine Component Library</title>
+    ${
+      favicon ? '<link rel="icon" type="image/x-icon" href="favicon.ico"/>' : ''
+    }
     <script src='/index.js'></script>
     <link rel="stylesheet" href="/index.css"/>
   </head>
