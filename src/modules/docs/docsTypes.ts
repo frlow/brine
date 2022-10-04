@@ -50,7 +50,7 @@ ${ar.emits.map(
 export const generateDocsTypesImplementation = ({
   analysisResults,
   prefix,
-}: DocTypePluginOptions) => {
+}: Pick<DocTypePluginOptions, 'analysisResults' | 'prefix'>) => {
   const components = analysisResults.map((ar) => {
     const tag = `${prefix}-${kebabize(ar.name)}`
     const props = ar.props

@@ -66,7 +66,7 @@ export async function runStages(
       prefix,
       analysisResults: analyzerResult.analysisResults,
     })
-    // await renderNewDocs(source)
+    await renderNewDocs(source, analyzerResult.analysisResults, prefix, dist)
   }
 
   // Log build time
