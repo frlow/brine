@@ -71,6 +71,7 @@ export const generateDocsTypesImplementation = ({
       .join(' ')
     return `export const ${ar.name} = (args: any)=><${tag} ${props}>{args.children}</${tag}>`
   })
+
   const componentInfos = analysisResults.map((ar) => {
     const props = ar.props.map((p) => ({
       ...p,
@@ -83,8 +84,8 @@ export const generateDocsTypesImplementation = ({
     const propsElements =
       props.length > 0
         ? `<div>
-<div>Properties</div>
-<table>
+<h3>Properties</h3>
+<table className="info-table">
 <tr>
     <th>Name</th>
     <th>Optional</th>
@@ -105,8 +106,8 @@ ${props
     const emitsElements =
       emits.length > 0
         ? `<div>
-<div>Emits</div>
-<table>
+<h3>Emits</h3>
+<table className="info-table">
 <tr>
     <th>Name</th>
     <th>Optional</th>
