@@ -1,57 +1,5 @@
-import { AnalysisResult } from '../analyze'
-import fs from 'fs'
-import path from 'path'
 import { kebabize } from '../../utils/kebabize'
 import { DocTypePluginOptions } from './mdx'
-
-export const generateDocsTypes = async (
-  analysisResults: AnalysisResult[],
-  dist: string
-) => {
-  const components = analysisResults
-    .map(
-      (ar) => `export declare const ${ar.name}: (args: {
-${ar.props
-  .map(
-    (p) => `${p.name}${p.optional ? '?' : ''}:${p.type.getText(ar.sourceFile)}`
-  )
-  .join(',')}
-${ar.emits.map(
-  (e) =>
-    `${'on' + e.name.substring(0, 1).toUpperCase() + e.name.substring(1)}${
-      e.optional ? '?' : ''
-    }:boolean`
-)}
-  children?: React.ReactNode
-}) => JSX.Element`
-    )
-    .join('\n\n')
-  const componentInfos = analysisResults
-    .map((ar) => `export declare const ${ar.name}Info : ()=>JSX.Element`)
-    .join('\n\n')
-  const code = `import * as React from 'react'
-export declare type NodeInfo = {
-  type?: string
-  tag?: string
-  props?: { [i: string]: any }
-  emits?: string[]
-  children?: NodeInfo[]
-}
-export declare type ExampleArgs = { 
-  children: React.ReactNode, 
-  code: {[i:string]:string},
-  info: NodeInfo
-  }
-export declare const Example: (args: {
-  children?: React.ReactNode
-}) => JSX.Element
-
-${components}
-
-${componentInfos}`
-
-  fs.writeFileSync(path.join(dist, 'DocsTypes.d.ts'), code, 'utf8')
-}
 
 export const generateDocsTypesImplementation = ({
   analysisResults,
@@ -195,5 +143,6 @@ const getCode = (info: any)=>{
   ${components.join('\n')}
   ${componentInfos.join('\n')}
 `
+  debugger
   return code
 }

@@ -56,7 +56,7 @@ async function generateWrappers(
   analysisResults: AnalysisResult[],
   outdir: string,
   prefix: string,
-  writeFile: (filePath: string, contents: string) => void
+  writeFile: WriteFileFunc
 ) {
   const wrapperRootDir = path.join(outdir, 'wrapper')
   for (const generator of generators) {

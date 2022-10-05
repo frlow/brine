@@ -1,11 +1,10 @@
-import fs, { writeFileSync } from 'fs'
+import fs from 'fs'
 import path from 'path'
 import { writeFile } from '../../utils/writeFile'
 import { DocTypePluginOptions } from './mdx'
 import { renderNewDocs } from './newDocs'
 import glob from 'glob'
-
-export { generateDocsTypes } from './docsTypes'
+import { generateDocsTypes } from './docsTypesDTs'
 
 export async function writeDocs(
   source: string,
@@ -14,18 +13,17 @@ export async function writeDocs(
 ) {
   const favicon = glob.sync(`${source}/**/favicon.ico`)[0]
   if (favicon)
-    writeFile(
-      path.join(dist, 'docs', 'favicon.ico'),
-      fs.readFileSync(favicon),
-      'binary'
-    )
+    writeFile(path.join(dist, 'docs', 'favicon.ico'), fs.readFileSync(favicon))
   const html = await renderNewDocs(
     source,
     docTypePluginOptions.analysisResults,
     docTypePluginOptions.prefix,
     !!favicon
   )
-
+  writeFile(
+    path.join(dist, 'DocsTypes.d.ts'),
+    await generateDocsTypes(docTypePluginOptions.analysisResults)
+  )
   writeFile(path.join(dist, 'docs', 'index.html'), html)
   writeFile(
     path.join(dist, 'docs', 'index.js'),

@@ -5,7 +5,7 @@ import { writeFile } from './utils/writeFile'
 import { wrapper } from './modules/wrapper'
 import { build } from './modules/build'
 import { bundle } from './modules/bundle'
-import { generateDocsTypes, writeDocs } from './modules/docs'
+import { writeDocs } from './modules/docs'
 
 export async function runStages(
   dist: string,
@@ -60,7 +60,7 @@ export async function runStages(
   if (docs) {
     if (fs.lstatSync(source).isFile())
       throw '--no-docs must be used when targeting single file'
-    await generateDocsTypes(analyzerResult.analysisResults, dist)
+    // await generateDocsTypes(analyzerResult.analysisResults, dist)
     await writeDocs(source, dist, {
       prefix,
       analysisResults: analyzerResult.analysisResults,

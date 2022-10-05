@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 
-export default ({ code, info }: { code: any; info: any }) => {
+export default () => {
   useEffect(() => {
-    document.title = 'This is my awesome component library'
+    document.title = 'Brine Components'
   })
-  return <h1 style={{ margin: '0.5rem' }}>My Component library</h1>
+  return <></>
 }

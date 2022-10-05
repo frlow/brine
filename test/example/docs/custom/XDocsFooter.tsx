@@ -1,5 +1,5 @@
 import React from 'react'
 
-export default ({ code, info }: { code: any; info: any }) => {
+export default () => {
   return <div>Footer</div>
 }
