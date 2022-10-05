@@ -21,7 +21,7 @@ describe('Elements', () => {
             textAlign: style.textAlign,
           }
         })
-        expect(style.color).toEqual('rgb(44, 62, 80)')
+        expect(style.color).toEqual('rgb(255, 182, 193)')
         expect(style.textAlign).toEqual('center')
       })
     }
