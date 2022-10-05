@@ -2,6 +2,10 @@ import fse from 'fs-extra'
 import fs from 'fs'
 import path from 'path'
 
+const version = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '..', '..', 'package.json'), 'utf8')
+).version
+
 const packageJson = {
   name: 'brine-demo',
   version: '1.0.0',
@@ -12,7 +16,7 @@ const packageJson = {
     build: 'brine build -x my src',
   },
   dependencies: {
-    '@frlow/brine': '^0.0.0',
+    '@frlow/brine': `^${version}`,
   },
 }
 
@@ -44,4 +48,8 @@ export const init = async (source: string, outDir: string) => {
     JSON.stringify(tsconfigJson, null, 2),
     'utf8'
   )
+  console.log(`Brine project has been successfully initialized
+  cd ${outDir}
+  yarn
+  yarn start`)
 }
