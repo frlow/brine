@@ -21,6 +21,8 @@ import {ReactSimple, VueSimple, SvelteSimple, SolidSimple, Example} from '../../
 
 ## Custom styling
 
+Set attribute "part" on element inside component to make it css stylable using [part()](https://developer.mozilla.org/en-US/docs/Web/CSS/::part)
+
 <Example>
     <style>{`.custom::part(base) {color: blue; font-size: 2rem;}`}</style>
     <SolidSimple className="custom"></SolidSimple>
