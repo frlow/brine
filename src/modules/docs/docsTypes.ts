@@ -17,7 +17,7 @@ export const generateDocsTypesImplementation = ({
           } : undefined}`
       )
       .join(' ')
-    return `export const ${ar.name} = (args: any)=><${tag} ${props}>{args.children}</${tag}>`
+    return `export const ${ar.name} = (args: any)=><${tag} ${props} class={args.className}>{args.children}</${tag}>`
   })
 
   const componentInfos = analysisResults.map((ar) => {
@@ -143,6 +143,5 @@ const getCode = (info: any)=>{
   ${components.join('\n')}
   ${componentInfos.join('\n')}
 `
-  debugger
   return code
 }

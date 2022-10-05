@@ -1,6 +1,7 @@
 import { SyntaxKind } from 'typescript'
 import { kebabize } from '../../utils/kebabize'
 import { GenerateWrapperFunction } from '../wrapper'
+import { shouldSendAsString } from '../common/utils'
 
 export const vueWrapperGenerator: GenerateWrapperFunction = async (
   analysisResult,
@@ -49,7 +50,7 @@ onMounted(()=>{import('${importFile}')})`
     .map(
       (prop) =>
         `:${prop.name}="${
-          prop.type.getText(analysisResult.sourceFile) === 'string'
+          shouldSendAsString(prop.type, analysisResult)
             ? prop.name
             : `JSON.stringify(${prop.name})`
         }"`

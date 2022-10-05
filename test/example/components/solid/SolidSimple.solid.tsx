@@ -1,5 +1,9 @@
 import '../dummy.scss'
 
 export default () => {
-  return <div className="dummy">solid</div>
+  return (
+    <div part="base" class="dummy">
+      solid
+    </div>
+  )
 }

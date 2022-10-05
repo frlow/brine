@@ -1,4 +1,4 @@
-<div class="dummy">svelte</div>
+<div class="dummy" part="base">svelte</div>
 <style lang="scss">
   @import "../dummy.scss";
 </style>

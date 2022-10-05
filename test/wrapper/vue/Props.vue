@@ -7,6 +7,7 @@ import SvelteProps from '../../dist/wrapper/vue/SvelteProps.lite.vue'
         :stringprop="'str'"
         :numprop="6"
         :complexprop="{ value: 'val' }"
+        :selectprop="'a'"
     ></SvelteProps>
   </div>
 </template>

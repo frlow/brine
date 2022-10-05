@@ -14,7 +14,8 @@ ${ar.emits.map(
       e.optional ? '?' : ''
     }:boolean`
 )}
-  children?: React.ReactNode
+  children?: React.ReactNode,
+  className?: string
 }) => JSX.Element`
 
 const getComponentInfo = (ar: AnalysisResult) =>

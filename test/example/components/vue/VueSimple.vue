@@ -1,5 +1,5 @@
 <template>
-  <div class="dummy">vue</div>
+  <div part="base" class="dummy">vue</div>
 </template>
 
 <style lang="scss">

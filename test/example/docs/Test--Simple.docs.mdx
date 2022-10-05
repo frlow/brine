@@ -17,3 +17,14 @@ import {ReactSimple, VueSimple, SvelteSimple, SolidSimple, Example} from '../../
 <Example>
     <SolidSimple></SolidSimple>
 </Example>
+
+
+## Custom styling
+
+<Example>
+    <style>{`.custom::part(base) {color: blue; font-size: 2rem;}`}</style>
+    <SolidSimple className="custom"></SolidSimple>
+    <SvelteSimple className="custom"></SvelteSimple>
+    <ReactSimple className="custom"></ReactSimple>
+    <VueSimple className="custom"></VueSimple>
+</Example>

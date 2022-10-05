@@ -76,6 +76,7 @@ footer {
 .example-code-react {
     display: block;
 }
+
 .example-code-react label {
     color: #61DBFB;
 }
@@ -84,7 +85,8 @@ footer {
     margin-top: 1rem;
     display: block;
 }
-.example-code-vue label{
+
+.example-code-vue label {
     color: #42b883;
 }
 
@@ -100,18 +102,19 @@ footer {
 }
 
 .docs-info-table td {
-   width: 7rem;
+    width: 7rem;
 }
 
 .docs-info-table tr {
     text-align: left;
 }
-nav ul{
+
+nav ul {
     list-style-type: none;
     padding-inline-start: 10px;
 }
 
-.docs-nav-root{
+.docs-nav-root {
     margin-top: 1rem;
 }
 

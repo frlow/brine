@@ -8,6 +8,7 @@ export default () => {
         stringprop={'str'}
         numprop={6}
         complexprop={{ value: 'val' }}
+        selectprop={'a'}
       ></SvelteProps>
     </div>
   )

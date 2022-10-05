@@ -38,7 +38,7 @@ describe('Wrappers', () => {
       test(wm.name, async () => {
         const result = await evaluateWrapper(wm.name, 'Props')
         expect(result).toEqual(
-          `<ex-svelte-props stringprop="str" numprop="6" complexprop=\"{&quot;value&quot;:&quot;val&quot;}\"></ex-svelte-props>`
+          `<ex-svelte-props stringprop="str" numprop="6" complexprop=\"{&quot;value&quot;:&quot;val&quot;}\" selectprop="a"></ex-svelte-props>`
         )
       })
     }
@@ -77,6 +77,16 @@ describe('Wrappers', () => {
       test(wm.name, async () => {
         expect(await evaluateWrapper(wm.name, 'Slots')).toEqual(
           `<ex-svelte-slots><ex-svelte-simple></ex-svelte-simple><ex-svelte-simple slot="named"></ex-svelte-simple></ex-svelte-slots>`
+        )
+      })
+    }
+  })
+
+  describe('Class', () => {
+    for (const wm of wrapperModules) {
+      test(wm.name, async () => {
+        expect(await evaluateWrapper(wm.name, 'Class')).toEqual(
+          `<ex-svelte-simple class="custom"></ex-svelte-simple>`
         )
       })
     }
