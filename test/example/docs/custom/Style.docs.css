@@ -1,3 +1,12 @@
+:root {
+    --bg-color: #17181e;
+    --primary-color: #383838;
+    --secondary-color: #535353;
+    --accent-color: #777;
+    --react-color: #61DBFB;
+    --vue-color: #42b883;
+}
+
 * {
     overflow-anchor: none;
 }
@@ -9,9 +18,9 @@ body {
         "nav main"
         "nav footer";
     margin: 0;
-    grid-template-columns: 200px auto;
+    grid-template-columns: 250px auto;
     grid-template-rows: min-content min-content min-content;
-    background-color: #18232c;
+    background-color: var(--bg-color);
     color: white;
     font-family: Avenir, Helvetica, Arial, sans-serif;
 }
@@ -25,23 +34,25 @@ header {
 }
 
 nav {
+    position: fixed;
     grid-area: nav;
     overflow-y: auto;
     overflow-x: hidden;
     padding-left: 1rem;
+    height: 100vh;
 }
 
 main {
     grid-area: main;
-    overflow-y: auto;
     overflow-x: hidden;
     padding: 1rem;
+    height: max-content;
 }
 
 footer {
     grid-area: footer;
+    height: 100px;
 }
-
 
 .docs-page {
     display: none;
@@ -53,15 +64,15 @@ footer {
 }
 
 .example-code {
-    border: 1px solid #535353;
-    background-color: #535353;
+    border: 1px solid var(--primary-color);
+    background-color: var(--secondary-color);
     padding: 1rem;
     white-space: pre-wrap;
 }
 
 .example-content {
-    border: 1px solid #535353;
-    background-color: #383838;
+    border: 1px solid var(--secondary-color);
+    background-color: var(--primary-color);
     padding: 1rem;
 }
 
@@ -77,7 +88,7 @@ footer {
 }
 
 .example-code-react label {
-    color: #61DBFB;
+    color: var(--react-color);
 }
 
 .example-code-vue {
@@ -86,7 +97,7 @@ footer {
 }
 
 .example-code-vue label {
-    color: #42b883;
+    color: var(--vue-color);
 }
 
 .docs-info {
@@ -95,8 +106,8 @@ footer {
 
 .docs-info-table {
     width: 100%;
-    border: 1px solid #535353;
-    background-color: #383838;
+    border: 1px solid var(--secondary-color);
+    background-color: var(--primary-color);
     padding: 1rem;
 }
 
@@ -119,20 +130,51 @@ nav ul {
 
 /* width */
 ::-webkit-scrollbar {
-    width: 4px;
+    width: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #3e3737;
+    background: var(--primary-color);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: var(--secondary-color);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: var(--accent-color);
+}
+
+@media (max-width: 756px) {
+    body {
+        grid-template-rows: repeat(4, auto);
+        grid-template-columns: auto;
+        grid-template:
+        "header"
+        "nav"
+        "main"
+        "footer";
+    }
+
+    nav {
+        position: relative;
+        height: max-content;
+    }
+
+    .docs-info-table {
+        border-collapse: collapse;
+    }
+
+    .docs-info-table td, th {
+        padding-left: 1rem;
+        border-top: 1px solid var(--secondary-color);
+    }
+
+    .docs-info-table th {
+        padding-top: 0.5rem;
+        padding-bottom: 0.2rem;
+    }
 }
