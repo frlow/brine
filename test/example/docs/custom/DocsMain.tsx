@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 export default () => {
   const updateInner = () => {
-    const name = window.location.hash.replace('#', '')
+    const name = decodeURIComponent(window.location.hash.replace('#', ''))
     const host = (mainRef.current!.getRootNode() as any).host as HTMLElement
     const children = Array.from(host.childNodes!)
     const child = (children.find((e: any) => e.id === name) ||
@@ -18,12 +18,14 @@ export default () => {
 
   const [el, setEl] = useState<HTMLElement>()
 
-  const mainRef = useRef<HTMLElement>(null)
+  const mainRef = useRef<HTMLDivElement>(null)
 
   return (
-    <main
+    <div
       ref={mainRef}
-      dangerouslySetInnerHTML={{ __html: el?.innerHTML || '' }}
-    ></main>
+      // dangerouslySetInnerHTML={{ __html: el?.innerHTML || '' }}
+    >
+      <slot></slot>
+    </div>
   )
 }

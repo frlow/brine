@@ -1,4 +1,4 @@
-import esbuild, { Plugin } from 'esbuild'
+import esbuild, { Plugin, Loader } from 'esbuild'
 import path from 'path'
 import fs from 'fs'
 import { findFiles } from '../utils/findFiles'
@@ -69,6 +69,9 @@ export const build = async ({
   analysisResults: AnalysisResult[]
   isProduction: boolean
 }) => {
+  const loader: Dictionary<Loader> = {
+    '.png': 'dataurl',
+  }
   const outDir = path.join(dist, 'module')
   const files = modules.flatMap((module) =>
     module.findMatchingFiles(source).map((file) => ({ file, module }))
@@ -99,6 +102,7 @@ export const build = async ({
       minify: isProduction,
       metafile,
       external: [...external],
+      loader,
     })
   const preResult = await runBuild({
     sourcemap: false,

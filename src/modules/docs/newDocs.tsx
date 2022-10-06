@@ -1,13 +1,13 @@
 import glob from 'glob'
 import { importMdx } from '../../utils/es.cjs'
 import path from 'path'
-import { kebabize } from '../../utils/kebabize'
 import { build, Plugin } from 'esbuild'
 import { AnalysisResult } from '../analyze'
 import { generateDocsTypesImplementation } from './docsTypes'
 import { getFullPath } from '../../utils/pluginUtils'
-import { Dictionary } from '../../utils/types'
 import { renderToString } from 'react-dom/server'
+import { getDocsMain } from './docsMain'
+import { getDocsExample } from './docsExample'
 
 const internalFilesPlugin = (
   files: { filter: RegExp; content: string }[]
@@ -18,30 +18,14 @@ const internalFilesPlugin = (
       build.onResolve({ filter: file.filter }, async (args) => ({
         path: getFullPath(args),
       }))
-      build.onLoad({ filter: file.filter }, async () => ({
+      build.onLoad({ filter: file.filter }, async (args) => ({
         loader: 'tsx',
         contents: file.content,
+        resolveDir: path.parse(args.path).dir,
       }))
     }
   },
 })
-
-type ImportDefinition = {
-  name: string
-  importPath: string
-}
-const groupLinks = (links: string[]) =>
-  links.reduce((acc, cur) => {
-    const parts = cur.split('--')
-    const key = parts[0]
-    if (parts.length === 1) acc[key] = `#${cur}`
-    else {
-      const obj: Dictionary<string> =
-        (acc[key] as Dictionary<string>) || (acc[key] = {})
-      obj[parts[1]] = `#${cur}`
-    }
-    return acc
-  }, {} as Dictionary<Dictionary<string> | string>)
 
 export const renderNewDocs = async (
   source: string,
@@ -54,88 +38,13 @@ export const renderNewDocs = async (
     importPath: `./${f}`,
     path: f,
     fullName: path.parse(f).name.replace('.docs', ''),
-    name:
-      path.parse(f).name.replace('.docs', '').split('--').at(-1)! + 'DocsPage',
+    name: (
+      path.parse(f).name.replace('.docs', '').split('--').at(-1)! + 'DocsPage'
+    ).replace(/[0-9]*_?/g, ''),
   }))
-  const imports: ImportDefinition[] = [...mdxFiles]
-  const groupedLinks = groupLinks(mdxFiles.map((m) => m.fullName))
-  const links = Object.entries(groupedLinks)
-    .map(([key, value]) => {
-      const name = key.replace('_', '')
-      if (typeof value === 'string') {
-        return `<li className="docs-nav-root"><a href="${value}">${name}</a></li>`
-      } else {
-        return `<li className="docs-nav-root">${name}</li>
-<ul>
-${Object.entries(value)
-  .map(
-    ([linkKey, linkValue]) =>
-      `<li className="docs-nav-sub"><a href="${linkValue}">${linkKey}</a></li>`
-  )
-  .join('\n')}
-</ul>`
-      }
-    })
-    .join('\n')
-
-  const code = `import React from 'react'
-${imports.map((i) => `import ${i.name} from '${i.importPath}'`).join('\n')}
-
-export default () => <html lang="en">
-  <head>
-    <title>Brine Component Library</title>
-    ${
-      favicon ? '<link rel="icon" type="image/x-icon" href="favicon.ico"/>' : ''
-    }
-    <script src='/index.js'></script>
-    <link rel="stylesheet" href="/index.css"/>
-  </head>
-  <body>
-    <header>
-        <${prefix}-docs-header></${prefix}-docs-header>
-    </header>
-    <nav>
-        <${prefix}-docs-nav links='${JSON.stringify(groupedLinks)}'>
-        <ul>
-${links}
-        </ul>
-        </${prefix}-docs-nav>
-    </nav>
-    <main>
-    <${prefix}-docs-main>
-${mdxFiles
-  .map(
-    (m) => `      <div className="docs-page ${kebabize(m.name)}" id="${
-      m.fullName
-    }">
-        <${m.name}/>
-      </div>`
-  )
-  .join('\n')}
-    </${prefix}-docs-main>
-    </main>
-    <footer>
-        <${prefix}-docs-footer></${prefix}-docs-footer>
-    </footer>
-  </body>
-</html>
-  `
-  const example = `import React from 'react'
-export const DocsExample = ({children, code, info}:any)=><${prefix}-docs-example info={JSON.stringify(info)} code={JSON.stringify(code)} className="example">
-<div className="example">
-<div className="example-content">
-{children}
-</div>
-<div className="example-code">
-{Object.keys(code).map(key=><div key={key} className={'example-code-'+key}>
-<label>{key}</label>
-<div >{code[key]}</div>
-</div>)}
-</div>
-</div>
-</${prefix}-docs-example>`
 
   const result = await build({
+    absWorkingDir: path.resolve(source),
     entryPoints: ['docsMain.tsx'],
     bundle: true,
     write: false,
@@ -144,7 +53,7 @@ export const DocsExample = ({children, code, info}:any)=><${prefix}-docs-example
       internalFilesPlugin([
         {
           filter: /docsMain\.tsx/,
-          content: code,
+          content: getDocsMain(mdxFiles, favicon, prefix),
         },
         {
           filter: /DocsTypes/,
@@ -153,7 +62,7 @@ export const DocsExample = ({children, code, info}:any)=><${prefix}-docs-example
             analysisResults: ar,
           }),
         },
-        { filter: /DocsExample/, content: example },
+        { filter: /DocsExample/, content: getDocsExample(prefix) },
       ]),
     ],
     format: 'cjs',

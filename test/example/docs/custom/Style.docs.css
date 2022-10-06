@@ -10,7 +10,7 @@ body {
         "nav footer";
     margin: 0;
     grid-template-columns: 200px auto;
-    grid-template-rows: 0 auto 0;
+    grid-template-rows: min-content min-content min-content;
     background-color: #18232c;
     color: white;
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -26,14 +26,13 @@ header {
 
 nav {
     grid-area: nav;
-    height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-left: 1rem;
 }
 
 main {
     grid-area: main;
-    height: calc(100vh - 2rem);
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1rem;

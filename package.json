@@ -12,7 +12,7 @@
     "start": "yon brine start test/example -x ex -o test/dist",
     "build": "tsc && cpy ./src/utils/es.cjs ./dist/utils --flat && cpy . --cwd test/example ../../dist/example",
     "build:example": "yon brine build test/example -o dist-example -x ex && node example.js dist-example && cpy --cwd dist-example/docs index.html . --rename='404.html'",
-    "brine": "ts-node src/cli.ts",
+    "brine": "ts-node-dev src/cli.ts",
     "test": "jest",
     "init": "yon brine init dist/example -s test/example",
     "local": "yon build && npm pack && npm i -g --force ./frlow-brine* && rm frlow-brine*"
@@ -49,6 +49,7 @@
     "svelte": "^3.47.0",
     "svelte-preprocess": "^4.10.6",
     "ts-node": "^10.7.0",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^4.6.3",
     "vscode-html-languageservice": "^4.2.4",
     "vue": "^3.2.33",

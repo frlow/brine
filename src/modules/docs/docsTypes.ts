@@ -135,10 +135,10 @@ const getCode = (info: any)=>{
         vue: getVue(info)
     }
 }
-  import {DocsExample} from './DocsExampleInternal'
+  import {DocsExampleInternal} from './DocsExampleInternal'
   export const Example = ({children}: any)=>{
     const info = getInfo(children)
-    return <DocsExample code={getCode(info)} info={info}>{children}</DocsExample>
+    return <DocsExampleInternal code={getCode(info)} info={info}>{children}</DocsExampleInternal>
   }
   ${components.join('\n')}
   ${componentInfos.join('\n')}
