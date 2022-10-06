@@ -40,6 +40,7 @@ nav {
     overflow-x: hidden;
     padding-left: 1rem;
     height: 100vh;
+    width: 230px;
 }
 
 main {
@@ -162,6 +163,7 @@ nav ul {
     nav {
         position: relative;
         height: max-content;
+        width: auto;
     }
 
     .docs-info-table {
