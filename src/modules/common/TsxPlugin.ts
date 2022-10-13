@@ -2,7 +2,7 @@ import esbuild from 'esbuild'
 import { getFullPath, getUrlParams } from '../../utils/pluginUtils'
 
 export const tsxPlugin: esbuild.Plugin = {
-  name: 'ucp-tsx-plugin',
+  name: 'brine-tsx-plugin',
   setup(build) {
     build.onResolve({ filter: /\.tsx/ }, async (args) => {
       const params = getUrlParams(args.path)

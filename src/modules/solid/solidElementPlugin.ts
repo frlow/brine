@@ -16,7 +16,7 @@ export const solidElementPlugin = ({
   prefix,
   analysisResults,
 }: PluginOptions): esbuild.Plugin => ({
-  name: 'ucp-solid-plugin',
+  name: 'brine-solid-plugin',
   setup(build) {
     const cache = new AsyncCache()
 

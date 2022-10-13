@@ -11,7 +11,7 @@ export const reactElementPlugin = ({
   prefix,
   styles,
 }: PluginOptions): esbuild.Plugin => ({
-  name: 'ucp-react-plugin',
+  name: 'brine-react-plugin',
   setup(build) {
     const cache = new AsyncCache()
 

@@ -1,13 +1,13 @@
 import esbuild from 'esbuild'
-import path from "path";
+import path from 'path'
 
 export const nativeEventsPlugin: esbuild.Plugin = {
-  name: 'ucp-native-events-plugin',
+  name: 'brine-native-events-plugin',
   setup(build) {
-    build.onResolve({filter: /nativeEvents/}, async (args) => {
-      return {path: path.join(process.cwd(), 'nativeEvents.ts')}
+    build.onResolve({ filter: /nativeEvents/ }, async (args) => {
+      return { path: path.join(process.cwd(), 'nativeEvents.ts') }
     })
-    build.onLoad({filter: /nativeEvents/}, async (args) => {
+    build.onLoad({ filter: /nativeEvents/ }, async (args) => {
       const code = `export default (element)=>{
   const events = ["click", "contextmenu", "dblclick", "mousedown", "mouseenter", "mouseleave", "mousemove",
         "mouseover", "mouseout", "mouseup", "keydown", "keypress", "keyup", "blur", "change", "focus", "focusin",
@@ -25,8 +25,8 @@ export const nativeEventsPlugin: esbuild.Plugin = {
     events.forEach(event=>element.shadowRoot.addEventListener(event, handler))
 }`
       return {
-        loader: "js",
-        contents: code
+        loader: 'js',
+        contents: code,
       }
     })
   },
