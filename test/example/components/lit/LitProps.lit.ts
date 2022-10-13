@@ -1,11 +1,11 @@
 import { LitElement, html, property } from 'lit-element'
 
 export default class extends LitElement {
-  @property({ type: String }) stringprop: string = ''
-  @property({ type: Number }) numprop: number = 0
-  @property({ type: Object }) complexprop: { value: string } = { value: '' }
-  @property({ type: String }) selectprop: 'a' | 'b' = 'a'
-  @property({ type: String }) optionalprop?: string = 'default'
+  @property() stringprop: string = ''
+  @property() numprop: number = 0
+  @property() complexprop: { value: string } = { value: '' }
+  @property() selectprop: 'a' | 'b' = 'a'
+  @property() optionalprop?: string = 'default'
 
   render() {
     return html` <div>
