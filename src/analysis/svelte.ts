@@ -2,14 +2,15 @@ import fs from 'fs'
 import ts, {
   CallExpression,
   SourceFile,
-  SyntaxKind,
   TypeLiteralNode,
   VariableDeclarationList,
   VariableStatement,
 } from 'typescript'
-import ScriptTarget = ts.ScriptTarget
 import path from 'path'
 import { AnalyzeFileFunction, PropDefinition } from './common'
+import SyntaxKind = ts.SyntaxKind
+import ScriptTarget = ts.ScriptTarget
+import { camelize } from '../utils/string'
 
 const getProps = (sourceFile: SourceFile): PropDefinition[] => {
   if (!sourceFile.statements) return []
@@ -52,14 +53,16 @@ function getEmits(sourceFile: ts.SourceFile): PropDefinition[] {
   if (!dispatch) return []
   const args = dispatch.typeArguments![0] as TypeLiteralNode
   const emits = args?.members.map((p) => ({
-    name: p.name!.getText(sourceFile),
+    name: camelize(p.name!.getText(sourceFile).replace(/\"/g, '')),
     type: (p as any).type.getText(sourceFile),
     optional: !!p.questionToken,
   }))
   return emits
 }
 
-const analyzeSvelteFile: AnalyzeFileFunction = async (filePath: string) => {
+export const analyzeSvelteFile: AnalyzeFileFunction = async (
+  filePath: string
+) => {
   const code = fs.readFileSync(filePath, 'utf8')
   let sourceFile: SourceFile = {} as SourceFile
   let slots: string[] | undefined = undefined

@@ -1,18 +1,17 @@
 import './index.css'
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 
-export default (
-  {
-    count,
-    text,
-    obj,
-    onMyEvent,
-  }: {
-    count: number
-    text: string
-    obj: { val: string }
-    onMyEvent: (text: string) => void
-  }) => {
+export default ({
+  count,
+  text,
+  obj,
+  onMyEvent,
+}: {
+  count: number
+  text: string
+  obj: { val: string }
+  onMyEvent: (text: string) => void
+}) => {
   useEffect(() => {
     console.log('React Mount')
     return () => {
@@ -21,11 +20,11 @@ export default (
   })
   return (
     <div>
-      <div>React</div>
+      <div>React 11</div>
       <div>
         {count} {text} {obj?.val}
       </div>
-      <button class="button" onClick={() => onMyEvent('react-demo')}>
+      <button className="button" onClick={() => onMyEvent('react-demo')}>
         Button
       </button>
       <slot name="foo"></slot>

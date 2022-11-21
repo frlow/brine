@@ -1,3 +1,4 @@
+// This is a handwritten file!!!
 import App from './VueApp.vue'
 import { createApp, h } from 'vue'
 import {
@@ -5,8 +6,7 @@ import {
   vueCustomElementComponent,
 } from '../../src/wrapper/vue'
 
-// This is a handwritten file!
-export default vueCustomElement(
+export default vueCustomElementComponent(
   (props) => {
     return createApp({
       render: () => h(App, props),
@@ -16,4 +16,4 @@ export default vueCustomElement(
   ['my-event']
 )
 
-// export default vueCustomElementComponent(App)
+// export default vueCustomElement(App)

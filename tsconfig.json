@@ -5,6 +5,7 @@
     "module": "ESNext",
     "resolveJsonModule": true,
     "moduleResolution": "Node",
+    "noImplicitAny": true,
     /**
      * Typecheck JS in `.svelte` and `.js` files by default.
      * Disable checkJs if you'd like to use dynamic types in JS.
@@ -19,14 +20,10 @@
   },
   "include": [
     "src/**/*",
-    "examples/**/*"
+    "examples/**/*",
+    "build.ts"
   ],
   "exclude": [
     "test/**/*"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
   ]
 }

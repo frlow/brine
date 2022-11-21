@@ -5,7 +5,7 @@ export const camelize = (str: string) => {
     .join('')
 }
 
-export const kebabize = (str) =>
+export const kebabize = (str: string) =>
   str
     .split('')
     .map((letter, idx) => {

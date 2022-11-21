@@ -2,8 +2,8 @@ import { WcWrapperOptions } from './index'
 import { App, DefineComponent, createApp, h, reactive } from 'vue'
 import { camelize } from '../utils/string'
 
-export const vueCustomElementComponent = (component: DefineComponent) =>
-  vueCustomElement(
+export const vueCustomElement = (component: DefineComponent) =>
+  vueCustomElementComponent(
     (props) =>
       createApp({
         render: () => h(component, props),
@@ -11,11 +11,11 @@ export const vueCustomElementComponent = (component: DefineComponent) =>
     Object.entries(component.props).reduce((acc, cur: any) => {
       acc[cur[0]] = cur[1]?.type === String
       return acc
-    }, {}),
+    }, {} as any),
     Array.isArray(component.emits) ? component.emits : []
   )
 
-export const vueCustomElement = (
+export const vueCustomElementComponent = (
   appCreateFunc: (props: any) => App,
   attributes: { [i: string]: boolean },
   emits: string[]

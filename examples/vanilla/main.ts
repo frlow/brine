@@ -1,3 +1,4 @@
+// This is a handwritten file!!!
 import { WcWrapperOptions } from '../../src/wrapper'
 import './style.css'
 
