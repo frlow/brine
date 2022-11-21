@@ -1,6 +1,6 @@
 import { WcWrapperOptions } from './index'
 import { App, DefineComponent, createApp, h, reactive } from 'vue'
-import { camelize } from './common'
+import { camelize } from '../utils/string'
 
 export const vueCustomElementComponent = (component: DefineComponent) =>
   vueCustomElement(
@@ -8,24 +8,25 @@ export const vueCustomElementComponent = (component: DefineComponent) =>
       createApp({
         render: () => h(component, props),
       }),
-    component.props,
+    Object.entries(component.props).reduce((acc, cur: any) => {
+      acc[cur[0]] = cur[1]?.type === String
+      return acc
+    }, {}),
     Array.isArray(component.emits) ? component.emits : []
   )
 
 export const vueCustomElement = (
   appCreateFunc: (props: any) => App,
-  props: any,
+  attributes: { [i: string]: boolean },
   emits: string[]
 ): WcWrapperOptions => ({
   constructor: (self) => {
     self.state.props = reactive<any>({})
   },
   attributeChangedCallback: (state, root, name, oldValue, newValue) => {
-    const prop = props[name]
-    const isString = prop?.type === String
-    state.props[name] = isString ? newValue : JSON.parse(newValue)
+    state.props[name] = attributes[name] ? newValue : JSON.parse(newValue)
   },
-  attributes: Object.keys(props || {}),
+  attributes: Object.keys(attributes || {}),
   connected: (state, root, emit) => {
     const mountPoint = document.createElement('div')
     root.appendChild(mountPoint)

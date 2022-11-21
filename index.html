@@ -22,20 +22,21 @@
             <div>Inner</div>
         </my-vanilla>
         <h3>Vue</h3>
-        <my-vue x-on:my-event="console.log($event)" x-bind:count="count" count="0" text="demo" obj='{"val": "a"}'>
+        <my-vue-app x-on:my-event="console.log($event)" x-bind:count="count" count="0" text="demo" obj='{"val": "a"}'>
             <div>Inner</div>
             <div slot="foo">Foo</div>
-        </my-vue>
+        </my-vue-app>
         <h3>Svelte</h3>
-        <my-svelte x-on:my-event="console.log($event)" x-bind:count="count" count="0" text="demo" obj='{"val": "a"}'>
+        <my-svelte-app x-on:my-event="console.log($event)" x-bind:count="count" count="0" text="demo"
+                       obj='{"val": "a"}'>
             <div>Inner</div>
             <div slot="foo">Foo</div>
-        </my-svelte>
+        </my-svelte-app>
         <h3>React</h3>
-        <my-react x-on:my-event="console.log($event)" x-bind:count="count" count="0" text="demo" obj='{"val": "a"}'>
+        <my-react-app x-on:my-event="console.log($event)" x-bind:count="count" count="0" text="demo" obj='{"val": "a"}'>
             <div>Inner</div>
             <div slot="foo">Foo</div>
-        </my-react>
+        </my-react-app>
     </div>
 </template>
 </body>

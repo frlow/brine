@@ -13,7 +13,9 @@
      */
     "allowJs": true,
     "checkJs": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*",
@@ -21,5 +23,10 @@
   ],
   "exclude": [
     "test/**/*"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }
