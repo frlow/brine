@@ -1,0 +1,17 @@
+**/node_modules/*
+.idea/
+**/dist/
+**/.parcel-cache/
+yarn-error.log
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+**/pacts/
+**/logs/
+**/.DS_Store
+generated/
+dist-example/

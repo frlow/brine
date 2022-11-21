@@ -1,0 +1,42 @@
+<html>
+<head>
+    <style>
+        body {
+            background-color: #262641;
+            color: #dcd6d6;
+        }
+    </style>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script type="module" src="./dist/react/element.js"></script>
+    <script type="module" src="./dist/vue/element.js"></script>
+    <script type="module" src="./dist/svelte/element.js"></script>
+    <script type="module" src="./dist/vanilla/element.js"></script>
+</head>
+<body x-data="{show: true, count: 0}">
+<button x-on:click="show=!show">Toggle</button>
+<button x-on:click="count=count+1;">Count</button>
+<template x-if="show">
+    <div style="border: solid 1px red; width: 100px;">
+        <h3>Vanilla</h3>
+        <my-vanilla x-on:my-event="console.log($event)" x-bind:count="count">
+            <div>Inner</div>
+        </my-vanilla>
+        <h3>Vue</h3>
+        <my-vue x-on:my-event="console.log($event)" x-bind:count="count" count="0" text="demo" obj='{"val": "a"}'>
+            <div>Inner</div>
+            <div slot="foo">Foo</div>
+        </my-vue>
+        <h3>Svelte</h3>
+        <my-svelte x-on:my-event="console.log($event)" x-bind:count="count" count="0" text="demo" obj='{"val": "a"}'>
+            <div>Inner</div>
+            <div slot="foo">Foo</div>
+        </my-svelte>
+        <h3>React</h3>
+        <my-react x-on:my-event="console.log($event)" x-bind:count="count" count="0" text="demo" obj='{"val": "a"}'>
+            <div>Inner</div>
+            <div slot="foo">Foo</div>
+        </my-react>
+    </div>
+</template>
+</body>
+</html>

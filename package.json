@@ -1,0 +1,33 @@
+{
+  "name": "@frlow/brine",
+  "version": "2.0.0",
+  "repository": "https://github.com/frlow/brine",
+  "author": "Fredrik Löwenhamn <fredrik.lowenhamn@gmail.com>",
+  "license": "MIT",
+  "main": "dist/cli.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "dev:build": "node build.js",
+    "dev:serve": "browser-sync start --server --files \"dist/*\" --no-open --no-ui",
+    "dev": "run-p -r \"dev:build\" \"dev:serve\""
+  },
+  "devDependencies": {
+    "@tsconfig/svelte": "^3.0.0",
+    "browser-sync": "^2.27.10",
+    "esbuild": "^0.15.14",
+    "esbuild-plugin-vue3": "^0.3.0",
+    "esbuild-svelte": "^0.7.3",
+    "npm-run-all": "^4.1.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "svelte": "^3.53.1",
+    "svelte-preprocess": "^4.10.7",
+    "typescript": "^4.8.4",
+    "vue": "^3.2.45"
+  }
+}
