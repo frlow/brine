@@ -14,7 +14,7 @@
     "watch": "tsc --watch",
     "dev:build": "node build.js",
     "dev:serve": "browser-sync start --server --files \"dist/*\" --no-open --no-ui",
-    "dev": "run-p -r \"dev:build\" \"dev:serve\""
+    "dev": "run-p -r \"dev:build watch\" \"dev:serve\""
   },
   "devDependencies": {
     "@tsconfig/svelte": "^3.0.0",

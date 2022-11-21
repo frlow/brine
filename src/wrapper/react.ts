@@ -1,7 +1,7 @@
-import { WcWrapperOptions } from './index'
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import { camelize } from './common'
+import {WcWrapperOptions} from './index'
+import {createElement} from 'react'
+import {createRoot} from 'react-dom/client'
+import {camelize} from './common'
 
 export const reactCustomElementComponent = (
   Component: (args: any) => JSX.Element,
@@ -18,7 +18,7 @@ export const reactCustomElementComponent = (
       })
       self.state.render = () => {
         if (self.state.app)
-          self.state.app.render(<Component {...self.state.props} />)
+          self.state.app.render(createElement(Component, self.state.props))
       }
     },
     attributes: Object.keys(attributes || {}),
