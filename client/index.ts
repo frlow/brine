@@ -16,7 +16,7 @@ export type WcWrapperOptions = {
   ) => void
   disconnected: (state: WcWrapperState, root: ShadowRoot) => void
 }
-export const createWrapper = (opts: WcWrapperOptions, style: string = '') =>
+export const createWrapper = (opts: WcWrapperOptions, style: string) =>
   class extends HTMLElement {
     state = {}
     emit = (name: string, detail?: any) => {

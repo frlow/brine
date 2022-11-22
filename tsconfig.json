@@ -16,14 +16,23 @@
     "checkJs": false,
     "isolatedModules": true,
     "jsx": "preserve",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@frlow/brine/client/*": [
+        "./client/*"
+      ]
+    }
   },
   "include": [
-    "src/**/*",
-    "examples/**/*",
-    "build.ts"
+    "client/**/*",
+    "examples/**/*"
   ],
   "exclude": [
     "test/**/*"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

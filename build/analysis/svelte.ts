@@ -10,7 +10,7 @@ import path from 'path'
 import { AnalyzeFileFunction, PropDefinition } from './common'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
-import { camelize } from '../utils/string'
+import {camelize} from "../utils/string";
 
 const getProps = (sourceFile: SourceFile): PropDefinition[] => {
   if (!sourceFile.statements) return []

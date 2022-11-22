@@ -1,0 +1,9 @@
+{
+  "include": [
+    "build/**/*",
+    "build.ts"
+  ],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true
+  }
+}

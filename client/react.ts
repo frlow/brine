@@ -1,7 +1,7 @@
 import { WcWrapperOptions } from './index'
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
-import { camelize } from '../utils/string'
+import {camelize} from "./common";
 
 export const reactCustomElementComponent = (
   Component: (args: any) => JSX.Element,
