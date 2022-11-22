@@ -23,3 +23,16 @@ export const getAttributes = (ar: AnalysisResult): { [i: string]: boolean } => {
 export const getEmits = (ar: AnalysisResult): string[] => {
   return ar.emits.map((e) => kebabize(e.name))
 }
+
+export const writeWebTypes = async (
+  results: AnalysisResult[],
+  dir: string
+) => {}
+export const writeVsCodeTypes = async (
+  results: AnalysisResult[],
+  dir: string
+) => {}
+export const writeBrineTypes = async (
+  results: AnalysisResult[],
+  dir: string
+) => {}

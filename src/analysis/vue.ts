@@ -1,4 +1,3 @@
-import { parse } from 'vue/compiler-sfc'
 import fs from 'fs'
 import ts, {
   CallExpression,
@@ -58,6 +57,7 @@ const getEmits = (sourceFile: SourceFile): PropDefinition[] => {
 
 export const analyzeVueFile: AnalyzeFileFunction = async (filePath) => {
   const source = fs.readFileSync(filePath, 'utf8')
+  const { parse } = await import('vue/compiler-sfc')
   const { descriptor } = parse(source, {
     filename: filePath,
   })

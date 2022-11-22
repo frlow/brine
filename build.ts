@@ -6,6 +6,13 @@ import { generateIndexFile, generateMainFile } from './src/build/entryPoints'
 import fs, { rmSync } from 'fs'
 import { watch } from 'chokidar'
 import path from 'path'
+import {
+  analyze,
+  writeBrineTypes,
+  writeVsCodeTypes,
+  writeWebTypes,
+} from './src/analysis'
+import { AnalysisResult } from './src/analysis/common'
 
 const svelteApp = 'examples/svelte/SvelteApp.svelte'
 const vueApp = 'examples/vue/VueApp.vue'
@@ -67,6 +74,30 @@ const build = async (remove: boolean = false) => {
       '.css': 'text',
     },
   })
+
+  const vanillaAnalysisResults: AnalysisResult = {
+    name: 'Vanilla',
+    slots: [],
+    emits: [
+      {
+        type: 'string',
+        name: 'my-event',
+        optional: true,
+      },
+    ],
+    props: [{ type: 'number', name: 'count', optional: false }],
+  }
+  const analysisResults = await Promise.all([
+    analyze(svelteApp, 'svelte'),
+    analyze(vueApp, 'vue'),
+    analyze(reactApp, 'react'),
+    vanillaAnalysisResults,
+  ])
+  await writeBrineTypes(analysisResults, outdir)
+  await writeWebTypes(analysisResults, outdir)
+  await writeVsCodeTypes(analysisResults, outdir)
+  debugger
+
   if (remove) {
     rmSync(tempDir, { recursive: true })
     generatedFiles.forEach((gf) => fs.rmSync(gf))
