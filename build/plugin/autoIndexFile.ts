@@ -3,12 +3,16 @@ import path from 'path'
 import fs from 'fs'
 import { kebabize } from '../utils/string'
 import { analyze } from '../analysis'
+import { FilePluginOptions } from './common'
 
 function escapeRegex(string: string) {
   return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&')
 }
 
-function isString(type: string) {}
+function isString(type: string) {
+  // TODO: this has to be able to handle 'a' | 'b' type scenarios
+  return type === 'string'
+}
 
 export const getEnding = (ext: string) => {
   switch (ext) {
@@ -22,13 +26,13 @@ export const getEnding = (ext: string) => {
 }
 
 export const generateIndexFile = async (
-  file: AutoIndexFilePluginOptions,
+  file: FilePluginOptions,
   prefix: string
 ) => {
   const parsed = path.parse(file.path)
   const result = await analyze(file.path, file.framework)
   const attributes = result.props.reduce((acc, cur) => {
-    acc[cur.name] = cur.type === 'string'
+    acc[cur.name] = isString(cur.type)
     return acc
   }, {} as { [i: string]: boolean })
   const emits = result.emits.map((e) => kebabize(e.name))
@@ -48,7 +52,7 @@ customElements.define('${prefix}-${kebabize(
 }
 
 export const writeAutoIndexFiles = async (
-  files: AutoIndexFilePluginOptions[],
+  files: FilePluginOptions[],
   prefix: string
 ) => {
   for (const file of files) {
@@ -62,14 +66,8 @@ export const writeAutoIndexFiles = async (
   }
 }
 
-export type Framework = 'react' | 'vue' | 'svelte'
-export type AutoIndexFilePluginOptions = {
-  path: string
-  framework: Framework
-  name?: string
-}
 export const autoIndexFilePlugin = (
-  files: AutoIndexFilePluginOptions[],
+  files: FilePluginOptions[],
   prefix: string
 ): Plugin => ({
   name: 'auto-index-file',

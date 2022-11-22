@@ -10,7 +10,7 @@ import path from 'path'
 import { AnalyzeFileFunction, PropDefinition } from './common'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
-import {camelize} from "../utils/string";
+import { camelize, kebabize } from '../utils/string'
 
 const getProps = (sourceFile: SourceFile): PropDefinition[] => {
   if (!sourceFile.statements) return []
@@ -70,7 +70,7 @@ export const analyzeSvelteFile: AnalyzeFileFunction = async (
   await preprocess(code, {
     markup: ({ content }) => {
       slots = content
-        .match(/<slot(.*?)>/g)
+        .match(/<svelte:element this="slot"(.*?)>/g)
         ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
         .filter((d) => d)
     },
@@ -80,10 +80,13 @@ export const analyzeSvelteFile: AnalyzeFileFunction = async (
   })
   const props = getProps(sourceFile)
   const emits = getEmits(sourceFile)
+  const name = path.parse(filePath).name
+  const tag = kebabize(name)
   return {
     props,
     emits,
-    name: path.parse(filePath).name,
+    name,
     slots,
+    tag,
   }
 }

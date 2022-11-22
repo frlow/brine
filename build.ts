@@ -5,9 +5,11 @@ import sveltePreprocess from 'svelte-preprocess'
 import path from 'path'
 import {
   autoIndexFilePlugin,
-  AutoIndexFilePluginOptions,
-} from './build/plugin/autoIndexFile'
-import { injectCssPlugin } from './build/plugin/cssInject'
+  FilePluginOptions,
+  generateTypes,
+  injectCssPlugin,
+  typesDocsPlugin,
+} from './build/plugin'
 import aliasPlugin from 'esbuild-plugin-alias'
 
 const svelteApp = 'examples/svelte/SvelteApp.svelte'
@@ -21,7 +23,7 @@ const indexFiles = [
   'examples/vanilla/index.ts',
 ]
 
-const autoIndexFiles: AutoIndexFilePluginOptions[] = [
+const autoIndexFiles: FilePluginOptions[] = [
   { path: reactApp, framework: 'react' },
   { path: svelteApp, framework: 'svelte' },
   { path: vueApp, framework: 'vue' },
@@ -50,6 +52,7 @@ esbuild
       }),
       autoIndexFilePlugin(autoIndexFiles, prefix),
       injectCssPlugin(),
+      typesDocsPlugin(autoIndexFiles, prefix),
 
       // This is just for local dev
       aliasPlugin({

@@ -11,6 +11,7 @@ import path from 'path'
 import { AnalyzeFileFunction, findProp, PropDefinition } from './common'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
+import { kebabize } from '../utils/string'
 
 const getProps = (sourceFile: SourceFile): PropDefinition[] => {
   if (!sourceFile.statements) return []
@@ -67,15 +68,18 @@ export const analyzeVueFile: AnalyzeFileFunction = async (filePath) => {
     ScriptTarget.ESNext
   )
   const slots = descriptor.template?.content
-    .match(/<slot(.*?)>/g)
+    .match(/<component is="slot"(.*?)>/g)
     ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
     .filter((d) => d)
   const props = getProps(sourceFile)
   const emits = getEmits(sourceFile)
+  const name = path.parse(filePath).name.split('.')[0]
+  const tag = kebabize(name)
   return {
     props,
     emits,
-    name: path.parse(filePath).name.split('.')[0],
+    name,
     slots,
+    tag,
   }
 }

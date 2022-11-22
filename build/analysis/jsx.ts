@@ -4,6 +4,7 @@ import path from 'path'
 import { AnalyzeFileFunction, getComponentName, PropDefinition } from './common'
 import ScriptTarget = ts.ScriptTarget
 import SyntaxKind = ts.SyntaxKind
+import { kebabize } from '../utils/string'
 
 export const getPropsType = (path: string) => {
   const text = fs.readFileSync(path.split('?')[0], 'utf8')
@@ -53,10 +54,12 @@ export const analyzeJsxFile: AnalyzeFileFunction = async (filePath: string) => {
     .match(/<slot(.*?)>/g)
     ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
     .filter((d) => d)
+  const tag = kebabize(name)
   return {
     props,
     emits,
     name,
     slots,
+    tag,
   }
 }

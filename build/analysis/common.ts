@@ -11,6 +11,7 @@ export type AnalysisResult = {
   emits: PropDefinition[]
   slots: string[] | undefined
   name: string
+  tag: string
 }
 
 export type AnalyzeFileFunction = (filePath: string) => Promise<AnalysisResult>

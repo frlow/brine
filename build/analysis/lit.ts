@@ -4,6 +4,7 @@ import ts, { createSourceFile, SourceFile } from 'typescript'
 import { AnalyzeFileFunction, getComponentName, PropDefinition } from './common'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
+import { kebabize } from '../utils/string'
 
 const getEmits = (classSource: any, sourceFile: SourceFile) => {
   const eventDispatcher = classSource.members.find(
@@ -47,11 +48,12 @@ export const analyzeLitFile: AnalyzeFileFunction = async (filePath) => {
     ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
     .filter((d) => d)
   const name = getComponentName(path.parse(filePath).name)
-  const imported: string[] = []
+  const tag = kebabize(name)
   return {
     props,
     emits,
     slots,
     name,
+    tag,
   }
 }
