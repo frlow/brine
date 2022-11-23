@@ -6,7 +6,6 @@ import path from 'path'
 import {
   autoIndexFilePlugin,
   FilePluginOptions,
-  generateTypes,
   injectCssPlugin,
   typesDocsPlugin,
 } from './build/plugin'
@@ -34,7 +33,6 @@ const outdir = 'dist'
 const prefix = 'my'
 
 const dev = process.argv[2] === 'watch'
-// writeAutoIndexFiles(autoIndexFiles, 'my')
 esbuild
   .build({
     entryPoints: indexFiles,

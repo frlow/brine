@@ -41,12 +41,13 @@ import { ${file.framework}CustomElementComponent } from '@frlow/brine/client/${
     file.framework
   }'
 import { createWrapper } from '@frlow/brine/client/index'
+const style = \`.dummy-style{}\`
 const wrapper = ${file.framework}CustomElementComponent(App,${JSON.stringify(
     attributes
-  )},${JSON.stringify(emits)})
+  )},${JSON.stringify(emits)}, style)
 customElements.define('${prefix}-${kebabize(
     parsed.name
-  )}', createWrapper(wrapper, \`.dummy-style{}\`))
+  )}', createWrapper(wrapper))
 `
   return code
 }

@@ -1,12 +1,13 @@
 import { WcWrapperOptions } from './index'
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
-import {camelize} from "./common";
+import { camelize } from './common'
 
 export const reactCustomElementComponent = (
   Component: (args: any) => JSX.Element,
   attributes: { [i: string]: boolean },
-  emits: string[]
+  emits: string[],
+  style: string
 ): WcWrapperOptions => {
   return {
     constructor: (self, emit) => {
@@ -35,5 +36,6 @@ export const reactCustomElementComponent = (
     disconnected: (state) => {
       state.app.unmount()
     },
+    style,
   }
 }

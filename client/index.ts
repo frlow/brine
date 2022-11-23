@@ -1,5 +1,6 @@
 export type WcWrapperState = any
 export type WcWrapperOptions = {
+  style: string
   constructor: (self: any, emit: (name: string, detail?: any) => void) => void
   attributes?: string[]
   attributeChangedCallback: (
@@ -16,7 +17,7 @@ export type WcWrapperOptions = {
   ) => void
   disconnected: (state: WcWrapperState, root: ShadowRoot) => void
 }
-export const createWrapper = (opts: WcWrapperOptions, style: string) =>
+export const createWrapper = (opts: WcWrapperOptions) =>
   class extends HTMLElement {
     state = {}
     emit = (name: string, detail?: any) => {
@@ -27,7 +28,7 @@ export const createWrapper = (opts: WcWrapperOptions, style: string) =>
       super()
       this.attachShadow({ mode: 'open' })
       const styleTag = document.createElement('style')
-      styleTag.innerText = style
+      styleTag.innerText = opts.style
       this.shadowRoot!.appendChild(styleTag)
       opts.constructor(this, this.emit)
     }

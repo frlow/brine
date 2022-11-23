@@ -3,7 +3,8 @@ import { WcWrapperOptions } from './index'
 export const svelteCustomElementComponent = (
   component: any,
   attributes: { [i: string]: boolean },
-  emits: string[]
+  emits: string[],
+  style: string
 ) =>
   svelteCustomElement(
     (element) =>
@@ -11,13 +12,15 @@ export const svelteCustomElementComponent = (
         target: element,
       }),
     attributes,
-    emits
+    emits,
+    style
   )
 
 export const svelteCustomElement = (
   appCreateFunc: (element: HTMLElement) => any,
   attributes: { [i: string]: boolean },
-  emits: string[]
+  emits: string[],
+  style: string
 ): WcWrapperOptions => {
   return {
     constructor: (self, emit) => {
@@ -44,5 +47,6 @@ export const svelteCustomElement = (
       state.app.$$.on_disconnect?.forEach((f: any) => f())
       state.app.$$.on_destroy?.forEach((f: any) => f())
     },
+    style,
   }
 }
