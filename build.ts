@@ -10,6 +10,8 @@ import {
   typesDocsPlugin,
 } from './build/plugin'
 import aliasPlugin from 'esbuild-plugin-alias'
+import { hotReloadPlugin } from './build/plugin/hotReload'
+import { metaPlugin } from './build/plugin/metaPlugin'
 
 const svelteApp = 'examples/svelte/SvelteApp.svelte'
 const vueApp = 'examples/vue/VueApp.vue'
@@ -42,15 +44,18 @@ esbuild
     bundle: true,
     sourcemap: true,
     splitting: true,
+    minify: !dev,
     define: { 'process.env.NODE_ENV': '"production"' },
     plugins: [
       vuePlugin() as Plugin,
       sveltePlugin({
         preprocess: [sveltePreprocess()],
       }),
-      autoIndexFilePlugin(autoIndexFiles, prefix),
+      autoIndexFilePlugin(autoIndexFiles, prefix, dev),
       injectCssPlugin(),
       typesDocsPlugin(autoIndexFiles, prefix),
+      hotReloadPlugin(['/dist/vanilla/index.js'], dev),
+      metaPlugin(dev),
 
       // This is just for local dev
       aliasPlugin({
@@ -59,5 +64,6 @@ esbuild
     ],
     watch: dev,
     write: false,
+    metafile: true,
   })
   .then()

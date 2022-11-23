@@ -25,7 +25,7 @@ const index: WcWrapperOptions = {
   connected: (state, root, emit) => {},
   disconnected: () => {},
   style: `.demo {
-    color: blue;
+    color: firebrick;
 }`,
 }
 

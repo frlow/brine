@@ -27,7 +27,8 @@ export const getEnding = (ext: string) => {
 
 export const generateIndexFile = async (
   file: FilePluginOptions,
-  prefix: string
+  prefix: string,
+  dev: boolean
 ) => {
   const parsed = path.parse(file.path)
   const result = await analyze(file.path, file.framework)
@@ -40,14 +41,14 @@ export const generateIndexFile = async (
 import { ${file.framework}CustomElementComponent } from '@frlow/brine/client/${
     file.framework
   }'
-import { createWrapper } from '@frlow/brine/client/index'
+import { defineComponent } from '@frlow/brine/client/index'
 const style = \`.dummy-style{}\`
-const wrapper = ${file.framework}CustomElementComponent(App,${JSON.stringify(
-    attributes
-  )},${JSON.stringify(emits)}, style)
-customElements.define('${prefix}-${kebabize(
-    parsed.name
-  )}', createWrapper(wrapper))
+const wrapperOpts = ${
+    file.framework
+  }CustomElementComponent(App,${JSON.stringify(attributes)},${JSON.stringify(
+    emits
+  )}, style)
+defineComponent('${prefix}-${kebabize(parsed.name)}',wrapperOpts, ${dev})
 `
   return code
 }
@@ -57,7 +58,7 @@ export const writeAutoIndexFiles = async (
   prefix: string
 ) => {
   for (const file of files) {
-    const code = await generateIndexFile(file, prefix)
+    const code = await generateIndexFile(file, prefix, false)
     const parsed = path.parse(file.path)
     fs.writeFileSync(
       path.join(parsed.dir, `${file.name || 'index'}.ts`),
@@ -69,7 +70,8 @@ export const writeAutoIndexFiles = async (
 
 export const autoIndexFilePlugin = (
   files: FilePluginOptions[],
-  prefix: string
+  prefix: string,
+  dev: boolean
 ): Plugin => ({
   name: 'auto-index-file',
   setup(build) {
@@ -86,7 +88,7 @@ export const autoIndexFilePlugin = (
       })
       build.onLoad({ filter }, async (args) => {
         return {
-          contents: await generateIndexFile(file, prefix),
+          contents: await generateIndexFile(file, prefix, dev),
           resolveDir: path.parse(args.path).dir,
           loader: 'ts',
         }

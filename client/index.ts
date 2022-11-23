@@ -1,7 +1,13 @@
+import { defineHotReloadedComponent } from '@frlow/brine/client/hmr'
+
 export type WcWrapperState = any
 export type WcWrapperOptions = {
   style: string
-  constructor: (self: any, emit: (name: string, detail?: any) => void) => void
+  constructor: (
+    self: any,
+    emit: (name: string, detail?: any) => void,
+    transplant: (opts: WcWrapperOptions) => void
+  ) => void
   attributes?: string[]
   attributeChangedCallback: (
     state: WcWrapperState,
@@ -17,28 +23,36 @@ export type WcWrapperOptions = {
   ) => void
   disconnected: (state: WcWrapperState, root: ShadowRoot) => void
 }
-export const createWrapper = (opts: WcWrapperOptions) =>
+export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
   class extends HTMLElement {
     state = {}
+    wrapper: WcWrapperOptions = {} as WcWrapperOptions
     emit = (name: string, detail?: any) => {
       this.shadowRoot!.host.dispatchEvent(new CustomEvent(name, { detail }))
     }
 
     constructor() {
       super()
+      this.wrapper = wrapperOptions
       this.attachShadow({ mode: 'open' })
+      this.runConstructor()
+    }
+
+    runConstructor() {
       const styleTag = document.createElement('style')
-      styleTag.innerText = opts.style
+      styleTag.innerHTML = this.wrapper.style
       this.shadowRoot!.appendChild(styleTag)
-      opts.constructor(this, this.emit)
+      this.wrapper.constructor(this, this.emit, (opts: WcWrapperOptions) =>
+        this.transplant(opts)
+      )
     }
 
     static get observedAttributes() {
-      return opts.attributes || []
+      return wrapperOptions.attributes || []
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-      opts.attributeChangedCallback(
+      this.wrapper.attributeChangedCallback(
         this.state,
         this.shadowRoot!,
         name,
@@ -48,11 +62,31 @@ export const createWrapper = (opts: WcWrapperOptions) =>
     }
 
     connectedCallback() {
-      opts.connected(this.state, this.shadowRoot!, this.emit)
+      this.wrapper.connected(this.state, this.shadowRoot!, this.emit)
     }
 
     disconnectedCallback() {
-      opts.disconnected(this.state, this.shadowRoot!)
+      this.wrapper.disconnected(this.state, this.shadowRoot!)
       this.shadowRoot!.innerHTML = ''
     }
+
+    public transplant(opts: WcWrapperOptions) {
+      this.disconnectedCallback()
+      this.wrapper = opts
+      this.runConstructor()
+      this.connectedCallback()
+      const attributes = Array.from(this.attributes)
+      attributes.forEach((a) =>
+        this.attributeChangedCallback(a.name, undefined, a.value)
+      )
+    }
   }
+
+export const defineComponent = (
+  tag: string,
+  wrapper: WcWrapperOptions,
+  hmr: boolean
+) => {
+  if (hmr) defineHotReloadedComponent(tag, wrapper)
+  else customElements.define(tag, createWrapper(wrapper))
+}
