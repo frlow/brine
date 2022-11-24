@@ -76,14 +76,17 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
       this.runConstructor()
       this.connectedCallback()
       const attributes = Array.from(this.attributes)
-      attributes.forEach((a) =>
-        this.attributeChangedCallback(a.name, undefined, a.value)
-      )
+      attributes
+        .filter((d) => !d.name.startsWith('data-') && !d.name.startsWith('x-'))
+        .forEach((a) => this.attributeChangedCallback(a.name, '', a.value))
     }
   }
 
-export const defineComponent = (tag: string, wrapper: WcWrapperOptions) => {
-  if (process.env.NODE_ENV === 'production')
-    customElements.define(tag, createWrapper(wrapper))
-  else defineHotReloadedComponent(tag, wrapper)
+export const defineComponent = (
+  tag: string,
+  wrapper: WcWrapperOptions,
+  hmr: boolean
+) => {
+  if (hmr) defineHotReloadedComponent(tag, wrapper)
+  else customElements.define(tag, createWrapper(wrapper))
 }
