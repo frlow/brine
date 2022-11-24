@@ -1,6 +1,4 @@
 import app from './VanillaApp'
-import { createWrapper } from '@frlow/brine/client/index'
-import { defineHotReloadedComponent } from '@frlow/brine/client/hmr'
+import { defineComponent } from '@frlow/brine/client/index'
 
-// customElements.define('my-vanilla', createWrapper(app, style))
-defineHotReloadedComponent('my-vanilla', app)
+defineComponent('my-vanilla', app)

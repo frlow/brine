@@ -1,4 +1,4 @@
-import { defineHotReloadedComponent } from '@frlow/brine/client/hmr'
+import { defineHotReloadedComponent } from './hmr'
 
 export type WcWrapperState = any
 export type WcWrapperOptions = {
@@ -82,11 +82,8 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     }
   }
 
-export const defineComponent = (
-  tag: string,
-  wrapper: WcWrapperOptions,
-  hmr: boolean
-) => {
-  if (hmr) defineHotReloadedComponent(tag, wrapper)
-  else customElements.define(tag, createWrapper(wrapper))
+export const defineComponent = (tag: string, wrapper: WcWrapperOptions) => {
+  if (process.env.NODE_ENV === 'production')
+    customElements.define(tag, createWrapper(wrapper))
+  else defineHotReloadedComponent(tag, wrapper)
 }

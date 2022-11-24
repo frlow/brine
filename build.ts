@@ -45,7 +45,7 @@ esbuild
     sourcemap: true,
     splitting: true,
     minify: !dev,
-    define: { 'process.env.NODE_ENV': '"production"' },
+    define: { 'process.env.NODE_ENV': dev ? "'development'" : '"production"' },
     plugins: [
       vuePlugin() as Plugin,
       sveltePlugin({
@@ -54,7 +54,7 @@ esbuild
       autoIndexFilePlugin(autoIndexFiles, prefix, dev),
       injectCssPlugin(),
       typesDocsPlugin(autoIndexFiles, prefix),
-      hotReloadPlugin(['/dist/vanilla/index.js'], dev),
+      hotReloadPlugin(['/dist/vanilla/index.js', '/dist/vue/index.js'], dev),
       metaPlugin(dev),
 
       // This is just for local dev

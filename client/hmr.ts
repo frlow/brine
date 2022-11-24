@@ -1,4 +1,4 @@
-import { createWrapper, WcWrapperOptions } from '@frlow/brine/client/index'
+import { createWrapper, WcWrapperOptions } from './index'
 
 const w = window as undefined as {
   hmr: {
