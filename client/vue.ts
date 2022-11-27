@@ -1,50 +1,36 @@
-import { WcWrapperOptions } from './index'
+import { WcWrapperOptions, WcWrapperOptionsMeta } from './index'
 import { App, DefineComponent, createApp, h, reactive } from 'vue'
 import { camelize } from './common'
 
-export const vueCustomElementComponent = (
-  component: DefineComponent,
-  _attributes: any,
-  _emits: any,
-  style: string
-) =>
-  vueCustomElement(
-    (props) =>
-      createApp({
-        render: () => h(component, props),
-      }),
-    Object.entries(component.props).reduce((acc, cur: any) => {
-      acc[cur[0]] = cur[1]?.type === String
-      return acc
-    }, {} as any),
-    Array.isArray(component.emits) ? component.emits : [],
-    style
-  )
-
-export const vueCustomElement = (
-  appCreateFunc: (props: any) => App,
-  attributes: { [i: string]: boolean },
-  emits: string[],
-  style: string
+export const createOptions = (
+  app: ((props: any) => App) | any,
+  meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => ({
   constructor: (self) => {
     self.state.props = reactive<any>({})
   },
   attributeChangedCallback: (state, root, name, oldValue, newValue) => {
-    state.props[name] = attributes[name] ? newValue : JSON.parse(newValue)
+    state.props[name] = meta.attributes[name] ? newValue : JSON.parse(newValue)
   },
-  attributes: Object.keys(attributes || {}),
+  attributes: Object.keys(meta.attributes || {}),
   connected: (state, root, emit) => {
     const mountPoint = document.createElement('div')
     root.appendChild(mountPoint)
-    emits.forEach(
+    meta.emits.forEach(
       (e) => (state.props[`on${camelize(e)}`] = (args: any) => emit(e, args))
     )
-    state.app = appCreateFunc(state.props)
+    state.app =
+      typeof app === 'function'
+        ? app(state.props)
+        : createApp({
+            render: () => h(app, state.props),
+          })
     state.app.mount(mountPoint)
   },
   disconnected: (state) => {
     ;(state.app as App).unmount()
   },
-  style,
+  style: meta.style,
+  tag: meta.tag,
 })
+export { createWrapper } from './index'

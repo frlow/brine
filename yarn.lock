@@ -97,6 +97,7 @@ __metadata:
     esbuild-plugin-vue3: ^0.3.0
     esbuild-svelte: ^0.7.3
     esno: ^0.16.3
+    glob: ^8.0.3
     npm-run-all: ^4.1.5
     prettier: ^2.7.1
     react: ^18.2.0
@@ -1647,7 +1648,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^8.0.1":
+"glob@npm:^8.0.1, glob@npm:^8.0.3":
   version: 8.0.3
   resolution: "glob@npm:8.0.3"
   dependencies:

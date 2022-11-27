@@ -1,41 +1,43 @@
-import { WcWrapperOptions } from './index'
+import { WcWrapperOptions, WcWrapperOptionsMeta } from './index'
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { camelize } from './common'
 
-export const reactCustomElementComponent = (
+export const createOptions = (
   Component: (args: any) => JSX.Element,
-  attributes: { [i: string]: boolean },
-  emits: string[],
-  style: string
+  meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {
     constructor: (self, emit) => {
       self.state.props = {}
-      emits.forEach((e) => {
+      const container = document.createElement('div')
+      self.shadowRoot.appendChild(container)
+      self.state.app = createRoot(container)
+      meta.emits.forEach((e) => {
         self.state.props[`on${camelize(e)}`] = (arg: any) => {
           emit(e, arg)
         }
       })
       self.state.render = () => {
-        if (self.state.app)
-          self.state.app.render(createElement(Component, self.state.props))
+        const element = createElement(Component, self.state.props)
+        self.state.app.render(element)
       }
     },
-    attributes: Object.keys(attributes || {}),
+    attributes: Object.keys(meta.attributes || {}),
     attributeChangedCallback: (state, root, name, oldValue, newValue) => {
-      state.props[name] = attributes[name] ? newValue : JSON.parse(newValue)
+      state.props[name] = meta.attributes[name]
+        ? newValue
+        : JSON.parse(newValue)
       state.render()
     },
     connected: (state, root, emit) => {
-      const container = document.createElement('div')
-      root.appendChild(container)
-      state.app = createRoot(container)
       state.render()
     },
     disconnected: (state) => {
       state.app.unmount()
     },
-    style,
+    style: meta.style,
+    tag: meta.tag,
   }
 }
+export { createWrapper } from './index'

@@ -4,6 +4,7 @@
     "build.ts"
   ],
   "compilerOptions": {
+    "composite": true,
     "allowSyntheticDefaultImports": true
   }
 }

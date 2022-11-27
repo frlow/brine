@@ -1,4 +1,5 @@
 import { WcWrapperOptions } from './index'
+import meta from '../examples/react/ReactApp.meta'
 
 export const svelteCustomElementComponent = (
   component: any,
@@ -48,5 +49,6 @@ export const svelteCustomElement = (
       state.app.$$.on_destroy?.forEach((f: any) => f())
     },
     style,
+    tag: meta.tag,
   }
 }

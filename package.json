@@ -13,8 +13,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "dev:build": "esno build.ts",
-    "dev:serve2": "browser-sync start --server --files \"dist/*\" --no-open --no-ui",
-    "dev:serve": "browser-sync start --server --no-open --no-ui",
+    "dev:serve": "browser-sync start --server --files \"dist/*\" --no-open --no-ui",
     "dev": "run-p -r \"dev:build watch\" \"dev:serve\""
   },
   "devDependencies": {
@@ -28,6 +27,7 @@
     "esbuild-plugin-vue3": "^0.3.0",
     "esbuild-svelte": "^0.7.3",
     "esno": "^0.16.3",
+    "glob": "^8.0.3",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "react": "^18.2.0",

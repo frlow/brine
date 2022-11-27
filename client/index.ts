@@ -1,12 +1,17 @@
-import { defineHotReloadedComponent } from './hmr'
-
+export type WcWrapperOptionsMeta = {
+  attributes: { [i: string]: boolean }
+  emits: string[]
+  style: '.dummy-style{}' | string
+  tag: string
+}
 export type WcWrapperState = any
 export type WcWrapperOptions = {
   style: string
+  tag: string
   constructor: (
     self: any,
-    emit: (name: string, detail?: any) => void,
-    transplant: (opts: WcWrapperOptions) => void
+    emit: (name: string, detail?: any) => void
+    // transplant: (opts: WcWrapperOptions) => void
   ) => void
   attributes?: string[]
   attributeChangedCallback: (
@@ -42,8 +47,11 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
       const styleTag = document.createElement('style')
       styleTag.innerHTML = this.wrapper.style
       this.shadowRoot!.appendChild(styleTag)
-      this.wrapper.constructor(this, this.emit, (opts: WcWrapperOptions) =>
-        this.transplant(opts)
+      this.wrapper.constructor(
+        this,
+        this.emit
+        // (opts: WcWrapperOptions) => {}
+        // this.transplant(opts)
       )
     }
 
@@ -63,6 +71,18 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
 
     connectedCallback() {
       this.wrapper.connected(this.state, this.shadowRoot!, this.emit)
+      // const attributes = Array.from(this.attributes).filter(
+      //   (d) => !d.name.startsWith('x-') && !d.name.startsWith('data-')
+      // )
+      // attributes.forEach((a) =>
+      //   this.wrapper.attributeChangedCallback(
+      //     this.state,
+      //     this.shadowRoot,
+      //     a.name,
+      //     null,
+      //     a.value
+      //   )
+      // )
     }
 
     disconnectedCallback() {
@@ -70,23 +90,14 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
       this.shadowRoot!.innerHTML = ''
     }
 
-    public transplant(opts: WcWrapperOptions) {
-      this.disconnectedCallback()
-      this.wrapper = opts
-      this.runConstructor()
-      this.connectedCallback()
-      const attributes = Array.from(this.attributes)
-      attributes
-        .filter((d) => !d.name.startsWith('data-') && !d.name.startsWith('x-'))
-        .forEach((a) => this.attributeChangedCallback(a.name, '', a.value))
-    }
+    // public transplant(opts: WcWrapperOptions) {
+    //   this.disconnectedCallback()
+    //   this.wrapper = opts
+    //   this.runConstructor()
+    //   this.connectedCallback()
+    //   const attributes = Array.from(this.attributes)
+    //   attributes
+    //     .filter((d) => !d.name.startsWith('data-') && !d.name.startsWith('x-'))
+    //     .forEach((a) => this.attributeChangedCallback(a.name, '', a.value))
+    // }
   }
-
-export const defineComponent = (
-  tag: string,
-  wrapper: WcWrapperOptions,
-  hmr: boolean
-) => {
-  if (hmr) defineHotReloadedComponent(tag, wrapper)
-  else customElements.define(tag, createWrapper(wrapper))
-}
