@@ -1,11 +1,11 @@
 import { WcWrapperOptions } from './index'
-import meta from '../examples/react/ReactApp.meta'
 
 export const svelteCustomElementComponent = (
   component: any,
   attributes: { [i: string]: boolean },
   emits: string[],
-  style: string
+  style: string,
+  tag: string
 ) =>
   svelteCustomElement(
     (element) =>
@@ -14,14 +14,16 @@ export const svelteCustomElementComponent = (
       }),
     attributes,
     emits,
-    style
+    style,
+    tag
   )
 
 export const svelteCustomElement = (
   appCreateFunc: (element: HTMLElement) => any,
   attributes: { [i: string]: boolean },
   emits: string[],
-  style: string
+  style: string,
+  tag: string
 ): WcWrapperOptions => {
   return {
     constructor: (self, emit) => {
@@ -49,6 +51,6 @@ export const svelteCustomElement = (
       state.app.$$.on_destroy?.forEach((f: any) => f())
     },
     style,
-    tag: meta.tag,
+    tag,
   }
 }

@@ -71,18 +71,6 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
 
     connectedCallback() {
       this.wrapper.connected(this.state, this.shadowRoot!, this.emit)
-      // const attributes = Array.from(this.attributes).filter(
-      //   (d) => !d.name.startsWith('x-') && !d.name.startsWith('data-')
-      // )
-      // attributes.forEach((a) =>
-      //   this.wrapper.attributeChangedCallback(
-      //     this.state,
-      //     this.shadowRoot,
-      //     a.name,
-      //     null,
-      //     a.value
-      //   )
-      // )
     }
 
     disconnectedCallback() {

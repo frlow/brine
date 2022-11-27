@@ -35,9 +35,15 @@ export const injectCssPlugin = (dummyCss: string = dummyStyle): Plugin => ({
         const jsMap = result.outputFiles.find(
           (d) => d.path === `${file.path}.map`
         )
-        const css = result.outputFiles.find(
-          (d) => d.path === path.join(parsed.dir, `${parsed.name}.css`)
-        )
+        const css = result.outputFiles.find((d) => {
+          const regex = new RegExp(
+            `${path
+              .join(parsed.dir, parsed.name)
+              .replace('.', '.')
+              .replace(/-[A-Z,0-9]{8}/, '')}(-[A-Z,0-9]{8})?\.css$`
+          )
+          return regex.test(d.path)
+        })
         if (css) {
           const { replacedJs, replacedMap } = await injectCss(
             file.text,

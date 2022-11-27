@@ -8,9 +8,9 @@ import aliasPlugin from 'esbuild-plugin-alias'
 
 const outbase = 'examples'
 const outdir = 'dist'
-// const prefix = 'my'
 
-const entryPoints = glob.sync('examples/*.ts')
+const entryPoints = glob.sync('examples/*App.ts')
+// const entryPoints = ['examples/index.ts']
 
 const dev = process.argv[2] === 'watch'
 esbuild
