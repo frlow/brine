@@ -9,18 +9,18 @@ export const createOptions = (
 ): WcWrapperOptions => {
   return {
     constructor: (self, emit) => {
-      self.state.props = {}
       const container = document.createElement('div')
       self.shadowRoot.appendChild(container)
       self.state.app = createRoot(container)
+      self.state.props = {}
+
       meta.emits.forEach((e) => {
         self.state.props[`on${camelize(e)}`] = (arg: any) => {
           emit(e, arg)
         }
       })
       self.state.render = () => {
-        const element = createElement(Component, self.state.props)
-        self.state.app.render(element)
+        self.state.app.render(createElement(Component, self.state.props))
       }
     },
     attributes: Object.keys(meta.attributes || {}),

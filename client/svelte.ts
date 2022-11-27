@@ -1,35 +1,16 @@
-import { WcWrapperOptions } from './index'
+import { WcWrapperOptions, WcWrapperOptionsMeta } from './index'
 
-export const svelteCustomElementComponent = (
-  component: any,
-  attributes: { [i: string]: boolean },
-  emits: string[],
-  style: string,
-  tag: string
-) =>
-  svelteCustomElement(
-    (element) =>
-      new component({
-        target: element,
-      }),
-    attributes,
-    emits,
-    style,
-    tag
-  )
-
-export const svelteCustomElement = (
-  appCreateFunc: (element: HTMLElement) => any,
-  attributes: { [i: string]: boolean },
-  emits: string[],
-  style: string,
-  tag: string
+export const createOptions = (
+  component: any | ((element: HTMLElement) => any),
+  meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {
     constructor: (self, emit) => {
       self.state.mountPoint = document.createElement('div')
-      self.state.app = appCreateFunc(self.state.mountPoint)
-      emits.forEach(
+      self.state.app = component.toString().startsWith('class')
+        ? new component({ target: self.state.mountPoint })
+        : component(self.state.mountPoint)
+      meta.emits.forEach(
         (e) =>
           (self.state.app.$$.callbacks[e] = [
             (arg: any) => {
@@ -39,10 +20,10 @@ export const svelteCustomElement = (
       )
       self.shadowRoot.appendChild(self.state.mountPoint)
     },
-    attributes: Object.keys(attributes),
+    attributes: Object.keys(meta.attributes),
     attributeChangedCallback: (state, root, name, oldValue, newValue) => {
       state.app.$$set({
-        [name]: attributes[name] ? newValue : JSON.parse(newValue),
+        [name]: meta.attributes[name] ? newValue : JSON.parse(newValue),
       })
     },
     connected: (state, root, emit) => {},
@@ -50,7 +31,9 @@ export const svelteCustomElement = (
       state.app.$$.on_disconnect?.forEach((f: any) => f())
       state.app.$$.on_destroy?.forEach((f: any) => f())
     },
-    style,
-    tag,
+    style: meta.style,
+    tag: meta.tag,
   }
 }
+
+export { createWrapper } from './index'

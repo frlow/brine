@@ -1,4 +1,4 @@
-import './index.css'
+import './ReactApp.css'
 import React, { useEffect } from 'react'
 
 export default ({
@@ -17,7 +17,7 @@ export default ({
     return () => {
       console.log('React unmount')
     }
-  })
+  }, [])
   return (
     <div>
       <div>React 11</div>
