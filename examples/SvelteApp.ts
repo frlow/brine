@@ -1,5 +1,4 @@
-import { createWrapper } from '@frlow/brine/client/svelte'
+import { createWrapper, defineComponent } from '@frlow/brine/client/svelte'
 import options from './svelte'
 
-const wrapper = createWrapper(options)
-customElements.define(options.tag, wrapper)
+defineComponent(createWrapper(options))

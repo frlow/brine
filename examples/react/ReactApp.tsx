@@ -25,7 +25,7 @@ export default ({
         {count} {text} {obj?.val}
       </div>
       <button className="button" onClick={() => onMyEvent('react-demo')}>
-        Button
+        Button D
       </button>
       <slot name="foo"></slot>
       <slot></slot>

@@ -33,4 +33,4 @@ export const createOptions = (
   style: meta.style,
   tag: meta.tag,
 })
-export { createWrapper } from './index'
+export * from './index'

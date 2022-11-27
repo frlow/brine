@@ -1,5 +1,5 @@
-import { createWrapper } from '@frlow/brine/client/react'
+import { createWrapper, defineComponent } from '@frlow/brine/client/react'
 import options from './react'
+import { createTransplantableWrapper } from '@frlow/brine/client/transplantExtension'
 
-const wrapper = createWrapper(options)
-customElements.define(options.tag, wrapper)
+defineComponent(createTransplantableWrapper(createWrapper(options)))

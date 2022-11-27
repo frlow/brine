@@ -28,31 +28,30 @@ export type WcWrapperOptions = {
   ) => void
   disconnected: (state: WcWrapperState, root: ShadowRoot) => void
 }
+export type WcWrapper = ReturnType<typeof createWrapper>
 export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
   class extends HTMLElement {
     state = {}
-    wrapper: WcWrapperOptions = {} as WcWrapperOptions
+    public static options: WcWrapperOptions = wrapperOptions
+    get options(): WcWrapperOptions {
+      return (this as any).constructor.options
+    }
+
     emit = (name: string, detail?: any) => {
       this.shadowRoot!.host.dispatchEvent(new CustomEvent(name, { detail }))
     }
 
     constructor() {
       super()
-      this.wrapper = wrapperOptions
       this.attachShadow({ mode: 'open' })
       this.runConstructor()
     }
 
     runConstructor() {
       const styleTag = document.createElement('style')
-      styleTag.innerHTML = this.wrapper.style
+      styleTag.innerHTML = this.options.style
       this.shadowRoot!.appendChild(styleTag)
-      this.wrapper.constructor(
-        this,
-        this.emit
-        // (opts: WcWrapperOptions) => {}
-        // this.transplant(opts)
-      )
+      this.options.constructor(this, this.emit)
     }
 
     static get observedAttributes() {
@@ -60,7 +59,7 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-      this.wrapper.attributeChangedCallback(
+      this.options.attributeChangedCallback(
         this.state,
         this.shadowRoot!,
         name,
@@ -70,22 +69,19 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     }
 
     connectedCallback() {
-      this.wrapper.connected(this.state, this.shadowRoot!, this.emit)
+      this.options.connected(this.state, this.shadowRoot!, this.emit)
     }
 
     disconnectedCallback() {
-      this.wrapper.disconnected(this.state, this.shadowRoot!)
+      this.options.disconnected(this.state, this.shadowRoot!)
       this.shadowRoot!.innerHTML = ''
     }
 
-    // public transplant(opts: WcWrapperOptions) {
-    //   this.disconnectedCallback()
-    //   this.wrapper = opts
-    //   this.runConstructor()
-    //   this.connectedCallback()
-    //   const attributes = Array.from(this.attributes)
-    //   attributes
-    //     .filter((d) => !d.name.startsWith('data-') && !d.name.startsWith('x-'))
-    //     .forEach((a) => this.attributeChangedCallback(a.name, '', a.value))
-    // }
+    public static fallback() {}
   }
+
+export const defineComponent = (wrapper: WcWrapper) => {
+  if (!customElements.get(wrapper.options.tag))
+    customElements.define(wrapper.options.tag, wrapper)
+  else wrapper.fallback()
+}

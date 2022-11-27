@@ -1,5 +1,4 @@
 import options from './vanilla'
-import { createWrapper } from '@frlow/brine/client/index'
+import { createWrapper, defineComponent } from '@frlow/brine/client/index'
 
-const wrapper = createWrapper(options)
-customElements.define(options.tag, wrapper)
+defineComponent(createWrapper(options))

@@ -13,7 +13,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "dev:build": "esno build.ts",
-    "dev:serve": "browser-sync start --server --files \"dist/*\" --no-open --no-ui",
+    "dev:serve": "browser-sync start --server --files \"di3st/*\" --no-open --no-ui",
     "dev": "run-p -r \"dev:build watch\" \"dev:serve\""
   },
   "devDependencies": {

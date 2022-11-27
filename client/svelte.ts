@@ -36,4 +36,4 @@ export const createOptions = (
   }
 }
 
-export { createWrapper } from './index'
+export * from './index'
