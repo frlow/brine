@@ -12,9 +12,9 @@ const meta: WcWrapperOptionsMeta = {
   style: `.dummy-style{}`,
   tag: 'my-vue-app',
 }
+
 // const app = (props: any) =>
 //   createApp({
 //     render: () => h(App, props),
 //   })
-const options = createOptions(App, meta)
-export default options
+export const options = createOptions(App, meta)

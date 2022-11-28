@@ -1,4 +1,4 @@
-import { createWrapper, defineComponent } from '@frlow/brine/client/svelte'
-import options from './svelte'
+import { createWrapper, defineComponent } from '@frlow/brine/client/index'
+import { options } from './svelte'
 
 defineComponent(createWrapper(options))

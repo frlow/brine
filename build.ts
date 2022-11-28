@@ -11,10 +11,10 @@ import path from 'path'
 const outbase = 'examples'
 const outdir = 'dist'
 
-const entryPoints = glob.sync('examples/*App.ts')
-// const entryPoints = ['examples/index.ts']
-
 const dev = process.argv[2] === 'watch'
+// const entryPoints = glob.sync('examples/*App.ts')
+// const entryPoints = ['examples/dev.ts']
+const entryPoints = ['examples/prod.ts']
 esbuild
   .build({
     entryPoints,

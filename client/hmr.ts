@@ -15,16 +15,17 @@ export const initHmr = (
   if (!isInit) {
     const ws = new WebSocket(options.host || 'ws://localhost:8080')
     ws.onmessage = async (msg) => {
-      const obj = options.force
-        ? await import(`${msg.data}?timstamp=${Date.now()}`)
-        : await import(msg.data)
-      if (obj.default?.tag) {
-        const options = obj.default as WcWrapperOptions
-        const wrapper = w.hmr.wrappers.find(
-          (wr: WcWrapper) => wr.options.tag === options.tag
-        )
-        if (wrapper?.transplant) wrapper.transplant(options)
-      }
+      console.log(msg)
+      // const obj = options.force
+      //   ? await import(`${msg.data}?timstamp=${Date.now()}`)
+      //   : await import(msg.data)
+      // if (obj.options) {
+      //   const options = obj.options as WcWrapperOptions
+      //   const wrapper = w.hmr.wrappers.find(
+      //     (wr: WcWrapper) => wr.options.tag === options.tag
+      //   )
+      //   if (wrapper?.transplant) wrapper.transplant(options)
+      // }
     }
   }
 }

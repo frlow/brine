@@ -1,7 +1,7 @@
 // This is a handwritten file!!!
 import { WcWrapperOptions } from '@frlow/brine/client/index'
 
-const index: WcWrapperOptions = {
+export const options: WcWrapperOptions = {
   constructor: (self, emit) => {
     const count = document.createElement('div')
     count.id = 'count'
@@ -29,5 +29,3 @@ const index: WcWrapperOptions = {
 }`,
   tag: 'my-vanilla',
 }
-
-export default index

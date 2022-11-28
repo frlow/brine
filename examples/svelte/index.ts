@@ -12,5 +12,5 @@ const meta: WcWrapperOptionsMeta = {
   style: `.dummy-style{}`,
   tag: 'my-svelte-app',
 }
-const options = createOptions(App, meta)
-export default options
+
+export const options = createOptions(App, meta)

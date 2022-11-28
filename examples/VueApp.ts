@@ -1,4 +1,4 @@
-import { createWrapper, defineComponent } from '@frlow/brine/client/vue'
-import options from './vue'
+import { createWrapper, defineComponent } from '@frlow/brine/client/index'
+import { options } from './vue'
 
 defineComponent(createWrapper(options))

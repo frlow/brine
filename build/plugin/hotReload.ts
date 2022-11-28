@@ -1,5 +1,6 @@
 import { Plugin } from 'esbuild'
 import { WebSocketServer } from 'ws'
+import path from 'path'
 
 export const hotReloadPlugin = (enable: boolean, basePath: string): Plugin => {
   if (!enable)
@@ -15,16 +16,20 @@ export const hotReloadPlugin = (enable: boolean, basePath: string): Plugin => {
       connections.splice(connections.indexOf(ws, 1))
     })
   })
+
+  let paths: string[] = []
   return {
     name: 'hot-reload',
     setup(build) {
       build.onEnd(async (result) => {
-        connections.forEach((ws) => {
-          const files = result.outputFiles
-            .filter((f) => f.path.endsWith('.js'))
-            .map((f) => f.path.replace(basePath, ''))
-          files.forEach((f) => ws.send(f))
-        })
+        const jsFiles = result.outputFiles
+          .filter((f) => f.path.endsWith('.js'))
+          .filter((f) => !paths.includes(f.path))
+        for (const jsFile of jsFiles) {
+          const loadPath = jsFile.path.replace(basePath, '')
+          connections.forEach((ws) => ws.send(loadPath))
+        }
+        paths = result.outputFiles.map((f) => f.path)
       })
     },
   }

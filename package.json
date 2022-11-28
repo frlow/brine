@@ -15,7 +15,7 @@
     "dev:build": "esno build.ts",
     "dev:serve-bs": "browser-sync start --server --files \"dist/*\" --no-open --no-ui",
     "dev:serve": "serve .",
-    "dev": "run-p -r \"dev:build watch\" \"dev:serve\""
+    "dev": "rm -r dist || true && run-p -r \"dev:build watch\" \"dev:serve\""
   },
   "devDependencies": {
     "@tsconfig/svelte": "^3.0.0",

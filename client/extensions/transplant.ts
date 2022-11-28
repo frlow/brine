@@ -1,7 +1,14 @@
-import { WcWrapper, WcWrapperOptions } from '@frlow/brine/client/index'
+import {
+  createWrapper,
+  WcWrapper,
+  WcWrapperOptions,
+} from '@frlow/brine/client/index'
 
-export const createTransplantableWrapper = (wrapper: WcWrapper): WcWrapper =>
-  class extends wrapper {
+export const createTransplantableWrapper = (
+  options: WcWrapperOptions
+): WcWrapper => {
+  const wrapper = createWrapper(options)
+  return class extends wrapper {
     connectedCallback() {
       super.connectedCallback()
       const self: any = this.constructor
@@ -31,3 +38,4 @@ export const createTransplantableWrapper = (wrapper: WcWrapper): WcWrapper =>
       temp.forEach((t) => t.reload())
     }
   }
+}

@@ -12,5 +12,4 @@ const meta: WcWrapperOptionsMeta = {
   style: `.dummy-style{}`,
   tag: 'my-react-app',
 }
-const options = createOptions(App, meta)
-export default options
+export const options = createOptions(App, meta)
