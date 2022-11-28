@@ -9,8 +9,4 @@ const meta: WcWrapperOptionsMeta = {
   tag: 'my-vue-app',
 }
 
-// const app = (props: any) =>
-//   createApp({
-//     render: () => h(App, props),
-//   })
 export const options = createOptions(App, meta)

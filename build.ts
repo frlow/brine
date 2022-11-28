@@ -35,7 +35,6 @@ esbuild
         preprocess: [sveltePreprocess()],
       }),
       injectCssPlugin(),
-      // typesDocsPlugin(autoIndexFiles, prefix),
       hotReloadPlugin(dev, path.resolve('.')),
       metaPlugin(dev),
 
