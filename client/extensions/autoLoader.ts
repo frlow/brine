@@ -20,7 +20,7 @@ export const createAutoLoaderWrapper = (
       if (!loaded) {
         loader().then((options) => {
           console.log('Loading')
-          self.constructor?.transplant(options)
+          self.constructor?.transplant(options, true)
         })
         loaded = true
       }

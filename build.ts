@@ -15,6 +15,7 @@ const dev = process.argv[2] === 'watch'
 // const entryPoints = glob.sync('examples/*App.ts')
 // const entryPoints = ['examples/dev.ts']
 const entryPoints = ['examples/prod.ts']
+// const entryPoints = dev ? ['examples/dev.ts'] : ['examples/prod.ts']
 esbuild
   .build({
     entryPoints,
