@@ -20,12 +20,12 @@ export default ({
   }, [])
   return (
     <div>
-      <div>React 11</div>
+      <div>React</div>
       <div>
         {count} {text} {obj?.val}
       </div>
       <button className="button" onClick={() => onMyEvent('react-demo')}>
-        Button D
+        Button
       </button>
       <slot name="foo"></slot>
       <slot></slot>

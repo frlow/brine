@@ -1,60 +1,30 @@
-import { createWrapper, WcWrapperOptions } from './index'
+import { WcWrapper, WcWrapperOptions } from '@frlow/brine/client/index'
 
-const w = window as undefined as {
-  hmr: {
-    elements: {
-      tag: string
-      element: any
-      transplant: (opts: WcWrapperOptions) => void
-    }[]
-    reload: (tag: string, wrapper: WcWrapperOptions) => void
+const w = window as any
+
+export const initHmr = (
+  wrappers: WcWrapper[],
+  options: { host?: string; force?: boolean } = {}
+) => {
+  const isInit = w.hmr
+  if (!isInit) {
+    w.hmr = {}
+    w.hmr.wrappers = []
   }
-}
-const initHmr = () => {
-  if (!w.hmr) {
-    w.hmr = {
-      elements: [],
-      reload: (tag, wrapper) => {
-        const elements = w.hmr.elements.filter((el) => el.tag === tag)
-        elements.forEach((el) => {
-          el.transplant(wrapper)
-        })
-      },
-    }
-    const ws = new WebSocket('ws://localhost:8080')
-    ws.onmessage = (ev) => {
-      const data = JSON.parse(ev.data)
-      if (data.action === 'update') {
-        data.files.forEach((file: string) => {
-          import(`${file}?timestamp=${Date.now()}`)
-        })
+  w.hmr.wrappers.push(...wrappers)
+  if (!isInit) {
+    const ws = new WebSocket(options.host || 'ws://localhost:8080')
+    ws.onmessage = async (msg) => {
+      const obj = options.force
+        ? await import(`${msg.data}?timstamp=${Date.now()}`)
+        : await import(msg.data)
+      if (obj.default?.tag) {
+        const options = obj.default as WcWrapperOptions
+        const wrapper = w.hmr.wrappers.find(
+          (wr: WcWrapper) => wr.options.tag === options.tag
+        )
+        if (wrapper?.transplant) wrapper.transplant(options)
       }
     }
-  }
-}
-
-export const defineHotReloadedComponent = (
-  tag: string,
-  wrapper: WcWrapperOptions
-) => {
-  initHmr()
-  const hmrConstructor = (args: any, constructor: (...args: any[]) => void) => {
-    w.hmr.elements.push({ tag, element: args[1].host, transplant: args[2] })
-    constructor(...args)
-  }
-  const hmrDisconnect = (args: any, disconnected: (...args: any[]) => void) => {
-    const hmrEl = w.hmr.elements.find((el) => el.element === args[1].host)
-    w.hmr.elements.splice(w.hmr.elements.indexOf(hmrEl), 1)
-    disconnected(...args)
-  }
-  const hmrWrapper = {
-    ...wrapper,
-    constructor: (...args: any) => hmrConstructor(args, wrapper.constructor),
-    disconnected: (...args: any) => hmrDisconnect(args, wrapper.disconnected),
-  }
-  if (!customElements.get(tag))
-    customElements.define(tag, createWrapper(hmrWrapper))
-  else {
-    w.hmr.reload(tag, hmrWrapper)
   }
 }

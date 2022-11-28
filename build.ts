@@ -5,6 +5,8 @@ import sveltePreprocess from 'svelte-preprocess'
 import glob from 'glob'
 import { injectCssPlugin } from './build/plugin'
 import aliasPlugin from 'esbuild-plugin-alias'
+import { hotReloadPlugin } from './build/plugin/hotReload'
+import path from 'path'
 
 const outbase = 'examples'
 const outdir = 'dist'
@@ -32,7 +34,7 @@ esbuild
       // autoIndexFilePlugin(autoIndexFiles, prefix, dev),
       injectCssPlugin(),
       // typesDocsPlugin(autoIndexFiles, prefix),
-      // hotReloadPlugin(['/dist/vanilla/index.js', '/dist/vue/index.js'], dev),
+      hotReloadPlugin(dev, path.resolve('.')),
       // metaPlugin(dev),
 
       // This is just for local dev

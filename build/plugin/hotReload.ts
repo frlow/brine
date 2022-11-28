@@ -1,7 +1,7 @@
 import { Plugin } from 'esbuild'
 import { WebSocketServer } from 'ws'
 
-export const hotReloadPlugin = (files: string[], enable: boolean): Plugin => {
+export const hotReloadPlugin = (enable: boolean, basePath: string): Plugin => {
   if (!enable)
     return {
       name: 'none',
@@ -18,10 +18,13 @@ export const hotReloadPlugin = (files: string[], enable: boolean): Plugin => {
   return {
     name: 'hot-reload',
     setup(build) {
-      build.onEnd(async () => {
-        connections.forEach((ws) =>
-          ws.send(JSON.stringify({ action: 'update', files }))
-        )
+      build.onEnd(async (result) => {
+        connections.forEach((ws) => {
+          const files = result.outputFiles
+            .filter((f) => f.path.endsWith('.js'))
+            .map((f) => f.path.replace(basePath, ''))
+          files.forEach((f) => ws.send(f))
+        })
       })
     },
   }

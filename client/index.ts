@@ -8,11 +8,7 @@ export type WcWrapperState = any
 export type WcWrapperOptions = {
   style: string
   tag: string
-  constructor: (
-    self: any,
-    emit: (name: string, detail?: any) => void
-    // transplant: (opts: WcWrapperOptions) => void
-  ) => void
+  constructor: (self: any, emit: (name: string, detail?: any) => void) => void
   attributes?: string[]
   attributeChangedCallback: (
     state: WcWrapperState,
@@ -76,12 +72,10 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
       this.options.disconnected(this.state, this.shadowRoot!)
       this.shadowRoot!.innerHTML = ''
     }
-
-    public static fallback() {}
   }
 
 export const defineComponent = (wrapper: WcWrapper) => {
   if (!customElements.get(wrapper.options.tag))
     customElements.define(wrapper.options.tag, wrapper)
-  else wrapper.fallback()
+  else console.warn(`${wrapper.options.tag} is already loaded`)
 }

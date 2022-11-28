@@ -1,19 +1,24 @@
-import vanilla from './vanilla'
-import react from './react'
-import vue from './vue'
-import svelte from './svelte'
-import { createWrapper, WcWrapperOptions } from '@frlow/brine/client/index'
+import { createWrapper, defineComponent } from '@frlow/brine/client/index'
+import { createTransplantableWrapper } from '@frlow/brine/client/extensions/transplant'
+import { initHmr } from '@frlow/brine/client/hmr'
+;(async () => {
+  const apps = [
+    import('./vanilla'),
+    import('./react'),
+    import('./vue'),
+    import('./svelte'),
+  ]
 
-const defineWc = (options: WcWrapperOptions) => {
-  const wrapper = createWrapper(options)
-  if (!customElements.get(options.tag))
-    customElements.define(options.tag, wrapper)
-  else {
-    debugger
-  }
-}
+  const wrappers = await Promise.all(
+    apps.map(async (appImport) => {
+      const app = await appImport
+      const wrapper = createWrapper(app.default)
+      const transplantableWrapper = createTransplantableWrapper(wrapper)
+      defineComponent(transplantableWrapper)
+      return transplantableWrapper
+    })
+  )
+  initHmr(wrappers)
+})()
 
-defineWc(react)
-defineWc(vue)
-defineWc(svelte)
-defineWc(vanilla)
+export {}
