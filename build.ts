@@ -6,20 +6,24 @@ import glob from 'glob'
 import { hotReloadPlugin, injectCssPlugin, metaPlugin } from './build/plugin'
 import aliasPlugin from 'esbuild-plugin-alias'
 import path from 'path'
+import { writeIndexFile } from './build/analysis'
+;(async () => {
+  const outbase = 'examples'
+  const outdir = 'dist'
+  const dev = process.argv[2] === 'watch'
 
-const outbase = 'examples'
-const outdir = 'dist'
+  await writeIndexFile('examples/react/ReactApp.tsx', 'react', 'my')
+  await writeIndexFile('examples/vue/VueApp.vue', 'vue', 'my')
+  await writeIndexFile('examples/svelte/SvelteApp.svelte', 'svelte', 'my')
 
-const dev = process.argv[2] === 'watch'
-// const entryPoints = glob.sync('examples/*App.ts')
-const entryPoints = glob
-  .sync('examples/**/index.ts')
-  .concat('examples/dynamic.ts')
-// const entryPoints = ['examples/dev.ts']
-// const entryPoints = ['examples/prod.ts']
-// const entryPoints = dev ? ['examples/dev.ts'] : ['examples/prod.ts']
-esbuild
-  .build({
+  // const entryPoints = glob.sync('examples/*App.ts')
+  const entryPoints = glob
+    .sync('examples/**/index.ts')
+    .concat('examples/dynamic.ts')
+  // const entryPoints = ['examples/dev.ts']
+  // const entryPoints = ['examples/prod.ts']
+  // const entryPoints = dev ? ['examples/dev.ts'] : ['examples/prod.ts']
+  const result = await esbuild.build({
     entryPoints,
     format: 'esm',
     outdir: outdir,
@@ -47,8 +51,7 @@ esbuild
     write: false,
     metafile: true,
   })
-  .then(async (result) => {
-    if (!dev) {
-      console.log(await analyzeMetafile(result.metafile))
-    }
-  })
+  if (!dev) {
+    console.log(await analyzeMetafile(result.metafile))
+  }
+})()

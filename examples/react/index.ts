@@ -1,10 +1,9 @@
-import { WcWrapperOptionsMeta } from '@frlow/brine/client/index'
 import { createOptions } from '@frlow/brine/client/react'
-import App from './ReactApp'
+import App from './ReactApp.js'
 
-const meta: WcWrapperOptionsMeta = {
-  emits: ['my-event'],
-  attributes: ['count', 'text', 'obj'],
+const meta = {
+  emits: ["myEvent"],
+  attributes: ["count","text","obj"],
   style: `.dummy-style{}`,
   tag: 'my-react-app',
 }
