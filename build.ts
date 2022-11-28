@@ -3,7 +3,7 @@ import vuePlugin from 'esbuild-plugin-vue3'
 import sveltePlugin from 'esbuild-svelte'
 import sveltePreprocess from 'svelte-preprocess'
 import glob from 'glob'
-import { hotReloadPlugin, injectCssPlugin, metaPlugin } from './build/plugin'
+import { hotReloadPlugin, injectCssPlugin } from './build/plugin'
 import aliasPlugin from 'esbuild-plugin-alias'
 import path from 'path'
 import { writeIndexFile } from './build/analysis'
@@ -40,7 +40,6 @@ import { writeIndexFile } from './build/analysis'
       }),
       injectCssPlugin(),
       hotReloadPlugin(dev, path.resolve('.')),
-      metaPlugin(dev),
 
       // This is just for local dev
       aliasPlugin({
