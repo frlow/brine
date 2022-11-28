@@ -23,11 +23,9 @@ export const createOptions = (
         self.state.app.render(createElement(Component, self.state.props))
       }
     },
-    attributes: Object.keys(meta.attributes || {}),
-    attributeChangedCallback: (state, root, name, oldValue, newValue) => {
-      state.props[name] = meta.attributes[name]
-        ? newValue
-        : JSON.parse(newValue)
+    attributes: meta.attributes,
+    attributeChangedCallback: (state, root, name, newValue) => {
+      state.props[name] = newValue
       state.render()
     },
     connected: (state, root, emit) => {

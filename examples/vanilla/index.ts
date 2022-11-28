@@ -18,7 +18,7 @@ export const options: WcWrapperOptions = {
     self.shadowRoot.appendChild(slot)
   },
   attributes: ['count'],
-  attributeChangedCallback: (state, root, name, oldValue, newValue) => {
+  attributeChangedCallback: (state, root, name, newValue) => {
     const element = root.getElementById(name)
     if (element) element.innerText = newValue
   },

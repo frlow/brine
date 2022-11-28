@@ -1,5 +1,5 @@
 export type WcWrapperOptionsMeta = {
-  attributes: { [i: string]: boolean }
+  attributes: string[]
   emits: string[]
   style: '.dummy-style{}' | string
   tag: string
@@ -14,8 +14,7 @@ export type WcWrapperOptions = {
     state: WcWrapperState,
     root: ShadowRoot,
     name: string,
-    oldValue: string,
-    newValue: string
+    newValue: any
   ) => void
   connected: (
     state: WcWrapperState,
@@ -55,12 +54,13 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+      const regex = /(^[0-9]*$)|(^{.*}$)|(^\[.*\]$)/
+      const parsedNew = regex.test(newValue) ? JSON.parse(newValue) : newValue
       this.options.attributeChangedCallback(
         this.state,
         this.shadowRoot!,
         name,
-        oldValue,
-        newValue
+        parsedNew
       )
     }
 

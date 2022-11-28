@@ -13,7 +13,7 @@ export const createAutoLoaderWrapper = (
   const options: WcWrapperOptions = {
     tag: meta.tag,
     style: '',
-    attributes: Object.keys(meta.attributes),
+    attributes: meta.attributes,
     disconnected: () => {},
     connected: () => {},
     constructor: (self) => {

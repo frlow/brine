@@ -1,5 +1,5 @@
 import { WcWrapperOptions, WcWrapperOptionsMeta } from './index'
-import { App, DefineComponent, createApp, h, reactive } from 'vue'
+import { App, createApp, h, reactive } from 'vue'
 import { camelize } from './common'
 
 export const createOptions = (
@@ -9,10 +9,10 @@ export const createOptions = (
   constructor: (self) => {
     self.state.props = reactive<any>({})
   },
-  attributeChangedCallback: (state, root, name, oldValue, newValue) => {
-    state.props[name] = meta.attributes[name] ? newValue : JSON.parse(newValue)
+  attributeChangedCallback: (state, root, name, newValue) => {
+    state.props[name] = newValue
   },
-  attributes: Object.keys(meta.attributes || {}),
+  attributes: meta.attributes,
   connected: (state, root, emit) => {
     const mountPoint = document.createElement('div')
     root.appendChild(mountPoint)

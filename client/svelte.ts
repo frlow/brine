@@ -20,10 +20,10 @@ export const createOptions = (
       )
       self.shadowRoot.appendChild(self.state.mountPoint)
     },
-    attributes: Object.keys(meta.attributes),
-    attributeChangedCallback: (state, root, name, oldValue, newValue) => {
+    attributes: meta.attributes,
+    attributeChangedCallback: (state, root, name, newValue) => {
       state.app.$$set({
-        [name]: meta.attributes[name] ? newValue : JSON.parse(newValue),
+        [name]: newValue,
       })
     },
     connected: (state, root, emit) => {},

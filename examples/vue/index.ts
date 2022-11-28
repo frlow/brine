@@ -4,11 +4,7 @@ import { createOptions } from '@frlow/brine/client/vue'
 
 const meta: WcWrapperOptionsMeta = {
   emits: ['my-event'],
-  attributes: {
-    count: false,
-    text: true,
-    obj: false,
-  },
+  attributes: ['count', 'text', 'obj'],
   style: `.dummy-style{}`,
   tag: 'my-vue-app',
 }

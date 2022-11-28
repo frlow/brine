@@ -4,11 +4,7 @@ import App from './SvelteApp.svelte'
 
 const meta: WcWrapperOptionsMeta = {
   emits: ['my-event'],
-  attributes: {
-    count: false,
-    text: true,
-    obj: false,
-  },
+  attributes: ['count', 'text', 'obj'],
   style: `.dummy-style{}`,
   tag: 'my-svelte-app',
 }
