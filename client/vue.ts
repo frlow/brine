@@ -7,28 +7,28 @@ export const createOptions = (
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => ({
   constructor: (self) => {
-    self.state.props = reactive<any>({})
+    self.props = reactive<any>({})
   },
-  attributeChangedCallback: (state, root, name, newValue) => {
-    state.props[name] = newValue
+  attributeChangedCallback: (self, name, newValue) => {
+    self.props[name] = newValue
   },
   attributes: meta.attributes,
-  connected: (state, root, emit) => {
+  connected: (self, emit) => {
     const mountPoint = document.createElement('div')
-    root.appendChild(mountPoint)
+    self.shadowRoot.appendChild(mountPoint)
     meta.emits.forEach(
-      (e) => (state.props[`on${camelize(e)}`] = (args: any) => emit(e, args))
+      (e) => (self.props[`on${camelize(e)}`] = (args: any) => emit(e, args))
     )
-    state.app =
+    self.app =
       typeof app === 'function'
-        ? app(state.props)
+        ? app(self.props)
         : createApp({
-            render: () => h(app, state.props),
+            render: () => h(app, self.props),
           })
-    state.app.mount(mountPoint)
+    self.app.mount(mountPoint)
   },
-  disconnected: (state) => {
-    ;(state.app as App).unmount()
+  disconnected: (self) => {
+    ;(self.app as App).unmount()
   },
   style: meta.style,
   tag: meta.tag,

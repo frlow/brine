@@ -9,17 +9,30 @@ import path from 'path'
 import { writeIndexFile } from './build/analysis'
 import { writeMetaFile } from './build/analysis/metaFile'
 import { beforePlugin } from './build/plugin/before'
-;(async () => {
+
+enum Mode {
+  standalone,
+  dev,
+  prod,
+  dynamic,
+}
+
+const buildMode: Mode = Mode.standalone
+const start = async (mode: Mode) => {
   const outbase = 'examples'
   const outdir = 'dist'
   const dev = process.argv[2] === 'watch'
-  const entryPoints = glob.sync('examples/*App.ts')
-  // const entryPoints = glob
-  //   .sync('examples/**/index.ts')
-  //   .concat('examples/dynamic.ts')
-  // const entryPoints = ['examples/dev.ts']
-  // const entryPoints = ['examples/prod.ts']
-  // const entryPoints = dev ? ['examples/dev.ts'] : ['examples/prod.ts']
+
+  const entryPoints =
+    mode === Mode.standalone
+      ? glob.sync('examples/*App.ts')
+      : mode === Mode.dev
+      ? ['examples/dev.ts']
+      : mode === Mode.prod
+      ? ['examples/prod.ts']
+      : mode === Mode.dynamic
+      ? glob.sync('examples/**/index.ts').concat('examples/dynamic.ts')
+      : []
   const result = await esbuild.build({
     entryPoints,
     format: 'esm',
@@ -55,4 +68,5 @@ import { beforePlugin } from './build/plugin/before'
   if (!dev) {
     console.log(await analyzeMetafile(result.metafile))
   }
-})()
+}
+start(buildMode).then()

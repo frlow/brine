@@ -2,14 +2,9 @@ import { defineComponent } from '@frlow/brine/client/index'
 import { createAutoLoaderWrapper } from '@frlow/brine/client/extensions/autoLoader'
 
 const baseMeta = {
-  emits: ['my-event'],
-  attributes: {
-    count: false,
-    text: true,
-    obj: false,
-  },
+  emits: ['MyEvent'],
+  attributes: ['count', 'obj', 'text'],
   style: `.dummy-style{}`,
-  tag: 'my-vue-app',
 }
 const apps = [
   {

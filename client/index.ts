@@ -4,29 +4,20 @@ export type WcWrapperOptionsMeta = {
   style: '.dummy-style{}' | string
   tag: string
 }
-export type WcWrapperState = any
 export type WcWrapperOptions = {
   style: string
   tag: string
   constructor: (self: any, emit: (name: string, detail?: any) => void) => void
   attributes?: string[]
-  attributeChangedCallback: (
-    state: WcWrapperState,
-    root: ShadowRoot,
-    name: string,
-    newValue: any
-  ) => void
-  connected: (
-    state: WcWrapperState,
-    root: ShadowRoot,
-    emit: (name: string, detail?: any) => void
-  ) => void
-  disconnected: (state: WcWrapperState, root: ShadowRoot) => void
+  attributeChangedCallback: (self: any, name: string, newValue: any) => void
+  connected: (self: any, emit: (name: string, detail?: any) => void) => void
+  disconnected: (self: any) => void
 }
 export type WcWrapper = ReturnType<typeof createWrapper>
+
 export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
   class extends HTMLElement {
-    state = {}
+    self: any
     public static options: WcWrapperOptions = wrapperOptions
     get options(): WcWrapperOptions {
       return (this as any).constructor.options
@@ -38,6 +29,7 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
 
     constructor() {
       super()
+      this.self = this
       this.attachShadow({ mode: 'open' })
       this.runConstructor()
     }
@@ -46,7 +38,7 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
       const styleTag = document.createElement('style')
       styleTag.innerHTML = this.options.style
       this.shadowRoot!.appendChild(styleTag)
-      this.options.constructor(this, this.emit)
+      this.options.constructor(this.self, this.emit)
     }
 
     static get observedAttributes() {
@@ -56,20 +48,15 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
       const regex = /(^[0-9]*$)|(^{.*}$)|(^\[.*\]$)/
       const parsedNew = regex.test(newValue) ? JSON.parse(newValue) : newValue
-      this.options.attributeChangedCallback(
-        this.state,
-        this.shadowRoot!,
-        name,
-        parsedNew
-      )
+      this.options.attributeChangedCallback(this.self, name, parsedNew)
     }
 
     connectedCallback() {
-      this.options.connected(this.state, this.shadowRoot!, this.emit)
+      this.options.connected(this.self, this.emit)
     }
 
     disconnectedCallback() {
-      this.options.disconnected(this.state, this.shadowRoot!)
+      this.options.disconnected(this.self)
       this.shadowRoot!.innerHTML = ''
     }
   }

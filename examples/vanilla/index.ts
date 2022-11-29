@@ -18,11 +18,11 @@ export const options: WcWrapperOptions = {
     self.shadowRoot.appendChild(slot)
   },
   attributes: ['count'],
-  attributeChangedCallback: (state, root, name, newValue) => {
-    const element = root.getElementById(name)
+  attributeChangedCallback: (self, name, newValue) => {
+    const element = self.shadowRoot.getElementById(name)
     if (element) element.innerText = newValue
   },
-  connected: (state, root, emit) => {},
+  connected: () => {},
   disconnected: () => {},
   style: `.demo {
     color: firebrick;

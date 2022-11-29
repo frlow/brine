@@ -6,30 +6,30 @@ export const createOptions = (
 ): WcWrapperOptions => {
   return {
     constructor: (self, emit) => {
-      self.state.mountPoint = document.createElement('div')
-      self.state.app = component.toString().startsWith('class')
-        ? new component({ target: self.state.mountPoint })
-        : component(self.state.mountPoint)
+      self.mountPoint = document.createElement('div')
+      self.app = component.toString().startsWith('class')
+        ? new component({ target: self.mountPoint })
+        : component(self.mountPoint)
       meta.emits.forEach(
         (e) =>
-          (self.state.app.$$.callbacks[e] = [
+          (self.app.$$.callbacks[e] = [
             (arg: any) => {
               emit(e, arg.detail)
             },
           ])
       )
-      self.shadowRoot.appendChild(self.state.mountPoint)
+      self.shadowRoot.appendChild(self.mountPoint)
     },
     attributes: meta.attributes,
-    attributeChangedCallback: (state, root, name, newValue) => {
-      state.app.$$set({
+    attributeChangedCallback: (self, name, newValue) => {
+      self.app.$$set({
         [name]: newValue,
       })
     },
-    connected: (state, root, emit) => {},
-    disconnected: (state, root) => {
-      state.app.$$.on_disconnect?.forEach((f: any) => f())
-      state.app.$$.on_destroy?.forEach((f: any) => f())
+    connected: (self, emit) => {},
+    disconnected: (self) => {
+      self.app.$$.on_disconnect?.forEach((f: any) => f())
+      self.app.$$.on_destroy?.forEach((f: any) => f())
     },
     style: meta.style,
     tag: meta.tag,

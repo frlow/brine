@@ -11,28 +11,28 @@ export const createOptions = (
     constructor: (self, emit) => {
       const container = document.createElement('div')
       self.shadowRoot.appendChild(container)
-      self.state.app = createRoot(container)
-      self.state.props = {}
+      self.app = createRoot(container)
+      self.props = {}
 
       meta.emits.forEach((e) => {
-        self.state.props[`on${camelize(e)}`] = (arg: any) => {
+        self.props[`on${camelize(e)}`] = (arg: any) => {
           emit(e, arg)
         }
       })
-      self.state.render = () => {
-        self.state.app.render(createElement(Component, self.state.props))
+      self.render = () => {
+        self.app.render(createElement(Component, self.props))
       }
     },
     attributes: meta.attributes,
-    attributeChangedCallback: (state, root, name, newValue) => {
-      state.props[name] = newValue
-      state.render()
+    attributeChangedCallback: (self, name, newValue) => {
+      self.props[name] = newValue
+      self.render()
     },
-    connected: (state, root, emit) => {
-      state.render()
+    connected: (self, emit) => {
+      self.render()
     },
-    disconnected: (state) => {
-      state.app.unmount()
+    disconnected: (self) => {
+      self.app.unmount()
     },
     style: meta.style,
     tag: meta.tag,
