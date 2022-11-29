@@ -58,7 +58,7 @@ const start = async (mode: Mode) => {
     sourcemap: true,
     splitting: true,
     minify: !dev,
-    define: { 'process.env.NODE_ENV': dev ? "'development'" : '"production"' },
+    define: { 'process.env.NODE_ENV': dev ? '"development"' : '"production"' },
     plugins: [
       vuePlugin() as Plugin,
       sveltePlugin({

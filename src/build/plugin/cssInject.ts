@@ -7,7 +7,7 @@ export const injectCss = async (
   js: string,
   jsMap: string,
   css: string,
-  dummyCss: string
+  dummyCss: string = dummyStyle
 ) => {
   const stringReplaceSourceMap = new StringReplaceSourceMap(js, jsMap)
   const beginIndex = js.split(dummyCss)[0].length
@@ -22,7 +22,7 @@ export const injectCss = async (
 }
 
 export const dummyStyle = '.dummy-style{}'
-export const injectCssPlugin = (dummyCss: string = dummyStyle): Plugin => ({
+export const injectCssPlugin = (dummyCss?: string): Plugin => ({
   name: 'inject-css',
   setup(build) {
     if (build.initialOptions.write) throw "write must be set to 'false'"

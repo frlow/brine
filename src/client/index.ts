@@ -24,17 +24,17 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     }
 
     emit = (name: string, detail?: any) => {
-      this.shadowRoot!.host.dispatchEvent(new CustomEvent(name, { detail }))
+      this.self.dispatchEvent(new CustomEvent(name, { detail }))
     }
 
     constructor() {
       super()
       this.self = this
       this.attachShadow({ mode: 'open' })
-      this.runConstructor()
+      this.init()
     }
 
-    runConstructor() {
+    init() {
       const styleTag = document.createElement('style')
       styleTag.innerHTML = this.options.style
       this.shadowRoot!.appendChild(styleTag)

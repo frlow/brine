@@ -19,7 +19,7 @@ export const createTransplantableWrapper = (
     }
 
     public reload() {
-      this.runConstructor()
+      this.init()
       Array.from(this.attributes)
         .filter((d) => !d.name.startsWith('data-') && !d.name.startsWith('x-'))
         .forEach((a) => this.attributeChangedCallback(a.name, '', a.value))
