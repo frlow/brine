@@ -1,4 +1,3 @@
-import fs from 'fs'
 import ts, {
   CallExpression,
   SourceFile,
@@ -53,7 +52,7 @@ function getEmits(sourceFile: ts.SourceFile): PropDefinition[] {
   if (!dispatch) return []
   const args = dispatch.typeArguments![0] as TypeLiteralNode
   const emits = args?.members.map((p) => ({
-    name: camelize(p.name!.getText(sourceFile).replace(/\"/g, '')),
+    name: kebabize(p.name!.getText(sourceFile).replace(/\"/g, '')),
     type: (p as any).type.getText(sourceFile),
     optional: !!p.questionToken,
   }))
@@ -61,9 +60,9 @@ function getEmits(sourceFile: ts.SourceFile): PropDefinition[] {
 }
 
 export const analyzeSvelteFile: AnalyzeFileFunction = async (
-  filePath: string
+  filePath,
+  code
 ) => {
-  const code = fs.readFileSync(filePath, 'utf8')
   let sourceFile: SourceFile = {} as SourceFile
   let slots: string[] | undefined = undefined
   const { preprocess } = await import('svelte/compiler')

@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 import ts, { createSourceFile, SourceFile } from 'typescript'
 import { AnalyzeFileFunction, getComponentName, PropDefinition } from './common'
@@ -21,9 +20,8 @@ const getEmits = (classSource: any, sourceFile: SourceFile) => {
   return emits
 }
 
-export const analyzeLitFile: AnalyzeFileFunction = async (filePath) => {
-  const text = fs.readFileSync(filePath.split('?')[0], 'utf8')
-  const sourceFile: any = createSourceFile(filePath, text, ScriptTarget.ESNext)
+export const analyzeLitFile: AnalyzeFileFunction = async (filePath, code) => {
+  const sourceFile: any = createSourceFile(filePath, code, ScriptTarget.ESNext)
   const classSource = sourceFile.statements.find(
     (d: any) => d.kind === SyntaxKind.ClassDeclaration
   )
@@ -43,7 +41,7 @@ export const analyzeLitFile: AnalyzeFileFunction = async (filePath) => {
       })) || []
 
   const emits: PropDefinition[] = getEmits(classSource, sourceFile)
-  const slots: string[] | undefined = text
+  const slots: string[] | undefined = code
     .match(/<slot(.*?)>/g)
     ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
     .filter((d) => d)

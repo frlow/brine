@@ -5,12 +5,17 @@ import { analyzeSvelteFile } from './svelte'
 
 export * from './indexFile'
 export * from './metaFile'
+export * from './typesFile'
 
-export const analyze = async (file: string, framework: Framework) =>
+export const analyze = async (
+  file: string,
+  code: string,
+  framework: Framework
+) =>
   ((
     {
       react: analyzeJsxFile,
       vue: analyzeVueFile,
       svelte: analyzeSvelteFile,
     } as { [i: string]: AnalyzeFileFunction }
-  )[framework](file))
+  )[framework](file, code))

@@ -1,25 +1,22 @@
 import { defineComponent } from '@frlow/brine/client/index'
 import { createAutoLoaderWrapper } from '@frlow/brine/client/extensions/autoLoader'
 
-const baseMeta = {
-  emits: ['my-event'],
-  attributes: ['count', 'obj', 'text'],
-}
+const attributes = ['count', 'obj', 'text']
 const apps = [
   {
-    meta: { ...baseMeta, tag: 'my-vue-app' },
+    meta: { attributes, tag: 'my-vue-app' },
     loader: async () => (await import('./apps/vue')).options,
   },
   {
-    meta: { ...baseMeta, tag: 'my-react-app' },
+    meta: { attributes, tag: 'my-react-app' },
     loader: async () => (await import('./apps/react')).options,
   },
   {
-    meta: { ...baseMeta, tag: 'my-svelte-app' },
+    meta: { attributes, tag: 'my-svelte-app' },
     loader: async () => (await import('./apps/svelte')).options,
   },
   {
-    meta: { ...baseMeta, tag: 'my-vanilla' },
+    meta: { attributes, tag: 'my-vanilla' },
     loader: async () => (await import('./apps/vanilla')).options,
   },
 ]

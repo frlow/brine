@@ -1,5 +1,4 @@
 const baseMeta = {
-  emits: ['my-event'],
   attributes: ['count', 'text', 'obj'],
 }
 const basePath = '/dist/apps'

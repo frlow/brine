@@ -1,4 +1,3 @@
-import fs from 'fs'
 import ts, {
   CallExpression,
   SourceFile,
@@ -48,7 +47,7 @@ const getEmits = (sourceFile: SourceFile): PropDefinition[] => {
   if (!defineEmits) return []
   const emits = (defineEmits.typeArguments![0] as TypeLiteralNode).members
   return emits.map((p: any) => ({
-    name: p.parameters[0].type.literal.text,
+    name: kebabize(p.parameters[0].type.literal.text),
     type: p.parameters[1]?.type.getText(sourceFile) || 'void',
     optional: !!p.type.types?.some(
       (t: any) => t.kind === SyntaxKind.UndefinedKeyword
@@ -56,10 +55,9 @@ const getEmits = (sourceFile: SourceFile): PropDefinition[] => {
   }))
 }
 
-export const analyzeVueFile: AnalyzeFileFunction = async (filePath) => {
-  const source = fs.readFileSync(filePath, 'utf8')
+export const analyzeVueFile: AnalyzeFileFunction = async (filePath, code) => {
   const { parse } = await import('vue/compiler-sfc')
-  const { descriptor } = parse(source, {
+  const { descriptor } = parse(code, {
     filename: filePath,
   })
   const sourceFile = ts.createSourceFile(

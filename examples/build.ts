@@ -10,6 +10,9 @@ import {
   beforePlugin,
   writeMetaFile,
   buildTimePlugin,
+  writeTypesFile,
+  generateTypes,
+  writeWrappersFile,
 } from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
 import path from 'path'
@@ -76,6 +79,22 @@ const start = async (mode: Mode) => {
           prefix
         )
         await writeMetaFile('examples/apps/vue/VueApp.vue', 'vue', prefix)
+        const types = await generateTypes(
+          [
+            {
+              path: 'examples/apps/react/ReactApp.tsx',
+              framework: 'react',
+            },
+            {
+              path: 'examples/apps/svelte/SvelteApp.svelte',
+              framework: 'svelte',
+            },
+            { path: 'examples/apps/vue/VueApp.vue', framework: 'vue' },
+          ],
+          'my'
+        )
+        await writeTypesFile(types, 'dist')
+        await writeWrappersFile(types, 'dist/wrapper')
       }),
       // This is just for local dev
       aliasPlugin({

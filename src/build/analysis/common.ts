@@ -14,7 +14,10 @@ export type AnalysisResult = {
   tag: string
 }
 
-export type AnalyzeFileFunction = (filePath: string) => Promise<AnalysisResult>
+export type AnalyzeFileFunction = (
+  filePath: string,
+  code: string
+) => Promise<AnalysisResult>
 
 export const getComponentName = (filePath: string) => {
   return path.parse(filePath).name.split('.')[0]

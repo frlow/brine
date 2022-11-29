@@ -1,14 +1,12 @@
 import ts, { PropertySignature } from 'typescript'
-import fs from 'fs'
 import path from 'path'
 import { AnalyzeFileFunction, getComponentName, PropDefinition } from './common'
 import ScriptTarget = ts.ScriptTarget
 import SyntaxKind = ts.SyntaxKind
 import { kebabize } from '../utils/string'
 
-export const getPropsType = (path: string) => {
-  const text = fs.readFileSync(path.split('?')[0], 'utf8')
-  const sourceFile: any = ts.createSourceFile(path, text, ScriptTarget.ESNext)
+export const getPropsType = (path: string, code: string) => {
+  const sourceFile: any = ts.createSourceFile(path, code, ScriptTarget.ESNext)
   const type =
     sourceFile.statements.find(
       (s: any) => s.kind === SyntaxKind.ExportAssignment
@@ -18,11 +16,11 @@ export const getPropsType = (path: string) => {
         s.kind === SyntaxKind.FunctionDeclaration &&
         s.modifiers?.some((m: any) => m.kind === SyntaxKind.DefaultKeyword)
     )?.parameters[0]?.type
-  return { type, sourceFile, text }
+  return { type, sourceFile }
 }
 
-export const analyzeJsxFile: AnalyzeFileFunction = async (filePath: string) => {
-  const { type, sourceFile, text } = getPropsType(filePath)
+export const analyzeJsxFile: AnalyzeFileFunction = async (filePath, code) => {
+  const { type, sourceFile } = getPropsType(filePath, code)
   const props: PropDefinition[] =
     type?.members
       ?.filter(
@@ -40,17 +38,15 @@ export const analyzeJsxFile: AnalyzeFileFunction = async (filePath: string) => {
         (d: PropertySignature) => d.type?.kind === SyntaxKind.FunctionType
       )
       .map((e: any) => {
-        const name = e.name.text.replace(/^on/, '')
-        const lowercaseName =
-          name.substring(0, 1).toLowerCase() + name.substring(1)
+        const name = kebabize(e.name.text.replace(/^on/, ''))
         return {
-          name: lowercaseName,
+          name,
           optional: !!e.questionToken,
           type: e.type.parameters[0]?.type.getText(sourceFile) || 'void',
         }
       }) || []
   const name = getComponentName(path.parse(filePath).name)
-  const slots = text
+  const slots = code
     .match(/<slot(.*?)>/g)
     ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
     .filter((d) => d)

@@ -1,4 +1,4 @@
-import { analyze, generateIndexFile } from './index'
+import { analyze } from './index'
 import { kebabize } from '../utils/string'
 import { Framework } from './common'
 import path from 'path'
@@ -9,19 +9,20 @@ export const generateMetaCode = async (
   framework: Framework,
   prefixOrTag: string
 ) => {
-  const ar = await analyze(file, framework)
+  const code = fs.readFileSync(file, 'utf8')
+  const ar = await analyze(file, code, framework)
   const emits = ar.emits.map((e) => e.name)
   const attributes = ar.props.map((p) => p.name)
   const tag = prefixOrTag.includes('-')
     ? prefixOrTag
     : `${prefixOrTag}-${kebabize(ar.name)}`
-  const code = `{
+  const meta = `{
   emits: ${JSON.stringify(emits)},
   attributes: ${JSON.stringify(attributes)},
   style: \`.dummy-style{}\`,
   tag: '${tag}',
 }`
-  return code
+  return meta
 }
 
 export const generateMetaFile = async (

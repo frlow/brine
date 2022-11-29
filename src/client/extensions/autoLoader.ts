@@ -3,7 +3,7 @@ import { createTransplantableWrapper } from './transplant'
 
 export type PartialWcWrapperOptionsMeta = Pick<
   WcWrapperOptionsMeta,
-  'tag' | 'attributes' | 'emits'
+  'tag' | 'attributes'
 >
 export const createAutoLoaderWrapper = (
   meta: PartialWcWrapperOptionsMeta,
