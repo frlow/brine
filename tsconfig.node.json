@@ -1,6 +1,6 @@
 {
   "include": [
-    "build/**/*",
+    "src/build/**/*",
     "build.ts"
   ],
   "compilerOptions": {

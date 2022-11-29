@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "client"
+    "src/client"
   ],
   "compilerOptions": {
     "outDir": "lib/client",

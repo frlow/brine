@@ -9,7 +9,7 @@ import {
   writeIndexFile,
   beforePlugin,
   writeMetaFile,
-} from './build/index'
+} from './src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
 import path from 'path'
 
@@ -65,7 +65,7 @@ const start = async (mode: Mode) => {
       }),
       // This is just for local dev
       aliasPlugin({
-        '@frlow/brine/client': './client',
+        '@frlow/brine/client': './src/client',
       }),
     ],
     watch: dev,

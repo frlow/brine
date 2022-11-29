@@ -20,7 +20,7 @@
     "allowSyntheticDefaultImports": true,
     "paths": {
       "@frlow/brine/client/*": [
-        "./client/*"
+        "./src/client/*"
       ]
     }
   },

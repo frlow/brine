@@ -1,6 +1,6 @@
 {
   "include": [
-    "build/**/*"
+    "src/build"
   ],
   "compilerOptions": {
     "outDir": "lib/build",
