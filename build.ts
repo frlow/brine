@@ -3,12 +3,15 @@ import vuePlugin from 'esbuild-plugin-vue3'
 import sveltePlugin from 'esbuild-svelte'
 import sveltePreprocess from 'svelte-preprocess'
 import glob from 'glob'
-import { hotReloadPlugin, injectCssPlugin } from './build/plugin'
+import {
+  hotReloadPlugin,
+  injectCssPlugin,
+  writeIndexFile,
+  beforePlugin,
+  writeMetaFile,
+} from './build/index'
 import aliasPlugin from 'esbuild-plugin-alias'
 import path from 'path'
-import { writeIndexFile } from './build/analysis'
-import { writeMetaFile } from './build/analysis/metaFile'
-import { beforePlugin } from './build/plugin/before'
 
 enum Mode {
   standalone,

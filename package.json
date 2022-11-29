@@ -7,11 +7,10 @@
   "main": "dist/cli.js",
   "type": "module",
   "files": [
-    "dist"
+    "lib"
   ],
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
+    "build": "rm -r lib || true && tsc -p ./tsconfig.build.client.json && tsc -p ./tsconfig.build.build.json",
     "dev:build": "rm -r dist || true && esno build.ts",
     "dev:serve-bs": "browser-sync start --server --files \"dist/*\" --no-open --no-ui",
     "dev:serve": "serve .",

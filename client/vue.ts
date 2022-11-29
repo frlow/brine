@@ -1,5 +1,5 @@
 import { WcWrapperOptions, WcWrapperOptionsMeta } from './index'
-import { App, createApp, h, reactive } from 'vue'
+import { App, createApp, h, reactive } from '@vue/runtime-dom'
 import { camelize } from './common'
 
 export const createOptions = (

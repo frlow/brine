@@ -4,6 +4,7 @@ import { analyzeVueFile } from './vue'
 import { analyzeSvelteFile } from './svelte'
 
 export * from './indexFile'
+export * from './metaFile'
 
 export const analyze = async (file: string, framework: Framework) =>
   ((

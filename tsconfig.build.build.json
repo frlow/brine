@@ -1,0 +1,12 @@
+{
+  "include": [
+    "build/**/*"
+  ],
+  "compilerOptions": {
+    "outDir": "lib/build",
+    "declaration": true,
+    "noEmit": false,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

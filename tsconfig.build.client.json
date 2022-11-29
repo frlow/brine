@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "client"
+  ],
+  "compilerOptions": {
+    "outDir": "lib/client",
+    "declaration": true,
+    "skipLibCheck": true,
+    "noEmit": false
+  }
+}
