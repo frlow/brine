@@ -1,7 +1,6 @@
 const baseMeta = {
   emits: ['my-event'],
   attributes: ['count', 'text', 'obj'],
-  style: '',
 }
 const basePath = '/dist/apps'
 export const apps = [

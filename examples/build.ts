@@ -22,7 +22,12 @@ enum Mode {
   auto,
 }
 
+// =================
+// Set mode here
 const buildMode: Mode = Mode.auto
+// End mode setter
+// =================
+
 const start = async (mode: Mode) => {
   const outbase = 'examples'
   const outdir = 'dist'

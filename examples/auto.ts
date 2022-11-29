@@ -2,9 +2,8 @@ import { defineComponent } from '@frlow/brine/client/index'
 import { createAutoLoaderWrapper } from '@frlow/brine/client/extensions/autoLoader'
 
 const baseMeta = {
-  emits: ['MyEvent'],
+  emits: ['my-event'],
   attributes: ['count', 'obj', 'text'],
-  style: `.dummy-style{}`,
 }
 const apps = [
   {

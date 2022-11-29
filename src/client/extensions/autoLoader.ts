@@ -1,8 +1,12 @@
 import { WcWrapper, WcWrapperOptions, WcWrapperOptionsMeta } from '../index'
 import { createTransplantableWrapper } from './transplant'
 
+export type PartialWcWrapperOptionsMeta = Pick<
+  WcWrapperOptionsMeta,
+  'tag' | 'attributes' | 'emits'
+>
 export const createAutoLoaderWrapper = (
-  meta: WcWrapperOptionsMeta,
+  meta: PartialWcWrapperOptionsMeta,
   loader: () => Promise<WcWrapperOptions>
 ): WcWrapper => {
   let loaded = false
