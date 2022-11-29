@@ -1,7 +1,5 @@
 import { Framework } from './common'
-import { analyze } from './index'
 import path from 'path'
-import { kebabize } from '../utils/string'
 import fs from 'fs'
 import { generateMetaCode } from './metaFile'
 
