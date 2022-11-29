@@ -1,30 +1,15 @@
 import { defineComponent } from '@frlow/brine/client/index'
-import { createAutoLoaderWrapper } from '@frlow/brine/client/extensions/autoLoader'
+import { createWrapper } from '../src/client'
 
-const baseMeta = {
-  emits: ['MyEvent'],
-  attributes: ['count', 'obj', 'text'],
-  style: `.dummy-style{}`,
+const setup = async () => {
+  const apps = await Promise.all([
+    import('./apps/react'),
+    import('./apps/vue'),
+    import('./apps/svelte'),
+    import('./apps/vanilla'),
+  ])
+  const wrappers = apps.map((app) => createWrapper(app.options))
+  wrappers.forEach((w) => defineComponent(w))
 }
-const apps = [
-  {
-    meta: { ...baseMeta, tag: 'my-vue-app' },
-    loader: async () => (await import('./vue')).options,
-  },
-  {
-    meta: { ...baseMeta, tag: 'my-react-app' },
-    loader: async () => (await import('./react')).options,
-  },
-  {
-    meta: { ...baseMeta, tag: 'my-svelte-app' },
-    loader: async () => (await import('./svelte')).options,
-  },
-  {
-    meta: { ...baseMeta, tag: 'my-vanilla' },
-    loader: async () => (await import('./vanilla')).options,
-  },
-]
 
-apps.forEach((app) =>
-  defineComponent(createAutoLoaderWrapper(app.meta, app.loader))
-)
+setup().then()

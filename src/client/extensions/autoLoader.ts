@@ -1,9 +1,5 @@
-import {
-  WcWrapper,
-  WcWrapperOptions,
-  WcWrapperOptionsMeta,
-} from '@frlow/brine/client/index'
-import { createTransplantableWrapper } from '@frlow/brine/client/extensions/transplant'
+import { WcWrapper, WcWrapperOptions, WcWrapperOptionsMeta } from '../index'
+import { createTransplantableWrapper } from './transplant'
 
 export const createAutoLoaderWrapper = (
   meta: WcWrapperOptionsMeta,

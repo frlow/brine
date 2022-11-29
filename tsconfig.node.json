@@ -1,7 +1,7 @@
 {
   "include": [
     "src/build/**/*",
-    "build.ts"
+    "examples/build.ts"
   ],
   "compilerOptions": {
     "composite": true,

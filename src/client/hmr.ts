@@ -1,4 +1,4 @@
-import { WcWrapper, WcWrapperOptions } from '@frlow/brine/client/index'
+import { WcWrapper, WcWrapperOptions } from './index'
 
 const w = window as any
 

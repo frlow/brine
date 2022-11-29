@@ -3,22 +3,22 @@ const baseMeta = {
   attributes: ['count', 'text', 'obj'],
   style: '',
 }
-
+const basePath = '/dist/apps'
 export const apps = [
   {
     meta: { ...baseMeta, tag: 'my-vue-app' },
-    url: '/dist/vue/index.js',
+    url: `${basePath}/vue/index.js`,
   },
   {
     meta: { ...baseMeta, tag: 'my-react-app' },
-    url: '/dist/react/index.js',
+    url: `${basePath}/react/index.js`,
   },
   {
     meta: { ...baseMeta, tag: 'my-svelte-app' },
-    url: '/dist/svelte/index.js',
+    url: `${basePath}/svelte/index.js`,
   },
   {
     meta: { ...baseMeta, tag: 'my-vanilla' },
-    url: '/dist/vanilla/index.js',
+    url: `${basePath}/vanilla/index.js`,
   },
 ]

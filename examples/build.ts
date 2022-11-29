@@ -9,7 +9,8 @@ import {
   writeIndexFile,
   beforePlugin,
   writeMetaFile,
-} from './src/build'
+  buildTimePlugin,
+} from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
 import path from 'path'
 
@@ -18,9 +19,10 @@ enum Mode {
   dev,
   prod,
   dynamic,
+  auto,
 }
 
-const buildMode: Mode = Mode.dynamic
+const buildMode: Mode = Mode.auto
 const start = async (mode: Mode) => {
   const outbase = 'examples'
   const outdir = 'dist'
@@ -35,7 +37,9 @@ const start = async (mode: Mode) => {
       : mode === Mode.prod
       ? ['examples/prod.ts']
       : mode === Mode.dynamic
-      ? glob.sync('examples/**/index.ts').concat('examples/dynamic.ts')
+      ? glob.sync('examples/apps/**/index.ts').concat('examples/dynamic.ts')
+      : mode === Mode.auto
+      ? ['examples/auto.ts']
       : []
   const result = await esbuild.build({
     entryPoints,
@@ -53,15 +57,20 @@ const start = async (mode: Mode) => {
         preprocess: [sveltePreprocess()],
       }),
       injectCssPlugin(),
+      buildTimePlugin(),
       hotReloadPlugin(dev, path.resolve('.')),
       beforePlugin(async () => {
-        await writeIndexFile('examples/react/ReactApp.tsx', 'react', prefix)
         await writeIndexFile(
-          'examples/svelte/SvelteApp.svelte',
+          'examples/apps/react/ReactApp.tsx',
+          'react',
+          prefix
+        )
+        await writeIndexFile(
+          'examples/apps/svelte/SvelteApp.svelte',
           'svelte',
           prefix
         )
-        await writeMetaFile('examples/vue/VueApp.vue', 'vue', prefix)
+        await writeMetaFile('examples/apps/vue/VueApp.vue', 'vue', prefix)
       }),
       // This is just for local dev
       aliasPlugin({

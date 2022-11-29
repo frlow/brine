@@ -1,8 +1,4 @@
-import {
-  createWrapper,
-  WcWrapper,
-  WcWrapperOptions,
-} from '@frlow/brine/client/index'
+import { createWrapper, WcWrapper, WcWrapperOptions } from '../index'
 
 export const createTransplantableWrapper = (
   options: WcWrapperOptions
