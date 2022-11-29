@@ -20,11 +20,12 @@ enum Mode {
   dynamic,
 }
 
-const buildMode: Mode = Mode.standalone
+const buildMode: Mode = Mode.dynamic
 const start = async (mode: Mode) => {
   const outbase = 'examples'
   const outdir = 'dist'
   const dev = process.argv[2] === 'watch'
+  const prefix = 'my'
 
   const entryPoints =
     mode === Mode.standalone
@@ -54,10 +55,13 @@ const start = async (mode: Mode) => {
       injectCssPlugin(),
       hotReloadPlugin(dev, path.resolve('.')),
       beforePlugin(async () => {
-        await writeIndexFile('examples/react/ReactApp.tsx', 'react', 'my')
-        // await writeIndexFile('examples/vue/VueApp.vue', 'vue', 'my')
-        await writeIndexFile('examples/svelte/SvelteApp.svelte', 'svelte', 'my')
-        await writeMetaFile('examples/vue/VueApp.vue', 'vue', 'my')
+        await writeIndexFile('examples/react/ReactApp.tsx', 'react', prefix)
+        await writeIndexFile(
+          'examples/svelte/SvelteApp.svelte',
+          'svelte',
+          prefix
+        )
+        await writeMetaFile('examples/vue/VueApp.vue', 'vue', prefix)
       }),
       // This is just for local dev
       aliasPlugin({
