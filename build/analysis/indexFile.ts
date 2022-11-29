@@ -3,28 +3,19 @@ import { analyze } from './index'
 import path from 'path'
 import { kebabize } from '../utils/string'
 import fs from 'fs'
+import { generateMetaCode } from './metaFile'
 
 export const generateIndexFile = async (
   file: string,
   framework: Framework,
   prefixOrTag: string
 ) => {
-  const ar = await analyze(file, framework)
   const appPath = path.parse(file).base.replace(/\.[j|t]sx?/, '.js')
-  const emits = ar.emits.map((e) => e.name)
-  const attributes = ar.props.map((p) => p.name)
-  const tag = prefixOrTag.includes('-')
-    ? prefixOrTag
-    : `${prefixOrTag}-${kebabize(ar.name)}`
+  const meta = await generateMetaCode(file, framework, prefixOrTag)
   const code = `import { createOptions } from '@frlow/brine/client/${framework}'
 import App from './${appPath}'
 
-const meta = {
-  emits: ${JSON.stringify(emits)},
-  attributes: ${JSON.stringify(attributes)},
-  style: \`.dummy-style{}\`,
-  tag: '${tag}',
-}
+const meta = ${meta}
 export const options = createOptions(App, meta)
 `
   return code
