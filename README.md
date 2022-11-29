@@ -2,7 +2,7 @@
 
 ### TODO:
 
-- [ ] React Wrapper
+- [x] React Wrapper
 - [ ] VsCodeTypes
 - [ ] WebTypes
 - [ ] ReadMe

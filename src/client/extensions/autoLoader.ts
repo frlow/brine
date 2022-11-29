@@ -18,11 +18,8 @@ export const createAutoLoaderWrapper = (
     connected: () => {},
     constructor: (self) => {
       if (!loaded) {
-        loader().then((options) => {
-          console.log('Loading')
-          self.constructor?.transplant(options, true)
-        })
         loaded = true
+        loader().then((options) => self.constructor?.transplant(options, true))
       }
     },
     attributeChangedCallback: () => {},
