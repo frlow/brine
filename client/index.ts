@@ -46,7 +46,7 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-      const regex = /(^[0-9]*$)|(^{.*}$)|(^\[.*\]$)/
+      const regex = /(^[0-9|\.|,]*$)|(^{.*}$)|(^\[.*\]$)/
       const parsedNew = regex.test(newValue) ? JSON.parse(newValue) : newValue
       this.options.attributeChangedCallback(this.self, name, parsedNew)
     }
