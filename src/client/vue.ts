@@ -33,4 +33,3 @@ export const createOptions = (
   style: meta.style,
   tag: meta.tag,
 })
-export * from './index.js'

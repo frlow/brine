@@ -4,6 +4,7 @@ import type { WebSocket } from 'ws'
 export const hotReloadPlugin = (options?: {
   disable?: boolean
   basePath?: string
+  force?: boolean
 }): Plugin => {
   if (options?.disable)
     return {
@@ -39,7 +40,7 @@ export const hotReloadPlugin = (options?: {
           )
           connections.forEach((ws) => ws.send(loadPath))
         }
-        paths = result.outputFiles.map((f) => f.path)
+        if (!options?.force) paths = result.outputFiles.map((f) => f.path)
       })
     },
   }

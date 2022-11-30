@@ -38,4 +38,3 @@ export const createOptions = (
     tag: meta.tag,
   }
 }
-export * from './index.js'
