@@ -1,4 +1,4 @@
-import { createWrapper, WcWrapper, WcWrapperOptions } from '../index'
+import { createWrapper, WcWrapper, WcWrapperOptions } from '../index.js'
 
 export const createTransplantableWrapper = (
   options: WcWrapperOptions

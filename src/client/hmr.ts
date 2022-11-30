@@ -1,4 +1,4 @@
-import { WcWrapper, WcWrapperOptions } from './index'
+import { WcWrapper, WcWrapperOptions } from './index.js'
 
 const w = window as any
 

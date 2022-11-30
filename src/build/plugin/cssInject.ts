@@ -8,6 +8,7 @@ export const injectCss = async (
   css: string,
   dummyCss: string = dummyStyle
 ) => {
+  // @ts-ignore
   const StringReplaceSourceMap = (await import('string-replace-source-map'))
     .default
   const stringReplaceSourceMap = new StringReplaceSourceMap(js, jsMap)

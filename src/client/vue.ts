@@ -1,6 +1,6 @@
-import { WcWrapperOptions, WcWrapperOptionsMeta } from './index'
+import { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 import { App, createApp, h, reactive } from '@vue/runtime-dom'
-import { camelize } from './common'
+import { camelize } from './common.js'
 
 export const createOptions = (
   app: ((props: any) => App) | any,
@@ -33,4 +33,4 @@ export const createOptions = (
   style: meta.style,
   tag: meta.tag,
 })
-export * from './index'
+export * from './index.js'

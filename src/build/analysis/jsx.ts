@@ -1,9 +1,13 @@
 import ts, { PropertySignature } from 'typescript'
 import path from 'path'
-import { AnalyzeFileFunction, getComponentName, PropDefinition } from './common'
+import {
+  AnalyzeFileFunction,
+  getComponentName,
+  PropDefinition,
+} from './common.js'
 import ScriptTarget = ts.ScriptTarget
 import SyntaxKind = ts.SyntaxKind
-import { kebabize } from '../utils/string'
+import { kebabize } from '../utils/string.js'
 
 export const getPropsType = (path: string, code: string) => {
   const sourceFile: any = ts.createSourceFile(path, code, ScriptTarget.ESNext)

@@ -1,4 +1,4 @@
-import { WcWrapperOptions, WcWrapperOptionsMeta } from './index'
+import { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 
 export const createOptions = (
   component: any | ((element: HTMLElement) => any),
@@ -36,4 +36,4 @@ export const createOptions = (
   }
 }
 
-export * from './index'
+export * from './index.js'

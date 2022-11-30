@@ -1,4 +1,5 @@
 import type { Plugin } from 'esbuild'
+import type { WebSocket } from 'ws'
 
 export const hotReloadPlugin = (enable: boolean, basePath: string): Plugin => {
   if (!enable)

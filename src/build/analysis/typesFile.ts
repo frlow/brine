@@ -1,9 +1,9 @@
-import { AnalysisResult, Framework } from './common'
-import { analyze } from './index'
+import { AnalysisResult, Framework } from './common.js'
+import { analyze } from './index.js'
 import fs from 'fs'
 import path from 'path'
-import { wrapperCode, wrapperDTs } from './wrapperCode'
-import { camelize } from '../utils/string'
+import { wrapperCode, wrapperDTs } from './wrapperCode.js'
+import { camelize } from '../utils/string.js'
 import ts from 'typescript'
 
 export const generateTypes = (files: TypeFile[], prefix?: string) =>

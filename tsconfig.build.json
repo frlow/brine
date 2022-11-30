@@ -1,12 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "src/client"
+    "src"
   ],
   "compilerOptions": {
-    "outDir": "lib/client",
+    "outDir": "lib",
     "declaration": true,
+    "noEmit": false,
     "skipLibCheck": true,
-    "noEmit": false
+    "allowSyntheticDefaultImports": true
   }
 }

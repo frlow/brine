@@ -6,10 +6,10 @@ import ts, {
   VariableStatement,
 } from 'typescript'
 import path from 'path'
-import { AnalyzeFileFunction, PropDefinition } from './common'
+import { AnalyzeFileFunction, PropDefinition } from './common.js'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
-import { camelize, kebabize } from '../utils/string'
+import { camelize, kebabize } from '../utils/string.js'
 
 const getProps = (sourceFile: SourceFile): PropDefinition[] => {
   if (!sourceFile.statements) return []

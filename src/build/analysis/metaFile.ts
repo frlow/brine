@@ -1,6 +1,6 @@
-import { analyze } from './index'
-import { kebabize } from '../utils/string'
-import { Framework } from './common'
+import { analyze } from './index.js'
+import { kebabize } from '../utils/string.js'
+import { Framework } from './common.js'
 import path from 'path'
 import fs from 'fs'
 

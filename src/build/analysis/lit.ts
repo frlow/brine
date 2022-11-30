@@ -1,9 +1,13 @@
 import path from 'path'
 import ts, { createSourceFile, SourceFile } from 'typescript'
-import { AnalyzeFileFunction, getComponentName, PropDefinition } from './common'
+import {
+  AnalyzeFileFunction,
+  getComponentName,
+  PropDefinition,
+} from './common.js'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
-import { kebabize } from '../utils/string'
+import { kebabize } from '../utils/string.js'
 
 const getEmits = (classSource: any, sourceFile: SourceFile) => {
   const eventDispatcher = classSource.members.find(

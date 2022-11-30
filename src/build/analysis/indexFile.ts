@@ -1,7 +1,7 @@
-import { Framework } from './common'
+import { Framework } from './common.js'
 import path from 'path'
 import fs from 'fs'
-import { generateMetaCode } from './metaFile'
+import { generateMetaCode } from './metaFile.js'
 
 export const generateIndexFile = async (
   file: string,

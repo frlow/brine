@@ -1,7 +1,7 @@
-import { WcWrapperOptions, WcWrapperOptionsMeta } from './index'
+import { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
-import { camelize } from './common'
+import { camelize } from './common.js'
 
 export const createOptions = (
   Component: (args: any) => JSX.Element,
@@ -38,4 +38,4 @@ export const createOptions = (
     tag: meta.tag,
   }
 }
-export * from './index'
+export * from './index.js'
