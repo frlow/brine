@@ -4,7 +4,7 @@
   "repository": "https://github.com/frlow/brine",
   "author": "Fredrik Löwenhamn <fredrik.lowenhamn@gmail.com>",
   "license": "MIT",
-  "main": "dist/cli.js",
+  "main": "lib/build/index.js",
   "type": "module",
   "files": [
     "lib"

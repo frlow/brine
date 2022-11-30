@@ -27,7 +27,8 @@ export const dummyStyle = '.dummy-style{}'
 export const injectCssPlugin = (dummyCss?: string): Plugin => ({
   name: 'inject-css',
   setup(build) {
-    if (build.initialOptions.write) throw "write must be set to 'false'"
+    if (build.initialOptions.write !== false)
+      throw "write must be set to 'false'"
     build.onEnd(async (result) => {
       for (const file of result.outputFiles.filter((f) =>
         f.path.endsWith('.js')
