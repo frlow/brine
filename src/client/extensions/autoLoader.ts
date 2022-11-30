@@ -1,4 +1,8 @@
-import { WcWrapper, WcWrapperOptions, WcWrapperOptionsMeta } from '../index.js'
+import type {
+  WcWrapper,
+  WcWrapperOptions,
+  WcWrapperOptionsMeta,
+} from '../index.js'
 import { createTransplantableWrapper } from './transplant.js'
 
 export type PartialWcWrapperOptionsMeta = Pick<

@@ -61,8 +61,8 @@ const start = async (mode: Mode) => {
     define: { 'process.env.NODE_ENV': dev ? '"development"' : '"production"' },
     plugins: [
       vuePlugin() as Plugin,
-      sveltePlugin({
-        preprocess: [sveltePreprocess()],
+      (sveltePlugin as any)({
+        preprocess: [(sveltePreprocess as any)()],
       }),
       injectCssPlugin(),
       buildTimePlugin(),
