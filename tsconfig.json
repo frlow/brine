@@ -10,11 +10,11 @@
     "allowJs": false,
     "checkJs": false,
     "isolatedModules": false,
-    //    "esModuleInterop": true,
+    "esModuleInterop": true,
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@frlow/brine/client/lib/*": [
+      "@frlow/brine/lib/client/*": [
         "./src/client/*"
       ]
     }

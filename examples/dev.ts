@@ -1,6 +1,6 @@
-import { createTransplantableWrapper } from '@frlow/brine/client/lib/extensions/transplant'
-import { defineComponent } from '@frlow/brine/client/lib/index'
-import { initHmr } from '@frlow/brine/client/lib/hmr'
+import { createTransplantableWrapper } from '@frlow/brine/lib/client/extensions/transplant'
+import { defineComponent } from '@frlow/brine/lib/client/index'
+import { initHmr } from '@frlow/brine/lib/client/hmr'
 
 const setup = async () => {
   const apps = await Promise.all([

@@ -1,5 +1,5 @@
-import { defineComponent } from '@frlow/brine/client/lib/index'
-import { createAutoLoaderWrapper } from '@frlow/brine/client/lib/extensions/autoLoader'
+import { defineComponent } from '@frlow/brine/lib/client/index'
+import { createAutoLoaderWrapper } from '@frlow/brine/lib/client/extensions/autoLoader'
 
 const attributes = ['count', 'obj', 'text']
 const apps = [

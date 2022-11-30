@@ -1,8 +1,11 @@
 import type { Plugin } from 'esbuild'
 import type { WebSocket } from 'ws'
 
-export const hotReloadPlugin = (enable: boolean, basePath: string): Plugin => {
-  if (!enable)
+export const hotReloadPlugin = (options?: {
+  disable?: boolean
+  basePath?: string
+}): Plugin => {
+  if (options?.disable)
     return {
       name: 'none',
       setup() {},
@@ -30,7 +33,10 @@ export const hotReloadPlugin = (enable: boolean, basePath: string): Plugin => {
           .filter((f) => f.path.endsWith('.js'))
           .filter((f) => !paths.includes(f.path))
         for (const jsFile of jsFiles) {
-          const loadPath = jsFile.path.replace(basePath, '')
+          const loadPath = jsFile.path.replace(
+            options?.basePath || process.cwd(),
+            ''
+          )
           connections.forEach((ws) => ws.send(loadPath))
         }
         paths = result.outputFiles.map((f) => f.path)

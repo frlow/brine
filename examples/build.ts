@@ -66,7 +66,7 @@ const start = async (mode: Mode) => {
       }),
       injectCssPlugin(),
       buildTimePlugin(),
-      hotReloadPlugin(dev, path.resolve('.')),
+      hotReloadPlugin(),
       beforePlugin(async () => {
         await writeIndexFile(
           'examples/apps/react/ReactApp.tsx',
@@ -98,7 +98,7 @@ const start = async (mode: Mode) => {
       }),
       // This is just for local dev
       aliasPlugin({
-        '@frlow/brine/client/lib': './src/client',
+        '@frlow/brine/lib/client': './src/client',
       }),
     ],
     watch: dev,

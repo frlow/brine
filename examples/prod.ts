@@ -1,4 +1,4 @@
-import { defineComponent } from '@frlow/brine/client/lib/index'
+import { defineComponent } from '@frlow/brine/lib/client/index'
 import { createWrapper } from '../src/client'
 
 const setup = async () => {
