@@ -1,4 +1,4 @@
-import { createOptions } from '@frlow/brine/client/react'
+import { createOptions } from '@frlow/brine/client/lib/react'
 import App from './ReactApp.js'
 
 const meta = {

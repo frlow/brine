@@ -1,4 +1,4 @@
-import { createOptions } from '@frlow/brine/client/svelte'
+import { createOptions } from '@frlow/brine/client/lib/svelte'
 import App from './SvelteApp.svelte'
 
 const meta = {

@@ -8,7 +8,8 @@ export const injectCss = async (
   css: string,
   dummyCss: string = dummyStyle
 ) => {
-  const StringReplaceSourceMap = await import('string-replace-source-map')
+  const StringReplaceSourceMap = (await import('string-replace-source-map'))
+    .default
   const stringReplaceSourceMap = new StringReplaceSourceMap(js, jsMap)
   const beginIndex = js.split(dummyCss)[0].length
   const endIndex = beginIndex + dummyCss.length

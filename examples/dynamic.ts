@@ -1,5 +1,5 @@
-import { defineComponent } from '@frlow/brine/client/index'
-import { createAutoLoaderWrapper } from '@frlow/brine/client/extensions/autoLoader'
+import { defineComponent } from '@frlow/brine/client/lib/index'
+import { createAutoLoaderWrapper } from '@frlow/brine/client/lib/extensions/autoLoader'
 
 import('./dynamicApps').then((result) => {
   result.apps.forEach((app) => {

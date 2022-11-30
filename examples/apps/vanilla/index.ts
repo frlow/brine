@@ -1,5 +1,5 @@
 // This is a handwritten file!!!
-import { WcWrapperOptions } from '@frlow/brine/client/index'
+import { WcWrapperOptions } from '@frlow/brine/client/lib/index'
 
 export const options: WcWrapperOptions = {
   constructor: (self, emit) => {

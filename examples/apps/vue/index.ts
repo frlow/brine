@@ -1,4 +1,4 @@
-import { createOptions } from '@frlow/brine/client/vue'
+import { createOptions } from '@frlow/brine/client/lib/vue'
 import App from './VueApp.vue'
 import { meta } from './VueApp.meta'
 import { createApp, h } from 'vue'

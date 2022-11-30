@@ -27,7 +27,7 @@ enum Mode {
 
 // =================
 // Set mode here
-const buildMode: Mode = Mode.auto
+const buildMode: Mode = Mode.dev
 // End mode setter
 // =================
 
@@ -98,7 +98,7 @@ const start = async (mode: Mode) => {
       }),
       // This is just for local dev
       aliasPlugin({
-        '@frlow/brine/client': './src/client',
+        '@frlow/brine/client/lib': './src/client',
       }),
     ],
     watch: dev,

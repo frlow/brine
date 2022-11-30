@@ -19,7 +19,7 @@
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@frlow/brine/client/*": [
+      "@frlow/brine/client/lib/*": [
         "./src/client/*"
       ]
     }

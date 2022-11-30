@@ -7,3 +7,4 @@
 - [ ] WebTypes
 - [ ] ReadMe
 - [ ] Testing
+- [ ] Alias to lib

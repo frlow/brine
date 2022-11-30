@@ -10,7 +10,7 @@ export const generateIndexFile = async (
 ) => {
   const appPath = path.parse(file).base.replace(/\.[j|t]sx?/, '.js')
   const meta = await generateMetaCode(file, framework, prefixOrTag)
-  const code = `import { createOptions } from '@frlow/brine/client/${framework}'
+  const code = `import { createOptions } from '@frlow/brine/client/lib/${framework}'
 import App from './${appPath}'
 
 const meta = ${meta}
