@@ -1,7 +1,6 @@
 import type { Plugin } from 'esbuild'
 import fs from 'fs'
 import path from 'path'
-import StringReplaceSourceMap from 'string-replace-source-map'
 
 export const injectCss = async (
   js: string,
@@ -9,6 +8,7 @@ export const injectCss = async (
   css: string,
   dummyCss: string = dummyStyle
 ) => {
+  const StringReplaceSourceMap = await import('string-replace-source-map')
   const stringReplaceSourceMap = new StringReplaceSourceMap(js, jsMap)
   const beginIndex = js.split(dummyCss)[0].length
   const endIndex = beginIndex + dummyCss.length

@@ -1,5 +1,4 @@
 import type { Plugin } from 'esbuild'
-import { WebSocketServer } from 'ws'
 
 export const hotReloadPlugin = (enable: boolean, basePath: string): Plugin => {
   if (!enable)
@@ -7,14 +6,19 @@ export const hotReloadPlugin = (enable: boolean, basePath: string): Plugin => {
       name: 'none',
       setup() {},
     }
-  const wss = new WebSocketServer({ port: 8080 })
   const connections: WebSocket[] = []
-  wss.on('connection', function connection(ws) {
-    connections.push(ws)
-    ws.on('close', function close() {
-      connections.splice(connections.indexOf(ws, 1))
+  const startServer = async () => {
+    const { WebSocketServer } = await import('ws')
+    const wss = new WebSocketServer({ port: 8080 })
+
+    wss.on('connection', function connection(ws) {
+      connections.push(ws)
+      ws.on('close', function close() {
+        connections.splice(connections.indexOf(ws, 1))
+      })
     })
-  })
+  }
+  startServer().then()
 
   let paths: string[] = []
   return {
