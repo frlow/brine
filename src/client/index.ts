@@ -7,7 +7,7 @@ export type WcWrapperOptionsMeta = {
 export type WcWrapperOptions = {
   style: string
   tag: string
-  constructor: (self: any, emit: (name: string, detail?: any) => void) => void
+  init: (self: any, emit: (name: string, detail?: any) => void) => void
   attributes?: string[]
   attributeChangedCallback: (self: any, name: string, newValue: any) => void
   connected: (self: any, emit: (name: string, detail?: any) => void) => void
@@ -38,7 +38,7 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
       const styleTag = document.createElement('style')
       styleTag.innerHTML = this.options.style
       this.shadowRoot!.appendChild(styleTag)
-      this.options.constructor(this.self, this.emit)
+      this.options.init(this.self, this.emit)
     }
 
     static get observedAttributes() {

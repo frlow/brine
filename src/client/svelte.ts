@@ -5,7 +5,7 @@ export const createOptions = (
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {
-    constructor: (self, emit) => {
+    init: (self, emit) => {
       self.mountPoint = document.createElement('div')
       self.app = component.toString().startsWith('class')
         ? new component({ target: self.mountPoint })

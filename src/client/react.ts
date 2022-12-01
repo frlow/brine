@@ -8,7 +8,7 @@ export const createOptions = (
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {
-    constructor: (self, emit) => {
+    init: (self, emit) => {
       const container = document.createElement('div')
       self.shadowRoot.appendChild(container)
       self.app = createRoot(container)

@@ -2,7 +2,7 @@
 import { WcWrapperOptions } from '@frlow/brine/lib/client/index'
 
 export const options: WcWrapperOptions = {
-  constructor: (self, emit) => {
+  init: (self, emit) => {
     const count = document.createElement('div')
     count.id = 'count'
     self.shadowRoot.appendChild(count)

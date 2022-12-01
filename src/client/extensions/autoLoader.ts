@@ -9,24 +9,37 @@ export type PartialWcWrapperOptionsMeta = Pick<
   WcWrapperOptionsMeta,
   'tag' | 'attributes'
 >
+export type PartialWcWrapperOptionsAlt = Partial<
+  Pick<
+    WcWrapperOptions,
+    'init' | 'connected' | 'attributeChangedCallback' | 'disconnected' | 'style'
+  >
+>
 export const createAutoLoaderWrapper = (
   meta: PartialWcWrapperOptionsMeta,
-  loader: () => Promise<WcWrapperOptions>
+  loader: () => Promise<WcWrapperOptions>,
+  alt?: PartialWcWrapperOptionsAlt
 ): WcWrapper => {
   let loaded = false
-  const options: WcWrapperOptions = {
-    tag: meta.tag,
-    style: '',
-    attributes: meta.attributes,
+  const dummy = {
     disconnected: () => {},
+    init: () => {},
     connected: () => {},
-    constructor: (self) => {
+    style: '',
+    attributeChangedCallback: () => {},
+  }
+  const altApplied = alt ? { ...dummy, ...alt } : dummy
+  const options = {
+    ...altApplied,
+    init: (self: any, emit: any) => {
+      altApplied.init(self, emit)
       if (!loaded) {
         loaded = true
         loader().then((options) => self.constructor?.transplant(options, true))
       }
     },
-    attributeChangedCallback: () => {},
+    tag: meta.tag,
+    attributes: meta.attributes,
   }
   return createTransplantableWrapper(options)
 }

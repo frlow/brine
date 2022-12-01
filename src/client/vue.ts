@@ -6,7 +6,7 @@ export const createOptions = (
   app: ((props: any) => App) | any,
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => ({
-  constructor: (self) => {
+  init: (self) => {
     self.props = reactive<any>({})
   },
   attributeChangedCallback: (self, name, newValue) => {
