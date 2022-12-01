@@ -22,45 +22,45 @@ export const injectCss = async (
   const replacedMap = JSON.stringify(
     await stringReplaceSourceMap.generateSourceMap()
   )
-  return { replacedJs, replacedMap }
+  return [replacedJs, replacedMap]
 }
-// export const injectCssPlugin = (dummyCss?: string): Plugin => ({
-//   name: 'inject-css',
-//   setup(build) {
-//     if (build.initialOptions.write !== false)
-//       throw "write must be set to 'false'"
-//     build.onEnd(async (result) => {
-//       for (const file of result.outputFiles.filter((f) =>
-//         f.path.endsWith('.js')
-//       )) {
-//         const parsed = path.parse(file.path)
-//         fs.mkdirSync(parsed.dir, { recursive: true })
-//         const jsMap = result.outputFiles.find(
-//           (d) => d.path === `${file.path}.map`
-//         )
-//         const css = result.outputFiles.find((d) => {
-//           const regex = new RegExp(
-//             `${path
-//               .join(parsed.dir, parsed.name)
-//               .replace('.', '.')
-//               .replace(/-[A-Z,0-9]{8}/, '')}(-[A-Z,0-9]{8})?\.css$`
-//           )
-//           return regex.test(d.path)
-//         })
-//         if (css) {
-//           const { replacedJs, replacedMap } = await injectCss(
-//             file.text,
-//             jsMap.text,
-//             css.text,
-//             dummyCss
-//           )
-//           fs.writeFileSync(file.path, replacedJs, 'utf8')
-//           fs.writeFileSync(jsMap.path, replacedMap, 'utf8')
-//         } else {
-//           fs.writeFileSync(file.path, file.contents, 'utf8')
-//           fs.writeFileSync(jsMap.path, jsMap.contents, 'utf8')
-//         }
-//       }
-//     })
-//   },
-// })
+
+export const groupJsMapCssFiles = (
+  files: { path: string; text: string }[],
+  hashFilter: RegExp = /-[A-Z,0-9]{8}/
+) =>
+  files
+    .filter((file) => file.path.endsWith('.js'))
+    .map((file) => {
+      const js = file
+      const map = files.find((d) => d.path === js.path + '.map')
+      const jsParsed = path.parse(js.path)
+      const deHashedJs = jsParsed.name.replace(hashFilter, '')
+      const css = files.find((f) => {
+        const parsed = path.parse(f.path)
+        const deHashedName = parsed.name.replace(hashFilter, '')
+        return (
+          parsed.ext === '.css' &&
+          deHashedName === deHashedJs &&
+          jsParsed.dir === parsed.dir
+        )
+      })
+      return { js, map, css }
+    })
+
+export const writeJsMapCssGroup = async (
+  groupedFiles: ReturnType<typeof groupJsMapCssFiles>
+) => {
+  for (const fileGroup of groupedFiles) {
+    fs.mkdirSync(path.parse(fileGroup.js.path).dir, { recursive: true })
+    const [js, map] = fileGroup.css
+      ? await injectCss(
+          fileGroup.js.text,
+          fileGroup.map.text,
+          fileGroup.css.text
+        )
+      : [fileGroup.js.text, fileGroup.map.text]
+    fs.writeFileSync(fileGroup.js.path, js)
+    fs.writeFileSync(fileGroup.map.path, map)
+  }
+}

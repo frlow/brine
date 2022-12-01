@@ -14,9 +14,11 @@
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@frlow/brine/lib/client/*": [
-        "./src/client/*"
-      ]
+      "@frlow/brine": ["./src/client/index.ts"],
+      "@frlow/brine/vue": ["./src/client/vue.ts"],
+      "@frlow/brine/react": ["./src/client/react.ts"],
+      "@frlow/brine/svelte": ["./src/client/svelte.ts"],
+      "@frlow/brine/extensions": ["./src/client/extensions/index.ts"],
     }
   },
   "include": [

@@ -1,5 +1,4 @@
-import { defineComponent } from '@frlow/brine/lib/client/index'
-import { createWrapper } from '../src/client'
+import { defineComponent, createWrapper } from '@frlow/brine'
 
 Promise.all([
   import('./apps/react'),

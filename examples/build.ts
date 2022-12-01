@@ -15,10 +15,10 @@ import {
   writeTypesFile,
   writeWrappersFile,
   startHotComponentTransplantServer,
+  groupJsMapCssFiles,
+  writeJsMapCssGroup,
 } from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
-import { injectCss } from '../lib/build/index.js'
-import fs from 'fs'
 
 enum Mode {
   standalone,
@@ -46,7 +46,7 @@ const effectPlugin = <T>(
 
 // =================
 // Set mode here
-const buildMode: Mode = Mode.dev
+const buildMode: Mode = Mode.auto
 // End mode setter
 // =================
 
@@ -126,50 +126,30 @@ const start = async (mode: Mode) => {
           return startTime
         },
         async (options, result, startTime) => {
-          const jsFiles = result.outputFiles.filter((file) =>
-            file.path.endsWith('.js')
-          )
-
           // ============================
           // Css Injections
-          const fileTrios = jsFiles.map((file) => {
-            const js = file
-            const map = result.outputFiles.find(
-              (d) => d.path === js.path + '.map'
-            )
-            const css = result.outputFiles.find(
-              (f) =>
-                f.path.replace(/-[A-Z,0-9]{8}/, '') ===
-                js.path.replace(/-[A-Z,0-9]{8}\.js/, '.css')
-            )
-            return { js, map, css }
-          })
-          for (const ft of fileTrios) {
-            if (ft.css) {
-              const res = await injectCss(ft.js.text, ft.map.text, ft.css.text)
-              fs.writeFileSync(ft.js.path, res.replacedJs)
-              fs.writeFileSync(ft.map.path, res.replacedMap)
-            } else {
-              fs.writeFileSync(ft.js.path, ft.js.text)
-              fs.writeFileSync(ft.map.path, ft.map.text)
-            }
-          }
+          const groupedFiles = groupJsMapCssFiles(result.outputFiles)
+          await writeJsMapCssGroup(groupedFiles)
           // ============================
 
           // ============================
           // Hot Component Transplant
+          const jsFiles = result.outputFiles.filter((d) =>
+            d.path.endsWith('.js')
+          )
           const changedFiles = jsFiles.filter(
             (d) => !lastBuild.includes(d.path)
           )
           hct(changedFiles.map((f) => f.path.replace(process.cwd(), '')))
           lastBuild = jsFiles.map((f) => f.path)
-          console.log('Build time: ', Date.now() - startTime, 'ms')
           // ============================
+
+          console.log('Build time: ', Date.now() - startTime, 'ms')
         }
       ),
       // This is just for local dev
       aliasPlugin({
-        '@frlow/brine/lib/client': './src/client',
+        '@frlow/brine': './src/client/index.ts',
       }),
     ],
     watch: dev,

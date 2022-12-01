@@ -1,5 +1,5 @@
-import { createTransplantableWrapper } from '@frlow/brine/lib/client/extensions/transplant'
-import { defineComponent } from '@frlow/brine/lib/client/index'
+import { createTransplantableWrapper } from '@frlow/brine/extensions'
+import { defineComponent } from '@frlow/brine'
 
 Promise.all([
   import('./apps/react'),
