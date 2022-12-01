@@ -20,7 +20,6 @@ export const createAutoLoaderWrapper = (
   loader: () => Promise<WcWrapperOptions>,
   alt?: PartialWcWrapperOptionsAlt
 ): WcWrapper => {
-  let loaded = false
   const dummy = {
     disconnected: () => {},
     init: () => {},
@@ -31,15 +30,28 @@ export const createAutoLoaderWrapper = (
   const altApplied = alt ? { ...dummy, ...alt } : dummy
   const options = {
     ...altApplied,
-    init: (self: any, emit: any) => {
-      altApplied.init(self, emit)
-      if (!loaded) {
-        loaded = true
-        loader().then((options) => self.constructor?.transplant(options, true))
-      }
-    },
     tag: meta.tag,
     attributes: meta.attributes,
   }
-  return createTransplantableWrapper(options)
+  const wrapper = createTransplantableWrapper(options)
+  return class extends wrapper {
+    static loaded = false
+    public static disableLoad = () => {
+      const temp = this.loaded
+      this.loaded = true
+      return temp
+    }
+    public static load = async () => {
+      if (!this.disableLoad()) {
+        const options = await loader()
+        ;(this as any).transplant(options, true)
+      }
+    }
+
+    init() {
+      super.init()
+      const self: any = this.constructor
+      self.load()
+    }
+  }
 }
