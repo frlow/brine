@@ -4,10 +4,10 @@ import {
   AnalyzeFileFunction,
   getComponentName,
   PropDefinition,
+  kebabize,
 } from './common.js'
 import ScriptTarget = ts.ScriptTarget
 import SyntaxKind = ts.SyntaxKind
-import { kebabize } from '../utils/string.js'
 
 export const getPropsType = (path: string, code: string) => {
   const sourceFile: any = ts.createSourceFile(path, code, ScriptTarget.ESNext)

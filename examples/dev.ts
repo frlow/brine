@@ -1,17 +1,21 @@
 import { createTransplantableWrapper } from '@frlow/brine/lib/client/extensions/transplant'
 import { defineComponent } from '@frlow/brine/lib/client/index'
-import { initHmr } from '@frlow/brine/lib/client/hmr'
 
-const setup = async () => {
-  const apps = await Promise.all([
-    import('./apps/react'),
-    import('./apps/vue'),
-    import('./apps/svelte'),
-    import('./apps/vanilla'),
-  ])
-  const wrappers = apps.map((app) => createTransplantableWrapper(app.options))
-  wrappers.forEach((w) => defineComponent(w))
-  initHmr(wrappers)
+Promise.all([
+  import('./apps/react'),
+  import('./apps/vue'),
+  import('./apps/svelte'),
+  import('./apps/vanilla'),
+]).then((apps) =>
+  apps.forEach((app) =>
+    defineComponent(createTransplantableWrapper(app.options))
+  )
+)
+
+const ws = new WebSocket('ws://localhost:8080')
+ws.onmessage = async (ev) => {
+  import(ev.data).then((r) => {
+    if (r.options?.tag)
+      (customElements.get(r.options.tag) as any).transplant(r.options)
+  })
 }
-
-setup().then()

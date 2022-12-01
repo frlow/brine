@@ -4,10 +4,10 @@ import {
   AnalyzeFileFunction,
   getComponentName,
   PropDefinition,
+  kebabize,
 } from './common.js'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
-import { kebabize } from '../utils/string.js'
 
 const getEmits = (classSource: any, sourceFile: SourceFile) => {
   const eventDispatcher = classSource.members.find(

@@ -3,10 +3,6 @@ import { analyzeJsxFile } from './jsx.js'
 import { analyzeVueFile } from './vue.js'
 import { analyzeSvelteFile } from './svelte.js'
 
-export * from './indexFile.js'
-export * from './metaFile.js'
-export * from './typesFile.js'
-
 export const analyze = async (
   file: string,
   code: string,

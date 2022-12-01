@@ -1,10 +1,8 @@
-import { AnalysisResult, Framework } from './common.js'
-import { analyze } from './index.js'
+import { AnalysisResult, Framework, camelize } from '../analysis/common.js'
+import { analyze } from '../analysis/index.js'
 import fs from 'fs'
 import path from 'path'
-import { wrapperCode, wrapperDTs } from './wrapperCode.js'
-import { camelize } from '../utils/string.js'
-import ts from 'typescript'
+import { wrapperCode } from './wrapperCode.js'
 
 export const generateTypes = (files: TypeFile[], prefix?: string) =>
   Promise.all(
@@ -51,24 +49,5 @@ ${results
         .join(', ')}}>('${r.tag}')`
   )
   .join('\n')}`
-  const jsx = ts.transpile(code, {
-    jsx: ts.JsxEmit.Preserve,
-    module: ts.ModuleKind.ES2022,
-    target: ts.ScriptTarget.ES2020,
-  })
-  const dts = wrapperDTs(
-    results.map((r) => ({
-      name: r.name,
-      types: r.props
-        .map((p) => `${p.name}${p.optional ? '?' : ''}:${p.type}`)
-        .concat(
-          r.emits.map(
-            (e) => `on${camelize(e.name)}${e.optional ? '?' : ''}:${e.type}`
-          )
-        )
-        .join(', '),
-    }))
-  )
-  fs.writeFileSync(path.join(dist, 'reactWrappers.jsx'), jsx, 'utf8')
-  fs.writeFileSync(path.join(dist, 'reactWrappers.d.ts'), dts, 'utf8')
+  fs.writeFileSync(path.join(dist, 'reactWrappers.tsx'), code, 'utf8')
 }
