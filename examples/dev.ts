@@ -1,5 +1,5 @@
-import { createTransplantableWrapper } from '@frlow/brine/extensions'
-import { defineComponent } from '@frlow/brine'
+import { createTransplantableWrapper } from 'brinejs/extensions'
+import { defineComponent } from 'brinejs'
 
 Promise.all([
   import('./apps/react'),

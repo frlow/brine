@@ -1,5 +1,5 @@
-import { defineComponent } from '@frlow/brine'
-import { createAutoLoaderWrapper } from '@frlow/brine/extensions'
+import { defineComponent } from 'brinejs'
+import { createAutoLoaderWrapper } from 'brinejs/extensions'
 
 const attributes = ['count', 'obj', 'text']
 const apps = [

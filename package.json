@@ -1,20 +1,20 @@
 {
-  "name": "@frlow/brine",
-  "version": "2.0.0",
+  "name": "brinejs",
+  "version": "1.0.0",
   "repository": "https://github.com/frlow/brine",
   "author": "Fredrik Löwenhamn <fredrik.lowenhamn@gmail.com>",
   "license": "MIT",
-  "main": "lib/build/index.js",
   "type": "module",
   "files": [
     "lib"
   ],
   "scripts": {
-    "build": "rm -r lib || true && tsc -p ./tsconfig.build.json",
+    "build": "rm -r lib || true && tsc -p ./tsconfig.build.json && cp package.lib.json lib/package.json",
     "dev": "run-p -r \"dev:build watch\" \"dev:serve\"",
     "dev:build": "rm -r dist || true && esno examples/build.ts",
     "dev:serve": "serve .",
-    "dev:prod": "yarn dev:build && yarn dev:serve"
+    "dev:prod": "yarn dev:build && yarn dev:serve",
+    "npm-publish": "cd lib && npm publish"
   },
   "devDependencies": {
     "@tsconfig/svelte": "^3.0.0",

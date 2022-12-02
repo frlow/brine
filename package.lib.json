@@ -1,0 +1,30 @@
+{
+  "name": "brinejs",
+  "version": "1.0.0",
+  "repository": "https://github.com/frlow/brine",
+  "author": "Fredrik Löwenhamn <fredrik.lowenhamn@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    },
+    "./vue": {
+      "import": "./lib/vue.js",
+      "types": "./lib/vue.d.ts"
+    },
+    "./react": {
+      "import": "./lib/react.js",
+      "types": "./lib/react.d.ts"
+    },
+    "./svelte": {
+      "import": "./lib/svelte.js",
+      "types": "./lib/svelte.d.ts"
+    },
+    "./build": {
+      "import": "./lib/build/index.js",
+      "types": "./lib/build/index.d.ts"
+    }
+  }
+}

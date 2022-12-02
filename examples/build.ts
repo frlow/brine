@@ -149,7 +149,7 @@ const start = async (mode: Mode) => {
       ),
       // This is just for local dev
       aliasPlugin({
-        '@frlow/brine': './src/client/index.ts',
+        brinejs: './src/index.ts',
       }),
     ],
     watch: dev,

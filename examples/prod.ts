@@ -1,4 +1,4 @@
-import { defineComponent, createWrapper } from '@frlow/brine'
+import { defineComponent, createWrapper } from 'brinejs'
 
 Promise.all([
   import('./apps/react'),

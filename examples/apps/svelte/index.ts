@@ -1,4 +1,4 @@
-import { createOptions } from '@frlow/brine/svelte'
+import { createOptions } from 'brinejs/svelte'
 import App from './SvelteApp.svelte'
 
 const meta = {
