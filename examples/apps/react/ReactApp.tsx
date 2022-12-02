@@ -6,13 +6,11 @@ export default ({
   text,
   obj,
   onMyEvent,
-  onOther,
 }: {
   count: number
   text: string
   obj: { val: string }
   onMyEvent: (text: string) => void
-  onOther: () => void
 }) => {
   useEffect(() => {
     console.log('React Mount')

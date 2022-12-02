@@ -19,7 +19,6 @@ const handle = () => {
 defineProps<{ count: number, text: string, obj: { val: string } }>()
 const emit = defineEmits<{
   (e: 'my-event', detail: string): void
-  (e: 'other'): void
 }>()
 </script>
 

@@ -2,7 +2,7 @@ import { createOptions } from 'brinejs/svelte'
 import App from './SvelteApp.svelte'
 
 const meta = {
-  emits: ["my-event","other"],
+  emits: ["my-event"],
   attributes: ["count","obj","text"],
   style: `.dummy-style{}`,
   tag: 'my-svelte-app',
