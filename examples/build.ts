@@ -17,6 +17,7 @@ import {
   startHotComponentTransplantServer,
   groupJsMapCssFiles,
   writeJsMapCssGroup,
+  writeVsCodeTypes,
 } from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
 
@@ -107,6 +108,7 @@ const start = async (mode: Mode) => {
           // ============================
           // Generate type docs
           await writeTypesFile(types, 'dist')
+          await writeVsCodeTypes(types, 'dist')
           await writeWrappersFile(types, 'dist/wrapper')
           // ============================
           return startTime

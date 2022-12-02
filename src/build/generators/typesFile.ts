@@ -59,3 +59,25 @@ ${results
   .join('\n')}`
   fs.writeFileSync(path.join(dist, 'reactWrappers.tsx'), code, 'utf8')
 }
+
+export const writeVsCodeTypes = async (
+  results: AnalysisResult[],
+  dist: string
+) => {
+  const types = {
+    tags: results.map((ar) => ({
+      name: ar.tag,
+      attributes: ar.props.map((p) => ({ name: p.name })),
+    })),
+  }
+  fs.writeFileSync(
+    path.join(dist, 'vscode.html-custom-data.json'),
+    JSON.stringify(types, null, 2),
+    'utf8'
+  )
+}
+
+export const writeWebTypes = async (
+  results: AnalysisResult[],
+  dist: string
+) => {}
