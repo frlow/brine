@@ -14,9 +14,13 @@ export const startHotComponentTransplantServer = (port: number = 8080) => {
     })
   }
   startServer().then()
-  return (urls: string[]) => {
-    for (const url of urls) {
+  let lastBuild: string[] = []
+  return (paths: string[]) => {
+    for (const url of paths
+      .filter((path) => path.endsWith('.js'))
+      .filter((url) => !lastBuild.includes(url))) {
       connections.forEach((ws) => ws.send(url))
     }
+    lastBuild = paths
   }
 }

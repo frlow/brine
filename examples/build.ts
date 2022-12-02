@@ -126,14 +126,7 @@ const start = async (mode: Mode) => {
 
           // ============================
           // Hot Component Transplant
-          const jsFiles = result.outputFiles.filter((d) =>
-            d.path.endsWith('.js')
-          )
-          const changedFiles = jsFiles.filter(
-            (d) => !lastBuild.includes(d.path)
-          )
-          hct(changedFiles.map((f) => f.path.replace(process.cwd(), '')))
-          lastBuild = jsFiles.map((f) => f.path)
+          hct(result.outputFiles.map((f) => f.path.replace(process.cwd(), '')))
           // ============================
 
           console.log('Build time: ', Date.now() - startTime, 'ms')

@@ -8,14 +8,13 @@ export const createTransplantableWrapper = (
     connectedCallback() {
       super.connectedCallback()
       const self: any = this.constructor
-      if (self.enable) self.transplantable.push(this)
+      self.transplantable.push(this)
     }
 
     public disconnectedCallback() {
       super.disconnectedCallback()
       const self: any = this.constructor
-      if (self.enable)
-        self.transplantable.splice(self.transplantable.indexOf(this), 1)
+      self.transplantable.splice(self.transplantable.indexOf(this), 1)
     }
 
     public reload() {
@@ -27,17 +26,11 @@ export const createTransplantableWrapper = (
     }
 
     static transplantable: any[] = []
-    static enable = true
 
-    public static transplant(
-      options: WcWrapperOptions,
-      disable: boolean = false
-    ) {
-      if (!this.enable) return
+    public static transplant(options: WcWrapperOptions) {
       const temp = [...this.transplantable]
       temp.forEach((t) => t.disconnectedCallback())
       this.options = options
-      if (disable) this.enable = false
       temp.forEach((t) => t.reload())
     }
   }

@@ -44,7 +44,7 @@ export const createAutoLoaderWrapper = (
     public static load = async () => {
       if (!this.disableLoad()) {
         const options = await loader()
-        ;(this as any).transplant(options, true)
+        ;(this as any).transplant(options)
       }
     }
 
