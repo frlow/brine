@@ -2,7 +2,6 @@ import { AnalysisResult, Framework, camelize } from '../analysis/common.js'
 import { analyze } from '../analysis/index.js'
 import fs from 'fs'
 import path from 'path'
-import { wrapperCode } from './wrapperCode.js'
 import { parseFramework } from './index.js'
 
 export const generateTypes = (files: (TypeFile | string)[], prefix?: string) =>
@@ -41,7 +40,7 @@ export const writeWrappersFile = async (
   dist: string
 ) => {
   if (!fs.existsSync(dist)) fs.mkdirSync(dist, { recursive: true })
-  const code = `${wrapperCode}
+  const code = `import {wrapWc} from 'brinejs/wrapper'
 ${results
   .map(
     (r) =>
@@ -49,7 +48,10 @@ ${results
         .map((p) => `${p.name}${p.optional ? '?' : ''}:${p.type}`)
         .concat(
           r.emits.map(
-            (e) => `on${camelize(e.name)}${e.optional ? '?' : ''}:${e.type}`
+            (e) =>
+              `on${camelize(e.name)}${e.optional ? '?' : ''}:(detail: ${
+                e.type
+              })=>void`
           )
         )
         .join(', ')}}>('${r.tag}')`

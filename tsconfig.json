@@ -14,11 +14,24 @@
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "brinejs": ["./src/index.ts"],
-      "brinejs/vue": ["./src/vue.ts"],
-      "brinejs/react": ["./src/react.ts"],
-      "brinejs/svelte": ["./src/svelte.ts"],
-      "brinejs/extensions": ["./src/extensions/index.ts"],
+      "brinejs": [
+        "./src/index.ts"
+      ],
+      "brinejs/vue": [
+        "./src/vue.ts"
+      ],
+      "brinejs/react": [
+        "./src/react.ts"
+      ],
+      "brinejs/svelte": [
+        "./src/svelte.ts"
+      ],
+      "brinejs/wrapper": [
+        "./src/wrapper.ts"
+      ],
+      "brinejs/extensions": [
+        "./src/extensions/index.ts"
+      ]
     }
   },
   "include": [

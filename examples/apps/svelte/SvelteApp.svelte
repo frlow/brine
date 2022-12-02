@@ -10,7 +10,7 @@
 
   onMount(() => console.log("Svelte mount"))
   onDestroy(() => console.log("Svelte unmount"))
-  const dispatch = createEventDispatcher<{ "my-event": string }>()
+  const dispatch = createEventDispatcher<{ "my-event": string, other: void }>()
   export let count: number = 12
   export let obj: { val: string }
   export let text: string

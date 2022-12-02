@@ -2,7 +2,7 @@ import { createOptions } from 'brinejs/react'
 import App from './ReactApp.js'
 
 const meta = {
-  emits: ["my-event"],
+  emits: ["my-event","other"],
   attributes: ["count","text","obj"],
   style: `.dummy-style{}`,
   tag: 'my-react-app',
