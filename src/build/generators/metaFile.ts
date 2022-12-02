@@ -2,6 +2,7 @@ import { analyze } from '../analysis/index.js'
 import { Framework, kebabize } from '../analysis/common.js'
 import path from 'path'
 import fs from 'fs'
+import { parseFramework } from './index.js'
 
 export const generateMetaCode = async (
   file: string,
@@ -35,11 +36,12 @@ export const generateMetaFile = async (
 
 export const writeMetaFile = async (
   file: string,
-  framework: Framework,
   prefixOrTag: string,
+  framework?: Framework,
   fileName?: string
 ) => {
-  const code = await generateMetaFile(file, framework, prefixOrTag)
+  const parsedFramework = framework || parseFramework(file)
+  const code = await generateMetaFile(file, parsedFramework, prefixOrTag)
   const parsed = path.parse(file)
   const dir = parsed.dir
   const target = path.join(dir, fileName || `${parsed.name}.meta.ts`)

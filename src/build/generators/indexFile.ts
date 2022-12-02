@@ -2,6 +2,7 @@ import { Framework } from '../analysis/common.js'
 import path from 'path'
 import fs from 'fs'
 import { generateMetaCode } from './metaFile.js'
+import { parseFramework } from './index.js'
 
 export const generateIndexFile = async (
   file: string,
@@ -21,11 +22,12 @@ export const options = createOptions(App, meta)
 
 export const writeIndexFile = async (
   file: string,
-  framework: Framework,
   prefixOrTag: string,
+  framework?: Framework,
   fileName?: string
 ) => {
-  const code = await generateIndexFile(file, framework, prefixOrTag)
+  const parsedFramework = framework || parseFramework(file)
+  const code = await generateIndexFile(file, parsedFramework, prefixOrTag)
   const dir = path.parse(file).dir
   const target = path.join(dir, fileName || 'index.ts')
   fs.writeFileSync(target, code, 'utf8')

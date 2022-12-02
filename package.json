@@ -14,7 +14,7 @@
     "dev:build": "rm -r dist || true && esno examples/build.ts",
     "dev:serve": "serve .",
     "dev:prod": "yarn dev:build && yarn dev:serve",
-    "npm-publish": "cd lib && npm publish"
+    "npm-publish": "yarn build && cd lib && npm publish"
   },
   "devDependencies": {
     "@tsconfig/svelte": "^3.0.0",

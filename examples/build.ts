@@ -91,30 +91,16 @@ const start = async (mode: Mode) => {
 
           // ============================
           // Generate boilerplate
-          await writeIndexFile(
-            'examples/apps/react/ReactApp.tsx',
-            'react',
-            prefix
-          )
-          await writeIndexFile(
-            'examples/apps/svelte/SvelteApp.svelte',
-            'svelte',
-            prefix
-          )
-          await writeMetaFile('examples/apps/vue/VueApp.vue', 'vue', prefix)
+          await writeIndexFile('examples/apps/react/ReactApp.tsx', prefix)
+          await writeIndexFile('examples/apps/svelte/SvelteApp.svelte', prefix)
+          await writeMetaFile('examples/apps/vue/VueApp.vue', prefix)
           const types = await generateTypes(
             [
-              {
-                path: 'examples/apps/react/ReactApp.tsx',
-                framework: 'react',
-              },
-              {
-                path: 'examples/apps/svelte/SvelteApp.svelte',
-                framework: 'svelte',
-              },
-              { path: 'examples/apps/vue/VueApp.vue', framework: 'vue' },
+              'examples/apps/react/ReactApp.tsx',
+              'examples/apps/svelte/SvelteApp.svelte',
+              'examples/apps/vue/VueApp.vue',
             ],
-            'my'
+            prefix
           )
           // ============================
 
@@ -128,8 +114,7 @@ const start = async (mode: Mode) => {
         async (options, result, startTime) => {
           // ============================
           // Css Injections
-          const groupedFiles = groupJsMapCssFiles(result.outputFiles)
-          await writeJsMapCssGroup(groupedFiles)
+          await writeJsMapCssGroup(groupJsMapCssFiles(result.outputFiles))
           // ============================
 
           // ============================

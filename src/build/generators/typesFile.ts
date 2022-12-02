@@ -3,19 +3,25 @@ import { analyze } from '../analysis/index.js'
 import fs from 'fs'
 import path from 'path'
 import { wrapperCode } from './wrapperCode.js'
+import { parseFramework } from './index.js'
 
-export const generateTypes = (files: TypeFile[], prefix?: string) =>
+export const generateTypes = (files: (TypeFile | string)[], prefix?: string) =>
   Promise.all(
-    files.map((file) =>
-      fs.promises.readFile(file.path, 'utf8').then((f) =>
-        analyze(file.path, f, file.framework).then((ar) => {
-          if (file.tag) ar.tag = file.tag
-          else if (prefix) ar.tag = `${prefix}-${ar.tag}`
-          else throw 'prefix or tag must be set'
-          return ar
-        })
+    files
+      .map(
+        (file: any): TypeFile =>
+          file.path ? file : { path: file, framework: parseFramework(file) }
       )
-    )
+      .map((file) =>
+        fs.promises.readFile(file.path, 'utf8').then((f) =>
+          analyze(file.path, f, file.framework).then((ar) => {
+            if (file.tag) ar.tag = file.tag
+            else if (prefix) ar.tag = `${prefix}-${ar.tag}`
+            else throw 'prefix or tag must be set'
+            return ar
+          })
+        )
+      )
   )
 
 export type TypeFile = { path: string; tag?: string; framework: Framework }
