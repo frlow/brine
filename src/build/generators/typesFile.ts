@@ -70,6 +70,7 @@ export const writeVsCodeTypes = async (
       attributes: ar.props.map((p) => ({ name: p.name })),
     })),
   }
+  if (!fs.existsSync(dist)) fs.mkdirSync(dist, { recursive: true })
   fs.writeFileSync(
     path.join(dist, 'vscode.html-custom-data.json'),
     JSON.stringify(types, null, 2),
@@ -79,5 +80,36 @@ export const writeVsCodeTypes = async (
 
 export const writeWebTypes = async (
   results: AnalysisResult[],
-  dist: string
-) => {}
+  dist: string,
+  { name, version }: { name: string; version: string }
+) => {
+  const webTypes: any = {
+    $schema: 'http://json.schemastore.org/web-types',
+    'description-markup': 'markdown',
+    name,
+    version,
+    contributions: {
+      html: {
+        elements: results.map((r) => ({
+          name: r.tag,
+          js: {
+            events: r.emits.map((e) => ({ name: e.name })),
+          },
+          attributes: r.props.map((p) => ({
+            name: p.name,
+            description: p.optional ? 'optional' : 'required',
+            value: {
+              type: p.type,
+            },
+          })),
+        })),
+      },
+    },
+  }
+  if (!fs.existsSync(dist)) fs.mkdirSync(dist, { recursive: true })
+  fs.writeFileSync(
+    path.join(dist, 'web-types.json'),
+    JSON.stringify(webTypes, null, 2),
+    'utf8'
+  )
+}

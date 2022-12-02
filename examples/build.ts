@@ -18,6 +18,7 @@ import {
   groupJsMapCssFiles,
   writeJsMapCssGroup,
   writeVsCodeTypes,
+  writeWebTypes,
 } from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
 
@@ -109,6 +110,10 @@ const start = async (mode: Mode) => {
           // Generate type docs
           await writeTypesFile(types, 'dist')
           await writeVsCodeTypes(types, 'dist')
+          await writeWebTypes(types, 'dist', {
+            name: 'example',
+            version: '1.0.0',
+          })
           await writeWrappersFile(types, 'dist/wrapper')
           // ============================
           return startTime
