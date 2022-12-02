@@ -7,24 +7,32 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./lib/index.js",
-      "types": "./lib/index.d.ts"
+      "import": "./index.js",
+      "types": "./index.d.ts"
     },
     "./vue": {
-      "import": "./lib/vue.js",
-      "types": "./lib/vue.d.ts"
+      "import": "./vue.js",
+      "types": "./vue.d.ts"
     },
     "./react": {
-      "import": "./lib/react.js",
-      "types": "./lib/react.d.ts"
+      "import": "./react.js",
+      "types": "./react.d.ts"
     },
     "./svelte": {
-      "import": "./lib/svelte.js",
-      "types": "./lib/svelte.d.ts"
+      "import": "./svelte.js",
+      "types": "./svelte.d.ts"
+    },
+    "./wrapper": {
+      "import": "./wrapper.js",
+      "types": "./wrapper.d.ts"
     },
     "./build": {
-      "import": "./lib/build/index.js",
-      "types": "./lib/build/index.d.ts"
+      "import": "./build/index.js",
+      "types": "./build/index.d.ts"
+    },
+    "./extensions": {
+      "import": "./extensions/index.js",
+      "types": "./extensions/index.d.ts"
     }
   }
 }

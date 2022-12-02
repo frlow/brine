@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode, useEffect, useRef } from 'react'
+import React, { CSSProperties, ReactNode, useEffect, useRef } from 'react'
 
 export const kebabize = (str: string) =>
   str
@@ -52,9 +52,9 @@ export const wrapWc =
         handlers.forEach((h) => ref.current?.removeEventListener(h.key, h.func))
     })
     const Component: (args: any) => JSX.Element = tag as any
-    return (
-      <Component {...props} ref={ref}>
-        {args.children}
-      </Component>
-    )
+    return React.createElement(
+      Component,
+      { ...props, ref: ref },
+      args.children
+    ) as JSX.Element
   }
