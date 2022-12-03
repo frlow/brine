@@ -24,3 +24,12 @@ export const startHotComponentTransplantServer = (port: number = 8080) => {
     lastBuild = paths
   }
 }
+
+export const hotReloadSnippet = (
+  port: number = 8080
+) => `new WebSocket('ws://localhost:8080').onmessage = async (ev) => {
+  import(ev.data).then((r) => {
+    if (r.options?.tag)
+      customElements.get(r.options.tag).transplant(r.options)
+  })
+}`

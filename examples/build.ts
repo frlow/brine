@@ -19,6 +19,7 @@ import {
   writeJsMapCssGroup,
   writeVsCodeTypes,
   writeWebTypes,
+  hotReloadSnippet,
 } from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
 
@@ -72,6 +73,11 @@ const start = async (mode: Mode) => {
       ? ['examples/auto.ts']
       : []
   const hct = dev ? startHotComponentTransplantServer() : () => {}
+  console.log(
+    `Use the following code in console to start hot transplanting components\n===================\n`,
+    hotReloadSnippet(),
+    `\n===================`
+  )
   const result = await esbuild.build({
     entryPoints,
     format: 'esm',
