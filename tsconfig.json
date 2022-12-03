@@ -37,8 +37,5 @@
   "include": [
     "src",
     "examples"
-  ],
-  "exclude": [
-    "test/**/*"
   ]
 }

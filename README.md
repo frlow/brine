@@ -2,6 +2,5 @@
 
 ### TODO:
 
-- [ ] WebTypes
 - [ ] ReadMe
 - [ ] Testing

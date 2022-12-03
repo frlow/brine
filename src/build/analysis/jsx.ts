@@ -31,7 +31,7 @@ export const analyzeJsxFile: AnalyzeFileFunction = async (filePath, code) => {
         (d: PropertySignature) => d.type?.kind !== SyntaxKind.FunctionType
       )
       .map((e: any) => ({
-        name: e.name.text,
+        name: kebabize(e.name.text),
         type: e.type.getText(sourceFile),
         optional: !!e.questionToken,
       }))

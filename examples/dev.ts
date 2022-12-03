@@ -11,10 +11,3 @@ Promise.all([
     defineComponent(createTransplantableWrapper(app.options))
   )
 )
-
-// new WebSocket('ws://localhost:8080').onmessage = async (ev) => {
-//   import(ev.data).then((r) => {
-//     if (r.options?.tag)
-//       (customElements.get(r.options.tag) as any).transplant(r.options)
-//   })
-// }
