@@ -1,11 +1,6 @@
 import ts, { PropertySignature } from 'typescript'
 import path from 'path'
-import {
-  AnalyzeFileFunction,
-  getComponentName,
-  PropDefinition,
-  kebabize,
-} from './common.js'
+import { AnalyzeFileFunction, PropDefinition, kebabize } from './index.js'
 import ScriptTarget = ts.ScriptTarget
 import SyntaxKind = ts.SyntaxKind
 
@@ -49,7 +44,7 @@ export const analyzeJsxFile: AnalyzeFileFunction = async (filePath, code) => {
           type: e.type.parameters[0]?.type.getText(sourceFile) || 'void',
         }
       }) || []
-  const name = getComponentName(path.parse(filePath).name)
+  const name = path.parse(filePath).name.split('.')[0]
   const slots = code
     .match(/<slot(.*?)>/g)
     ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])

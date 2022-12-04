@@ -1,14 +1,5 @@
 import React, { CSSProperties, ReactNode, useEffect, useRef } from 'react'
-
-export const kebabize = (str: string) =>
-  str
-    .split('')
-    .map((letter, idx) => {
-      return letter.toUpperCase() === letter && letter !== '-'
-        ? `${idx !== 0 ? '-' : ''}${letter.toLowerCase()}`
-        : letter
-    })
-    .join('')
+import { kebabize } from './utils/kebab.js'
 
 export const filterProps = <T extends { [i: string]: any }>(
   obj: T,

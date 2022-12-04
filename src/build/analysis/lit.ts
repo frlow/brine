@@ -1,11 +1,6 @@
 import path from 'path'
 import ts, { createSourceFile, SourceFile } from 'typescript'
-import {
-  AnalyzeFileFunction,
-  getComponentName,
-  PropDefinition,
-  kebabize,
-} from './common.js'
+import { AnalyzeFileFunction, PropDefinition, kebabize } from './index.js'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
 
@@ -49,7 +44,7 @@ export const analyzeLitFile: AnalyzeFileFunction = async (filePath, code) => {
     .match(/<slot(.*?)>/g)
     ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
     .filter((d) => d)
-  const name = getComponentName(path.parse(filePath).name)
+  const name = path.parse(filePath).name.split('.')[0]
   const tag = kebabize(name)
   return {
     props,

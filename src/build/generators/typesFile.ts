@@ -1,8 +1,12 @@
-import { AnalysisResult, Framework, camelize } from '../analysis/common.js'
-import { analyze } from '../analysis/index.js'
 import fs from 'fs'
 import path from 'path'
-import { parseFramework } from './index.js'
+import {
+  parseFramework,
+  camelize,
+  analyze,
+  Framework,
+  AnalysisResult,
+} from './index.js'
 
 export const generateTypes = (files: (TypeFile | string)[], prefix?: string) =>
   Promise.all(

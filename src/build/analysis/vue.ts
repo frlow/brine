@@ -12,7 +12,7 @@ import {
   findProp,
   PropDefinition,
   kebabize,
-} from './common.js'
+} from './index.js'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
 

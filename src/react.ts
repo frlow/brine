@@ -1,6 +1,6 @@
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
-import { camelize } from './kebab.js'
+import { camelize } from './utils/kebab.js'
 import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 
 export const createOptions = (

@@ -1,5 +1,5 @@
 import { App, createApp, h, reactive } from '@vue/runtime-dom'
-import { camelize } from './kebab.js'
+import { camelize } from './utils/kebab.js'
 import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 
 export const createOptions = (

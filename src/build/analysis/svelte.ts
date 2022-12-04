@@ -6,7 +6,7 @@ import ts, {
   VariableStatement,
 } from 'typescript'
 import path from 'path'
-import { AnalyzeFileFunction, PropDefinition, kebabize } from './common.js'
+import { AnalyzeFileFunction, PropDefinition, kebabize } from './index.js'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
 

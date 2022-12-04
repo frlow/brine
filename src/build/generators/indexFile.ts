@@ -1,4 +1,4 @@
-import { Framework } from '../analysis/common.js'
+import { Framework } from './index.js'
 import path from 'path'
 import fs from 'fs'
 import { generateMetaCode } from './metaFile.js'
