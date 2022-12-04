@@ -1,3 +1,5 @@
+import { kebabize } from './utils/kebab.js'
+
 export type WcWrapperOptionsMeta = {
   attributes: string[]
   emits: string[]
@@ -24,7 +26,7 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     }
 
     emit = (name: string, detail?: any) => {
-      this.self.dispatchEvent(new CustomEvent(name, { detail }))
+      this.self.dispatchEvent(new CustomEvent(kebabize(name), { detail }))
     }
 
     constructor() {
