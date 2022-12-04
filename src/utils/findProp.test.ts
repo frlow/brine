@@ -10,7 +10,7 @@ describe('find prop', () => {
     expect(prop.parents).toStrictEqual([b, obj])
   })
 
-  test('looping props', () => {
+  test('looping props', async () => {
     const c = { c: 'val' }
     const b: any = { b: c, obj: {} }
     const obj = { a: b }
