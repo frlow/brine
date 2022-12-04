@@ -23,7 +23,7 @@ const getProps = (sourceFile: SourceFile): PropDefinition[] => {
   if (!defineProps) return []
   const props = (defineProps.typeArguments![0] as TypeLiteralNode).members
   return props.map((p: any) => ({
-    name: p.name.getText(sourceFile),
+    name: kebabize(p.name.getText(sourceFile).replace(/"|'/g, '')),
     type: p.type!.getText(sourceFile),
     optional: !!p.questionToken,
   }))
@@ -51,7 +51,9 @@ const getEmits = (sourceFile: SourceFile): PropDefinition[] => {
   if (!defineEmits) return []
   const emits = (defineEmits.typeArguments![0] as TypeLiteralNode).members
   return emits.map((p: any) => ({
-    name: kebabize(p.parameters[0].type.literal.text),
+    name: kebabize(
+      p.parameters[0].type.getText(sourceFile).replace(/"|'/g, '')
+    ),
     type: p.parameters[1]?.type.getText(sourceFile) || 'void',
     optional: !!p.type.types?.some(
       (t: any) => t.kind === SyntaxKind.UndefinedKeyword

@@ -119,12 +119,14 @@ export const testAnalyzer = (
         { name: 'literal', type: "'a'|'b'", optional: false },
       ])
     })
-    test('Optional', async () => {
-      const result = await analyze(fileName, testCases.optionalEmit)
-      expect(result.emits).toStrictEqual([
-        { name: 'optional', type: 'string', optional: true },
-      ])
-    })
+    if (testCases.optionalEmit !== null)
+      // No good way to define optional emits in vue
+      test('Optional', async () => {
+        const result = await analyze(fileName, testCases.optionalEmit)
+        expect(result.emits).toStrictEqual([
+          { name: 'optional', type: 'string', optional: true },
+        ])
+      })
     test('Multiple', async () => {
       const result = await analyze(fileName, testCases.multipleEmits)
       expect(result.emits).toStrictEqual([
