@@ -1,7 +1,7 @@
-import { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
-import { camelize } from './common.js'
+import { camelize } from './kebab.js'
+import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 
 export const createOptions = (
   Component: (args: any) => JSX.Element,

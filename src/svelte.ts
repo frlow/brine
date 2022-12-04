@@ -1,4 +1,4 @@
-import { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
+import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 
 export const createOptions = (
   component: any | ((element: HTMLElement) => any),

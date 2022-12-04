@@ -1,6 +1,6 @@
-import { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 import { App, createApp, h, reactive } from '@vue/runtime-dom'
-import { camelize } from './common.js'
+import { camelize } from './kebab.js'
+import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 
 export const createOptions = (
   app: ((props: any) => App) | any,
