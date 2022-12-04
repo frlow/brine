@@ -19,5 +19,5 @@ export default {
     '(.+)\\.js': '$1',
   },
   extensionsToTreatAsEsm: ['.ts'],
-  testPathIgnorePatterns: ['common.test.ts'],
+  testPathIgnorePatterns: ['shared.test.ts'],
 }

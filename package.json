@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "rm -r lib || true && tsc -p ./tsconfig.build.json && cp package.lib.json lib/package.json && cp README.md lib",
-    "test": "jest",
+    "test": "yarn node --experimental-vm-modules $(yarn bin jest)",
     "dev": "run-p -r \"dev:build watch\" \"dev:serve\"",
     "dev:build": "rm -r dist || true && tsx examples/build.ts",
     "dev:serve": "serve .",
