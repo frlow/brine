@@ -8,6 +8,9 @@ export type AnalyzerTestCases = {
   literalProp: string
   optionalProp: string
   multipleProps: string
+  camelName: string
+  kebabName: string
+  exoticName: string
 }
 export const testAnalyzer = (
   analyze: AnalyzeFileFunction,
@@ -58,6 +61,24 @@ export const testAnalyzer = (
       expect(result.props).toStrictEqual([
         { name: 'a', type: 'string', optional: false },
         { name: 'b', type: 'number', optional: false },
+      ])
+    })
+    test('Camel name', async () => {
+      const result = await analyze('dummy.js', testCases.camelName)
+      expect(result.props).toStrictEqual([
+        { name: 'camel-name', type: 'string', optional: false },
+      ])
+    })
+    test('Kebab name', async () => {
+      const result = await analyze('dummy.js', testCases.kebabName)
+      expect(result.props).toStrictEqual([
+        { name: 'kebab-name', type: 'string', optional: false },
+      ])
+    })
+    test('Exotic name', async () => {
+      const result = await analyze('dummy.js', testCases.exoticName)
+      expect(result.props).toStrictEqual([
+        { name: 'ex0t_ic', type: 'string', optional: false },
       ])
     })
   })

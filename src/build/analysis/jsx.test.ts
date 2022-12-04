@@ -10,5 +10,8 @@ describe('jsx', () => {
     literalProp: `export default (args: {literal: 'a'|'b'})=>{}`,
     optionalProp: `export default (args: {optional?: string})=>{}`,
     multipleProps: `export default (args: {a: string, b: number})=>{}`,
+    camelName: `export default (args: {camelName: string})=>{}`,
+    kebabName: `export default (args: {"kebab-name": string})=>{}`,
+    exoticName: `export default (args: {ex0t_ic: string})=>{}`,
   })
 })
