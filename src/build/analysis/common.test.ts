@@ -1,7 +1,7 @@
 import { AnalyzeFileFunction } from './index.js'
 
 export type AnalyzerTestCases = {
-  tagName: { fileName: string; code: string }
+  name: { fileName: string; code: string }
   stringProp: string
   numberProp: string
   objectProp: string
@@ -9,7 +9,7 @@ export type AnalyzerTestCases = {
   optionalProp: string
   multipleProps: string
   camelNameProp: string
-  kebabNameProp: string
+  kebabNameProp: string | null
   exoticNameProp: string
   stringEmit: string
   numberEmit: string
@@ -27,13 +27,10 @@ export type AnalyzerTestCases = {
 }
 export const testAnalyzer = (
   analyze: AnalyzeFileFunction,
-  testCases: AnalyzerTestCases
+  testCases: Partial<AnalyzerTestCases>
 ) => {
   test('Name', async () => {
-    const result = await analyze(
-      testCases.tagName.fileName,
-      testCases.tagName.code
-    )
+    const result = await analyze(testCases.name.fileName, testCases.name.code)
     expect(result.tag).toEqual('my-app')
     expect(result.name).toEqual('MyApp')
   })
@@ -81,12 +78,14 @@ export const testAnalyzer = (
         { name: 'camel-name', type: 'string', optional: false },
       ])
     })
-    test('Kebab Name', async () => {
-      const result = await analyze('dummy.js', testCases.kebabNameProp)
-      expect(result.props).toStrictEqual([
-        { name: 'kebab-name', type: 'string', optional: false },
-      ])
-    })
+    if (testCases.kebabNameProp !== null)
+      // Svelte cannot use kebab-cased props
+      test('Kebab Name', async () => {
+        const result = await analyze('dummy.js', testCases.kebabNameProp)
+        expect(result.props).toStrictEqual([
+          { name: 'kebab-name', type: 'string', optional: false },
+        ])
+      })
     test('Exotic Name', async () => {
       const result = await analyze('dummy.js', testCases.exoticNameProp)
       expect(result.props).toStrictEqual([

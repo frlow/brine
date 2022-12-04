@@ -27,7 +27,7 @@ const getProps = (sourceFile: SourceFile): PropDefinition[] => {
     return pr.declarations[0]
   })
   return variables.map((v) => ({
-    name: v.name.getText(sourceFile),
+    name: kebabize(v.name.getText(sourceFile)),
     type: v.type!.getText(sourceFile),
     optional: !!v.initializer,
   }))

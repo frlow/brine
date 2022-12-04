@@ -3,7 +3,7 @@ import { analyzeJsxFile } from './jsx.js'
 
 describe('jsx', () => {
   testAnalyzer(analyzeJsxFile, {
-    tagName: { fileName: 'MyApp.tsx', code: `export default ()=>{}` },
+    name: { fileName: 'MyApp.tsx', code: `export default ()=>{}` },
     stringProp: `export default (args: {str: string})=>{}`,
     numberProp: `export default (args: {num: number})=>{}`,
     objectProp: `export default (args: {obj: {val:string}})=>{}`,
