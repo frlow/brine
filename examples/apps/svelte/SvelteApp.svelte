@@ -8,7 +8,10 @@
   import Child from "./Child.svelte";
   import {createEventDispatcher, onMount, onDestroy} from 'svelte'
 
-  onMount(() => console.log("Svelte mount"))
+  onMount(() => {
+    console.log("Svelte mount")
+    console.log(text, obj, count)
+  })
   onDestroy(() => console.log("Svelte unmount"))
   const dispatch = createEventDispatcher<{ "my-event": string }>()
   export let count: number = 12

@@ -1,15 +1,26 @@
 import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 
 export const createOptions = (
-  component: any | ((element: HTMLElement) => any),
+  component: any | ((element: HTMLElement, props: any) => any),
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {
     init: (self, emit) => {
+      self.temp = {}
+    },
+    attributes: meta.attributes,
+    attributeChangedCallback: (self, name, newValue) => {
+      if (self.app)
+        self.app.$$set({
+          [name]: newValue,
+        })
+      else self.temp[name] = newValue
+    },
+    connected: (self, emit) => {
       self.mountPoint = document.createElement('div')
       self.app = component.toString().startsWith('class')
-        ? new component({ target: self.mountPoint })
-        : component(self.mountPoint)
+        ? new component({ target: self.mountPoint, props: self.temp })
+        : component(self.mountPoint, self.temp)
       meta.emits.forEach(
         (e) =>
           (self.app.$$.callbacks[e] = [
@@ -20,13 +31,6 @@ export const createOptions = (
       )
       self.shadowRoot.appendChild(self.mountPoint)
     },
-    attributes: meta.attributes,
-    attributeChangedCallback: (self, name, newValue) => {
-      self.app.$$set({
-        [name]: newValue,
-      })
-    },
-    connected: (self, emit) => {},
     disconnected: (self) => {
       self.app.$$.on_disconnect?.forEach((f: any) => f())
       self.app.$$.on_destroy?.forEach((f: any) => f())
