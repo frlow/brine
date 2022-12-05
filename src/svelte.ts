@@ -21,6 +21,7 @@ export const createOptions = (
       self.app = component.toString().startsWith('class')
         ? new component({ target: self.mountPoint, props: self.temp })
         : component(self.mountPoint, self.temp)
+      delete self.temp
       meta.emits.forEach(
         (e) =>
           (self.app.$$.callbacks[e] = [
