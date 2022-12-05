@@ -10,16 +10,15 @@ const plugins: Plugin[] = [
   }),
 ]
 describe('svelte', () => {
-  testWrapper({
-    stringText: async () =>
-      createOptions(
-        await buildApp(`<div>text</div>`, 'StringTextApp.svelte', plugins),
-        {
-          tag: 'test-string-text',
-          style: '',
-          attributes: [],
-          emits: [],
-        }
-      ),
-  })
+  testWrapper(
+    createOptions,
+    {
+      stringText: `<div>simple-string-text</div>`,
+      stringProp: `<div>{text}</div><script>export let text</script>`,
+      numProp: `<div>{num+1}</div><script>export let num</script>`,
+      objProp: `<div>{obj.val}</div><script>export let obj; console.log(obj)</script>`,
+    },
+    plugins,
+    'TestApp.svelte'
+  )
 })
