@@ -8,29 +8,28 @@ import { Plugin, build } from 'esbuild'
 import path from 'path'
 import fs from 'fs'
 import { screen } from '@testing-library/dom'
+import { jest } from '@jest/globals'
 
+const tempDir = './src/temp'
 export const buildApp = async (
   code: string,
   fileName: string,
   plugins: Plugin[]
 ): Promise<any> => {
-  const tempDir = './src/temp'
   fs.mkdirSync(tempDir, { recursive: true })
   fs.writeFileSync(path.join(tempDir, fileName), code, 'utf8')
   const result = await build({
     entryPoints: [path.join(tempDir, fileName)],
     bundle: true,
     format: 'esm',
-    write: false,
+    write: true,
     plugins,
     outdir: tempDir,
   })
-  fs.rmSync(tempDir, { recursive: true })
-  const base64 = Buffer.from(
-    result.outputFiles.find((f) => f.path.endsWith('.js')).text
-  ).toString('base64')
-  const dataUrl = `data:text/javascript;base64,${base64}`
-  const importResult = await import(dataUrl)
+  // fs.rmSync(tempDir, { recursive: true })
+  const importResult = await import(
+    path.resolve(path.join(tempDir, path.parse(fileName).name + '.js'))
+  )
   return importResult.default
 }
 
@@ -39,6 +38,7 @@ export type WrapperTestCases = {
   stringProp: string
   numProp: string
   objProp: string
+  onMountProps: string
 }
 
 export const testWrapper = (
@@ -50,6 +50,11 @@ export const testWrapper = (
   plugins: Plugin[],
   fileName: string
 ) => {
+  afterEach(() => {
+    jest.clearAllMocks()
+    fs.rmSync(tempDir, { recursive: true })
+  })
+
   async function defineWrapper(code: string, meta: WcWrapperOptionsMeta) {
     const app = await buildApp(code, fileName, plugins)
     const options = createOptions(app, meta)
@@ -57,7 +62,7 @@ export const testWrapper = (
     defineComponent(wrapper)
   }
 
-  test('String div simple component', async () => {
+  test('Simple, component, should render text in component', async () => {
     const meta: WcWrapperOptionsMeta = {
       tag: 'test-string-text',
       style: '',
@@ -70,7 +75,7 @@ export const testWrapper = (
     const innerHtml = el.shadowRoot.innerHTML
     expect(innerHtml).toContain('simple-string-text')
   })
-  describe('props', () => {
+  describe('Props, should set and update', () => {
     test('String', async () => {
       const meta: WcWrapperOptionsMeta = {
         tag: 'test-string-prop',
@@ -115,6 +120,18 @@ export const testWrapper = (
       el.setAttribute('obj', '{"val": "bbb"}')
       await new Promise((r) => setTimeout(() => r(''), 0))
       expect(el.shadowRoot.innerHTML).toContain('bbb')
+    })
+    test.only('Props available on mount', async () => {
+      const meta: WcWrapperOptionsMeta = {
+        tag: 'test-on-mount-prop',
+        style: '',
+        attributes: ['text'],
+        emits: [],
+      }
+      await defineWrapper(testCases.onMountProps, meta)
+      const log = jest.spyOn(console, 'log').mockImplementation(() => {})
+      document.body.innerHTML = `<test-on-mount-prop role="test" text='aaa'></test-on-mount-prop>`
+      expect(log).toBeCalledWith('aaa')
     })
   })
 }
