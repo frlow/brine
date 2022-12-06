@@ -55,9 +55,6 @@ const getEmits = (sourceFile: SourceFile): PropDefinition[] => {
       p.parameters[0].type.getText(sourceFile).replace(/"|'/g, '')
     ),
     type: p.parameters[1]?.type.getText(sourceFile) || 'void',
-    optional: !!p.type.types?.some(
-      (t: any) => t.kind === SyntaxKind.UndefinedKeyword
-    ),
   }))
 }
 

@@ -53,7 +53,6 @@ function getEmits(sourceFile: ts.SourceFile): PropDefinition[] {
   const emits = args?.members.map((p) => ({
     name: kebabize(p.name!.getText(sourceFile).replace(/\"/g, '')),
     type: (p as any).type.getText(sourceFile),
-    optional: !!p.questionToken,
   }))
   return emits
 }

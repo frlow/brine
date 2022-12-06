@@ -15,7 +15,6 @@ export type AnalyzerTestCases = {
   numberEmit: string
   objectEmit: string
   literalEmit: string
-  optionalEmit: string
   multipleEmits: string
   camelNameEmit: string
   kebabNameEmit: string
@@ -97,60 +96,44 @@ export const testAnalyzer = (
   describe('Emits', () => {
     test('String', async () => {
       const result = await analyze(fileName, testCases.stringEmit)
-      expect(result.emits).toStrictEqual([
-        { name: 'str', type: 'string', optional: false },
-      ])
+      expect(result.emits).toStrictEqual([{ name: 'str', type: 'string' }])
     })
     test('Number', async () => {
       const result = await analyze(fileName, testCases.numberEmit)
-      expect(result.emits).toStrictEqual([
-        { name: 'num', type: 'number', optional: false },
-      ])
+      expect(result.emits).toStrictEqual([{ name: 'num', type: 'number' }])
     })
     test('Object', async () => {
       const result = await analyze(fileName, testCases.objectEmit)
       expect(result.emits).toStrictEqual([
-        { name: 'obj', type: '{val:string}', optional: false },
+        { name: 'obj', type: '{val:string}' },
       ])
     })
     test('Literal', async () => {
       const result = await analyze(fileName, testCases.literalEmit)
-      expect(result.emits).toStrictEqual([
-        { name: 'literal', type: "'a'|'b'", optional: false },
-      ])
+      expect(result.emits).toStrictEqual([{ name: 'literal', type: "'a'|'b'" }])
     })
-    if (testCases.optionalEmit !== null)
-      // No good way to define optional emits in vue
-      test('Optional', async () => {
-        const result = await analyze(fileName, testCases.optionalEmit)
-        expect(result.emits).toStrictEqual([
-          { name: 'optional', type: 'string', optional: true },
-        ])
-      })
     test('Multiple', async () => {
       const result = await analyze(fileName, testCases.multipleEmits)
       expect(result.emits).toStrictEqual([
-        { name: 'a', type: 'string', optional: false },
-        { name: 'b', type: 'number', optional: false },
+        { name: 'a', type: 'string' },
+        { name: 'b', type: 'number' },
       ])
     })
     test('Camel Name', async () => {
       const result = await analyze(fileName, testCases.camelNameEmit)
       expect(result.emits).toStrictEqual([
-        { name: 'camel-name', type: 'string', optional: false },
+        { name: 'camel-name', type: 'string' },
       ])
     })
     test('Kebab Name', async () => {
       const result = await analyze(fileName, testCases.kebabNameEmit)
       expect(result.emits).toStrictEqual([
-        { name: 'kebab-name', type: 'string', optional: false },
+        { name: 'kebab-name', type: 'string' },
       ])
     })
     test('Exotic name', async () => {
       const result = await analyze(fileName, testCases.exoticNameEmit)
-      expect(result.emits).toStrictEqual([
-        { name: 'ex0t_ic', type: 'string', optional: false },
-      ])
+      expect(result.emits).toStrictEqual([{ name: 'ex0t_ic', type: 'string' }])
     })
   })
   describe('Slots', () => {

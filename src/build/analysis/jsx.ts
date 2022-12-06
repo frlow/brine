@@ -40,7 +40,6 @@ export const analyzeJsxFile: AnalyzeFileFunction = async (filePath, code) => {
         const name = kebabize(e.name.text.replace(/^on/, ''))
         return {
           name,
-          optional: !!e.questionToken,
           type: e.type.parameters[0]?.type.getText(sourceFile) || 'void',
         }
       }) || []

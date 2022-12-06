@@ -19,7 +19,6 @@ describe('vue', () => {
       numberEmit: `<script setup>const emit = defineEmits<{(e: num, detail: number): void}>()</script>`,
       objectEmit: `<script setup>const emit = defineEmits<{(e: obj, detail: {val:string}): void}>()</script>`,
       literalEmit: `<script setup>const emit = defineEmits<{(e: literal, detail: 'a'|'b'): void}>()</script>`,
-      optionalEmit: null,
       multipleEmits: `<script setup>const emit = defineEmits<{(e: a, detail: string): void, (e: b, detail: number): void}>()</script>`,
       camelNameEmit: `<script setup>const emit = defineEmits<{(e: camelName, detail:  string): void}>()</script>`,
       kebabNameEmit: `<script setup>const emit = defineEmits<{(e: "kebab-name", detail:  string): void}>()</script>`,

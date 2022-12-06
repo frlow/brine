@@ -19,7 +19,6 @@ describe('svelte', () => {
       numberEmit: `<script lang="ts">const d = createEventDispatcher<{num:number}>()</script>`,
       objectEmit: `<script lang="ts">const d = createEventDispatcher<{obj:{val:string}}>()</script>`,
       literalEmit: `<script lang="ts">const d = createEventDispatcher<{literal:'a'|'b'}>()</script>`,
-      optionalEmit: `<script lang="ts">const d = createEventDispatcher<{optional?:string}>()</script>`,
       multipleEmits: `<script lang="ts">const d = createEventDispatcher<{a:string,b:number}>()</script>`,
       camelNameEmit: `<script lang="ts">const d = createEventDispatcher<{camelName: string}>()</script>`,
       kebabNameEmit: `<script lang="ts">const d = createEventDispatcher<{"kebab-name": string}>()</script>`,

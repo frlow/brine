@@ -19,7 +19,6 @@ describe('jsx', () => {
       numberEmit: `export default (args: {onNum: (arg: number)=>void})=>{}`,
       objectEmit: `export default (args: {onObj: (arg: {val:string}})=>void})=>{}`,
       literalEmit: `export default (args: {onLiteral: (arg: 'a'|'b')=>void})=>{}`,
-      optionalEmit: `export default (args: {onOptional?: (arg: string)=>void})=>{}`,
       multipleEmits: `export default (args: {onA: (arg: string)=>void,onB: (arg: number)=>void})=>{}`,
       camelNameEmit: `export default (args: {onCamelName: (arg: string)=>void})=>{}`,
       kebabNameEmit: `export default (args: {"onKebab-name": (arg: string)=>void})=>{}`,

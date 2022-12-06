@@ -15,7 +15,7 @@ export type PropDefinition = {
 
 export type AnalysisResult = {
   props: PropDefinition[]
-  emits: PropDefinition[]
+  emits: Pick<PropDefinition, 'type' | 'name'>[]
   slots: string[] | undefined
   name: string
   tag: string
