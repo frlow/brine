@@ -15,6 +15,7 @@ export default {
       },
     ],
   },
+  maxWorkers: 1,
   moduleNameMapper: {
     '(.+)\\.js': '$1',
   },

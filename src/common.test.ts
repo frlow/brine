@@ -18,18 +18,20 @@ export const buildApp = async (
 ): Promise<any> => {
   fs.mkdirSync(tempDir, { recursive: true })
   fs.writeFileSync(path.join(tempDir, fileName), code, 'utf8')
-  const result = await build({
+  let filePath = path.join(
+    tempDir,
+    (Math.random() + 1).toString(36).substring(7) + '.js'
+  )
+  await build({
     entryPoints: [path.join(tempDir, fileName)],
     bundle: true,
     format: 'esm',
     write: true,
     plugins,
-    outdir: tempDir,
+    outfile: filePath,
   })
-  // fs.rmSync(tempDir, { recursive: true })
-  const importResult = await import(
-    path.resolve(path.join(tempDir, path.parse(fileName).name + '.js'))
-  )
+  const importPath = path.resolve(filePath)
+  const importResult = await import(importPath)
   return importResult.default
 }
 
@@ -48,15 +50,18 @@ export const testWrapper = (
   ) => WcWrapperOptions,
   testCases: Partial<WrapperTestCases>,
   plugins: Plugin[],
-  fileName: string
+  extension: string
 ) => {
   afterEach(() => {
     jest.clearAllMocks()
     fs.rmSync(tempDir, { recursive: true })
+    Array.from(document.body.children).forEach((el) =>
+      document.body.removeChild(el)
+    )
   })
 
   async function defineWrapper(code: string, meta: WcWrapperOptionsMeta) {
-    const app = await buildApp(code, fileName, plugins)
+    const app = await buildApp(code, 'TestApp' + extension, plugins)
     const options = createOptions(app, meta)
     const wrapper = createWrapper(options)
     defineComponent(wrapper)
@@ -121,7 +126,7 @@ export const testWrapper = (
       await new Promise((r) => setTimeout(() => r(''), 0))
       expect(el.shadowRoot.innerHTML).toContain('bbb')
     })
-    test.only('Props available on mount', async () => {
+    test('Props available on mount', async () => {
       const meta: WcWrapperOptionsMeta = {
         tag: 'test-on-mount-prop',
         style: '',
