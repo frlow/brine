@@ -7,33 +7,8 @@ import {
 import { Plugin, build } from 'esbuild'
 import path from 'path'
 import fs from 'fs'
-import { getByRole, screen } from '@testing-library/dom'
+import { screen } from '@testing-library/dom'
 import { jest } from '@jest/globals'
-
-const tempDir = './src/temp'
-export const buildApp = async (
-  code: string,
-  fileName: string,
-  plugins: Plugin[]
-): Promise<any> => {
-  fs.mkdirSync(tempDir, { recursive: true })
-  fs.writeFileSync(path.join(tempDir, fileName), code, 'utf8')
-  let filePath = path.join(
-    tempDir,
-    (Math.random() + 1).toString(36).substring(7) + '.js'
-  )
-  await build({
-    entryPoints: [path.join(tempDir, fileName)],
-    bundle: true,
-    format: 'esm',
-    write: true,
-    plugins,
-    outfile: filePath,
-  })
-  const importPath = path.resolve(filePath)
-  const importResult = await import(importPath)
-  return importResult.default
-}
 
 export type WrapperTestCases = {
   stringText: string
@@ -51,14 +26,43 @@ export const testWrapper = (
   ) => WcWrapperOptions,
   testCases: Partial<WrapperTestCases>,
   plugins: Plugin[],
-  extension: string
+  extension: string,
+  tsconfig?: string
 ) => {
+  const tempDir = './src/temp'
+  const buildApp = async (
+    code: string,
+    fileName: string,
+    plugins: Plugin[]
+  ): Promise<any> => {
+    fs.mkdirSync(tempDir, { recursive: true })
+    fs.writeFileSync(path.join(tempDir, fileName), code, 'utf8')
+    let filePath = path.join(
+      tempDir,
+      (Math.random() + 1).toString(36).substring(7) + '.js'
+    )
+    await build({
+      entryPoints: [path.join(tempDir, fileName)],
+      bundle: true,
+      format: 'esm',
+      write: true,
+      plugins,
+      outfile: filePath,
+      tsconfig,
+    })
+
+    const importPath = path.resolve(filePath)
+    const importResult = await import(importPath)
+    return importResult.default
+  }
+
   afterEach(() => {
     jest.clearAllMocks()
     fs.rmSync(tempDir, { recursive: true })
     Array.from(document.body.children).forEach((el) =>
       document.body.removeChild(el)
     )
+    document.body.innerHTML = ''
   })
 
   async function defineWrapper(code: string, meta: WcWrapperOptionsMeta) {
@@ -77,6 +81,7 @@ export const testWrapper = (
     }
     await defineWrapper(testCases.stringText, meta)
     document.body.innerHTML = `<test-string-text role="test"></test-string-text>`
+    await new Promise((r) => setTimeout(() => r(''), 0))
     const el = screen.getByRole('test')
     const innerHtml = el.shadowRoot.innerHTML
     expect(innerHtml).toContain('simple-string-text')
@@ -91,6 +96,7 @@ export const testWrapper = (
       }
       await defineWrapper(testCases.stringProp, meta)
       document.body.innerHTML = `<test-string-prop role="test" text="aaa"></test-string-prop>`
+      await new Promise((r) => setTimeout(() => r(''), 0))
       const el = screen.getByRole('test')
       expect(el.shadowRoot.innerHTML).toContain('aaa')
       el.setAttribute('text', 'bbb')
@@ -106,6 +112,7 @@ export const testWrapper = (
       }
       await defineWrapper(testCases.numProp, meta)
       document.body.innerHTML = `<test-number-prop role="test" num="6"></test-number-prop>`
+      await new Promise((r) => setTimeout(() => r(''), 0))
       const el = screen.getByRole('test')
       expect(el.shadowRoot.innerHTML).toContain('7')
       el.setAttribute('num', '4')
@@ -121,6 +128,7 @@ export const testWrapper = (
       }
       await defineWrapper(testCases.objProp, meta)
       document.body.innerHTML = `<test-object-prop role="test" obj='{"val": "aaa"}'></test-object-prop>`
+      await new Promise((r) => setTimeout(() => r(''), 0))
       const el = screen.getByRole('test')
       expect(el.shadowRoot.innerHTML).toContain('aaa')
       el.setAttribute('obj', '{"val": "bbb"}')
@@ -137,6 +145,7 @@ export const testWrapper = (
       await defineWrapper(testCases.onMountProps, meta)
       const log = jest.spyOn(console, 'log').mockImplementation(() => {})
       document.body.innerHTML = `<test-on-mount-prop role="test" text='aaa'></test-on-mount-prop>`
+      await new Promise((r) => setTimeout(() => r(''), 0))
       expect(log).toBeCalledWith('aaa')
     })
   })
@@ -155,6 +164,7 @@ export const testWrapper = (
       })
       const callback = (e: any) => resolve(e)
       document.body.innerHTML = `<test-simple-event role="test"></test-simple-event>`
+      await new Promise((r) => setTimeout(() => r(''), 0))
       const el = screen.getByRole('test')
       el.addEventListener('my-event', callback)
       el.shadowRoot.getElementById('button').click()

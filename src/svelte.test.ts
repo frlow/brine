@@ -1,5 +1,5 @@
-import { buildApp, testWrapper } from './common.test.js'
-import { createOptions } from './svelte'
+import { testWrapper } from './common.test.js'
+import { createOptions } from './svelte.js'
 import type { Plugin } from 'esbuild'
 import sveltePlugin from 'esbuild-svelte'
 import sveltePreprocess from 'svelte-preprocess'
