@@ -9,6 +9,7 @@
   import {createEventDispatcher, onMount, onDestroy} from 'svelte'
 
   onMount(() => {
+    dispatch("my-event", "mount")
     console.log("Svelte mount")
     console.log(text, obj, count)
   })

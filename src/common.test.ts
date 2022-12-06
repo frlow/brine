@@ -7,7 +7,7 @@ import {
 import { Plugin, build } from 'esbuild'
 import path from 'path'
 import fs from 'fs'
-import { screen } from '@testing-library/dom'
+import { getByRole, screen } from '@testing-library/dom'
 import { jest } from '@jest/globals'
 
 const tempDir = './src/temp'
@@ -41,6 +41,7 @@ export type WrapperTestCases = {
   numProp: string
   objProp: string
   onMountProps: string
+  simpleEvent: string
 }
 
 export const testWrapper = (
@@ -137,6 +138,28 @@ export const testWrapper = (
       const log = jest.spyOn(console, 'log').mockImplementation(() => {})
       document.body.innerHTML = `<test-on-mount-prop role="test" text='aaa'></test-on-mount-prop>`
       expect(log).toBeCalledWith('aaa')
+    })
+  })
+  describe('Emits', () => {
+    test('Send event', async () => {
+      const meta: WcWrapperOptionsMeta = {
+        tag: 'test-simple-event',
+        style: '',
+        attributes: [],
+        emits: ['my-event'],
+      }
+      await defineWrapper(testCases.simpleEvent, meta)
+      let resolve: any
+      const callbackPromise = new Promise((r) => {
+        resolve = r
+      })
+      const callback = (e: any) => resolve(e)
+      document.body.innerHTML = `<test-simple-event role="test"></test-simple-event>`
+      const el = screen.getByRole('test')
+      el.addEventListener('my-event', callback)
+      el.shadowRoot.getElementById('button').click()
+      const e = (await callbackPromise) as any
+      expect(e.detail).toEqual('simple')
     })
   })
 }

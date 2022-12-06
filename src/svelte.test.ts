@@ -18,6 +18,8 @@ describe('svelte', () => {
       numProp: `<div>{num+1}</div><script>export let num</script>`,
       objProp: `<div>{obj.val}</div><script>export let obj</script>`,
       onMountProps: `<script>import {onMount} from 'svelte'; onMount(() => console.log(text)); export let text</script>`,
+      simpleEvent: `<script>import {createEventDispatcher} from 'svelte'; const d = createEventDispatcher()</script>
+                    <button id="button" on:click={()=>d("my-event","simple")}></button>`,
     },
     plugins,
     '.svelte'
