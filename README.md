@@ -7,7 +7,7 @@ More on the power of web components [here](https://www.webcomponents.org/introdu
 
 Currently, brine supports the following framework
 - React
-- Vue
+- Vue ![alt vue](https://static.cdnlogo.com/logos/v/69/vue.svg)
 - Svelte
 
 ## Install
