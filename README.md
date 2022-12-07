@@ -35,7 +35,7 @@ const meta = {
     attributes: ["text", "disabled"], // names of attributes
     emits: ["my-click"], // names of emits 
     style: `.button{color: blue}`, // styling, more on this later
-    tag: 'my-app', // the web component tag, must contain a "-"
+    tag: 'my-button', // the web component tag, must contain a "-"
 }
 const options = createOptions(App, meta)
 const wrapper = createWrapper(options)
@@ -74,7 +74,7 @@ const meta = {
     attributes: ["text", "disabled"], // names of attributes
     emits: ["my-click"], // names of emits 
     style: `.button{color: blue}`, // styling, more on this later
-    tag: 'my-app', // the web component tag, must contain a "-"
+    tag: 'my-button', // the web component tag, must contain a "-"
 }
 export const options = createOptions(App, meta)
 ```
@@ -96,7 +96,7 @@ custom element class.
 ```javascript
 // Run in browser, devtools, console etc. 
 import('./options-SOMEHASH.js').then(({options})=>{
-    customElements.get("my-app").transplant(options)
+    customElements.get("my-button").transplant(options)
 })
 ```
 
@@ -113,7 +113,7 @@ const meta = {
     attributes: ["text", "disabled"], // names of attributes
     emits: ["my-click"], // names of emits 
     style: `.button{color: blue}`, // styling, more on this later
-    tag: 'my-app', // the web component tag, must contain a "-"
+    tag: 'my-button', // the web component tag, must contain a "-"
 }
 export const options = createOptions(App, meta)
 ```
@@ -128,11 +128,17 @@ import {createTransplantableWrapper} from 'brinejs/extensions'
 
 const meta = {
     attributes: ["text", "disabled"],
-    tag: 'my-app'
+    tag: 'my-button'
 }
 const wrapper = createAutoLoaderWrapper(
     meta, 
     async () => (await import('./options.js')).options)
+```
+
+The component can be manually loaded using the "load" method on 
+the custom element class.
+```javascript
+customElements.get("my-button").load()
 ```
 
 ### Notes on the autoloader
