@@ -24,9 +24,13 @@ brine consists of 2 separate layers and a meta object
 ### Examples
 ***react***
 ```javascript
-import { createOptions } from 'brinejs/react'
 import { createWrapper } from 'brinejs'
+
+// Replace this part with framework specific implementation
+import { createOptions } from 'brinejs/react'
 import App from './App.js' // jsx|tsx file
+// =============================
+
 const meta = {
     attributes: ["text", "disabled"], // names of attributes
     emits: ["my-click"], // names of emits 
@@ -36,4 +40,15 @@ const meta = {
 const options = createOptions(App, meta)
 const wrapper = createWrapper(options)
 customElements.define(wrapper.options.tag,wrapper)
+```
+
+***vue***
+```javascript
+import { createOptions } from 'brinejs/vue'
+import App from './App.vue'
+```
+***svelte***
+```javascript
+import { createOptions } from 'brinejs/svelte'
+import App from './App.svelte'
 ```
