@@ -6,7 +6,7 @@ It enables developers to write components in their favourite framework and use t
 More on the power of web components [here](https://www.webcomponents.org/introduction)
 
 Currently, brine supports the following frameworks
-<div style="display: flex; flex-direction:row; justify-content: center;"><span>Vue</span><img src="https://static.cdnlogo.com/logos/v/69/vue.svg" alt="vue" width="50"/></div>
+<div style="display: flex; flex-direction:row; align-items: center;"><span>Vue</span><img src="https://static.cdnlogo.com/logos/v/69/vue.svg" alt="vue" width="50"/></div>
 
 ## Install
 ```
