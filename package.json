@@ -1,6 +1,6 @@
 {
   "name": "brinejs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "repository": "https://github.com/frlow/brine",
   "author": "Fredrik Löwenhamn <fredrik.lowenhamn@gmail.com>",
   "license": "MIT",
@@ -9,13 +9,13 @@
     "lib"
   ],
   "scripts": {
-    "build": "rm -r lib || true && tsc -p ./tsconfig.build.json && cp package.lib.json lib/package.json && cp README.md lib",
+    "build": "rm -r lib || true && tsc -p ./tsconfig.build.json && cp README.md lib && cp .npmrc lib",
     "test": "yarn node --experimental-vm-modules $(yarn bin jest)",
     "dev": "run-p -r \"dev:build watch\" \"dev:serve\"",
     "dev:build": "rm -r dist || true && tsx examples/build.ts",
     "dev:serve": "serve .",
     "dev:prod": "yarn dev:build && yarn dev:serve",
-    "npm-publish": "yarn build && cd lib && npm publish"
+    "npm-publish": "yarn build && node publish.js"
   },
   "devDependencies": {
     "@testing-library/dom": "^8.19.0",
