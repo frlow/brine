@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { parseFramework, kebabize, analyze, Framework } from './index.js'
+import { parseFramework, kebabize, analyze, Framework } from './common.js'
 
 export const generateMetaCode = async (
   file: string,

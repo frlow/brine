@@ -6,7 +6,7 @@ import {
   analyze,
   Framework,
   AnalysisResult,
-} from './index.js'
+} from './common.js'
 
 export const generateTypes = (files: (TypeFile | string)[], prefix?: string) =>
   Promise.all(

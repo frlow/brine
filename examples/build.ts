@@ -9,17 +9,28 @@ import sveltePlugin from 'esbuild-svelte'
 import sveltePreprocess from 'svelte-preprocess'
 import glob from 'glob'
 import {
-  writeIndexFile,
-  writeMetaFile,
-  generateTypes,
-  writeTypesFile,
-  writeWrappersFile,
+  // ==== hot reload ====
   startHotComponentTransplantServer,
+  hotReloadSnippet,
+  // =============
+
+  // ==== boilerplate generation ====
+  writeMetaFile,
+  writeIndexFile,
+  // ================================
+
+  // ==== css injection ====
   groupJsMapCssFiles,
   writeJsMapCssGroup,
+  // =======================
+
+  // ==== type docs generation ====
+  generateTypes,
+  writeTypesFile,
   writeVsCodeTypes,
   writeWebTypes,
-  hotReloadSnippet,
+  writeWrappersFile,
+  // ==============================
 } from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
 
@@ -102,6 +113,10 @@ const start = async (mode: Mode) => {
           await writeIndexFile('examples/apps/react/ReactApp.tsx', prefix)
           await writeIndexFile('examples/apps/svelte/SvelteApp.svelte', prefix)
           await writeMetaFile('examples/apps/vue/VueApp.vue', prefix)
+          // ============================
+
+          // ============================
+          // Generate type docs
           const types = await generateTypes(
             [
               'examples/apps/react/ReactApp.tsx',
@@ -110,10 +125,6 @@ const start = async (mode: Mode) => {
             ],
             prefix
           )
-          // ============================
-
-          // ============================
-          // Generate type docs
           await writeTypesFile(types, 'dist')
           await writeVsCodeTypes(types, 'dist')
           await writeWebTypes(types, 'dist', {

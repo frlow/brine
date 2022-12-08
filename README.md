@@ -185,3 +185,82 @@ fetch('/apps.json').then((result) => {
   }
 ]
 ```
+
+## Build tools
+Brine contains some helper functions that makes building and bundling
+simpler.
+
+***hot component transplant***
+
+Hot component transplant server is a websocket server that allows developers
+to automatically transplant components during development or debugging.
+```javascript
+// build script
+import {startHotComponentTransplantServer} from 'brinejs/build'
+
+const hotTransplant = startHotComponentTransplantServer(8080)
+const build = () => {
+    // ... some build code
+    hotTransplant('./dist/App.js')
+}
+```
+```javascript
+// in browser
+new WebSocket('ws://localhost:8080').onmessage = async (ev) => {
+    import(ev.data).then((r) => {
+        if (r.options?.tag)
+            customElements.get(r.options.tag).transplant(r.options)
+    })
+}
+```
+
+***boilerplate generation***
+
+Brine has two code generation methods, 'writeMetaFile' and 'writeIndexFile'.
+They can be used to generate boilerplate code, specifically the meta 
+object that describes the component. 
+
+#### meta file
+```javascript
+// Generate meta file
+import {writeMetaFile} from '/brine/build'
+await writeMetaFile('App.tsx', 'my') // (filePath, prefix or filename)
+```
+```javascript
+// output
+// App.meta.ts
+export const meta = {
+    emits: ["my-click"],
+    attributes: ["count","text","obj"],
+    style: `.dummy-style{}`,
+    tag: 'my-app',
+}
+```
+
+#### index file
+```javascript
+// Generate meta file
+import {writeIndexFile} from '/brine/build'
+await writeIndexFile('App.tsx', 'my') // (filePath, prefix or filename)
+```
+```javascript
+// output
+// index.ts
+import { createOptions } from 'brinejs/react'
+import App from './App.js'
+
+const meta = {
+    emits: ["my-event"],
+    attributes: ["count","text","obj"],
+    style: `.dummy-style{}`,
+    tag: 'my-app',
+}
+export const options = createOptions(App, meta)
+```
+
+***css injection***
+
+
+
+***type documentation***
+

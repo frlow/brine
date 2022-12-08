@@ -1,8 +1,7 @@
-import { Framework } from './index.js'
+import { Framework, parseFramework } from './common.js'
 import path from 'path'
 import fs from 'fs'
 import { generateMetaCode } from './metaFile.js'
-import { parseFramework } from './index.js'
 
 export const generateIndexFile = async (
   file: string,
