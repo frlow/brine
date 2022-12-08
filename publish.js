@@ -75,7 +75,7 @@ const publish = (version, beta) => {
   )
   fs.writeFileSync(
     'lib/.npmrc',
-    `registry.npmjs.org/:_authToken=${process.env.NODE_AUTH_TOKEN}`,
+    `registry=https://registry.npmjs.org/:_authToken=${process.env.NODE_AUTH_TOKEN}`,
     'utf8'
   )
   const result = spawnSync('npm', args, {
