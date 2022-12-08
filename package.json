@@ -15,7 +15,7 @@
     "dev:build": "rm -r dist || true && tsx examples/build.ts",
     "dev:serve": "serve .",
     "dev:prod": "yarn dev:build && yarn dev:serve",
-    "npm-publish": "yarn build && node publish.js"
+    "npm-version": "yarn build && node version.js"
   },
   "devDependencies": {
     "@testing-library/dom": "^8.19.0",

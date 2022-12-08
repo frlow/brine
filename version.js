@@ -73,16 +73,7 @@ const publish = (version, beta) => {
     JSON.stringify(packageJson, null, 2),
     'utf8'
   )
-  fs.writeFileSync(
-    'lib/.npmrc',
-    `registry=https://registry.npmjs.org/:_authToken=${process.env.NODE_AUTH_TOKEN}`,
-    'utf8'
-  )
-  const result = spawnSync('npm', args, {
-    encoding: 'utf8',
-    cwd: path.resolve('./lib'),
-  })
-  console.log(result.stdout, result.stderr)
+  console.log(beta ? '--tag beta' : '')
 }
 
 let current = getCurrentVersion()

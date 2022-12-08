@@ -20,6 +20,9 @@ jobs:
         cache: 'yarn'
     - run: yarn
     - run: yarn test
-    - run: NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN yarn npm-publish
+    - run: |
+        BETA=$(yarn npm-version)
+        cd lib
+        npm publish $BETA
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
