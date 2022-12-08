@@ -79,4 +79,4 @@ const publish = (version, beta) => {
 let current = getCurrentVersion()
 const packageVersion = getPackageVersion()
 if (current === packageVersion) publish(current, getBetaVersion())
-else publish(current)
+else publish(packageVersion)
