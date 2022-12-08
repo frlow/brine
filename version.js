@@ -59,12 +59,12 @@ const getBetaVersion = () => {
     encoding: 'utf8',
   })
   const version = result.stdout.trim()
-  const match = version.match(/beta(.*)$/)[1]
+  const match = version.match(/beta-(.*)$/)[1]
   return (parseInt(match) + 1).toString().padStart(3, '0')
 }
 
 const publish = (version, beta) => {
-  const newVersion = `${version}${beta ? `beta-${beta}` : ''}`
+  const newVersion = `${version}${beta ? `-beta-${beta}` : ''}`
   const tag = beta ? '--tag beta' : ''
   const args = ['publish'].concat(tag.split(' '))
   packageJson.version = newVersion
