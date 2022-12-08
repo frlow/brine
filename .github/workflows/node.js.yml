@@ -23,7 +23,7 @@ jobs:
     - run: |
         BETA=$(yarn npm-version)
         cd lib
-        npm adduser --registry=https://registry.npmjs.org
+        npm set //registry.npmjs.org/:_authToken NODE_AUTH_TOKEN
         npm publish $BETA
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
