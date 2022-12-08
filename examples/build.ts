@@ -29,7 +29,7 @@ import {
   writeTypesFile,
   writeVsCodeTypes,
   writeWebTypes,
-  writeWrappersFile,
+  writeReactWrappersFile,
   // ==============================
 } from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
@@ -131,7 +131,7 @@ const start = async (mode: Mode) => {
             name: 'example',
             version: '1.0.0',
           })
-          await writeWrappersFile(types, 'dist/wrapper')
+          await writeReactWrappersFile(types, 'dist/wrapper')
           // ============================
           return startTime
         },

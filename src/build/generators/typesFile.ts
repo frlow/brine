@@ -39,7 +39,7 @@ export const writeTypesFile = async (
   )
 }
 
-export const writeWrappersFile = async (
+export const writeReactWrappersFile = async (
   results: AnalysisResult[],
   dist: string
 ) => {

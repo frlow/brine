@@ -260,7 +260,50 @@ export const options = createOptions(App, meta)
 
 ***css injection***
 
+Most builders produce separate js and css files as build output. 
+Since the styling needs to be in the code, this styling must be injected into
+the code somehow.
 
+Brine has a helper method that can modify a bundled js file and inject css
+into it. It also updates and adjusts the source map to match the 
+new content.
+
+```javascript
+import {writeJsMapCssGroup, groupJsMapCssFiles} from '/brine/build'
+
+const groupedFiles = groupJsMapCssFiles(['./dist/App.js'])
+await writeJsMapCssGroup(groupedFiles)
+```
 
 ***type documentation***
 
+Type documentation can be extracted and generated for the components 
+```javascript
+import {
+    generateTypes,
+    writeTypesFile,
+    writeVsCodeTypes,
+    writeWebTypes
+} from 'brine/build'
+
+const types = await generateTypes(
+    [
+      'src/App.tsx',
+    ],
+    'my'
+)
+// json file with serialized typing
+await writeTypesFile(types, 'dist')
+
+// vscode.html-custom-data.json (VsCode)
+await writeVsCodeTypes(types, 'dist')
+
+// web-types.json (JetBrains, IntelliJ/WebStorm)
+await writeWebTypes(types, 'dist', {
+    name: 'example',
+    version: '1.0.0',
+})
+
+// react wrappers
+await writeReactWrappersFile(types, 'dist/wrapper')
+```
