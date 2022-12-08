@@ -76,6 +76,7 @@ const publish = (version, beta) => {
   const result = spawnSync('npm', args, {
     encoding: 'utf8',
     cwd: path.resolve('./lib'),
+    env: { NODE_AUTH_TOKEN: process.env.NODE_AUTH_TOKEN },
   })
   console.log(result.stdout, result.stderr)
 }
