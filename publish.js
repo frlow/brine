@@ -73,10 +73,14 @@ const publish = (version, beta) => {
     JSON.stringify(packageJson, null, 2),
     'utf8'
   )
+  fs.writeFileSync(
+    'lib/.npmrc',
+    `registry.npmjs.org/:_authToken=${process.env.NODE_AUTH_TOKEN}`,
+    'utf8'
+  )
   const result = spawnSync('npm', args, {
     encoding: 'utf8',
     cwd: path.resolve('./lib'),
-    env: { ...process.env },
   })
   console.log(result.stdout, result.stderr)
 }
