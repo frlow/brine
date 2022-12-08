@@ -19,7 +19,6 @@ jobs:
         node-version: 18.x
         cache: 'yarn'
     - run: yarn
-    - run: yarn build
     - run: yarn test
     - run: yarn npm-publish
       env:
