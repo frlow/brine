@@ -44,6 +44,7 @@ esbuild
       'velocityjs',
       'dustjs-linkedin',
       'atpl',
+      'string-replace-source-map',
     ],
   })
   .then()
