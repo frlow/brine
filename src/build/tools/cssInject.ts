@@ -6,9 +6,10 @@ export const dummyStyle: DummyStyle = '.dummy-style{}'
 export const injectCss = async (
   js: string,
   jsMap: string,
-  css: string,
+  css?: string,
   dummyCss: string = dummyStyle
 ) => {
+  if (!css) return [js, jsMap]
   // @ts-ignore
   const StringReplaceSourceMap = (await import('string-replace-source-map'))
     .default
