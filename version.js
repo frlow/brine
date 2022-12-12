@@ -32,7 +32,7 @@ const packageJson = {
     },
     './build': {
       import: './build/index.js',
-      require: './build/cjs/build/index.js',
+      require: './build/index.cjs',
       types: './build/index.d.ts',
     },
     './extensions': {
