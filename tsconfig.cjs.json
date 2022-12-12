@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/build"
+  ],
+  "exclude": [
+    "**/*.test.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "lib/build/cjs",
+    "declaration": true,
+    "noEmit": false,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "CommonJS"
+  }
+}
