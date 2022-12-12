@@ -3,6 +3,27 @@ import path from 'path'
 
 export type DummyStyle = '.dummy-style{}'
 export const dummyStyle: DummyStyle = '.dummy-style{}'
+
+export const injectCode = async (
+  js: string,
+  jsMap: string,
+  code: string,
+  target: string
+) => {
+  // @ts-ignore
+  const StringReplaceSourceMap = (await import('string-replace-source-map'))
+    .default
+  const stringReplaceSourceMap = new StringReplaceSourceMap(js, jsMap)
+  const beginIndex = js.split(target)[0].length
+  const endIndex = beginIndex + target.length
+  stringReplaceSourceMap.replace(beginIndex, endIndex, code)
+  const replacedJs = js.replace(target, code)
+  const replacedMap = JSON.stringify(
+    await stringReplaceSourceMap.generateSourceMap()
+  )
+  return [replacedJs, replacedMap]
+}
+
 export const injectCss = async (
   js: string,
   jsMap: string,
@@ -10,19 +31,8 @@ export const injectCss = async (
   dummyCss: string = dummyStyle
 ) => {
   if (!css) return [js, jsMap]
-  // @ts-ignore
-  const StringReplaceSourceMap = (await import('string-replace-source-map'))
-    .default
-  const stringReplaceSourceMap = new StringReplaceSourceMap(js, jsMap)
-  const beginIndex = js.split(dummyCss)[0].length
-  const endIndex = beginIndex + dummyCss.length
   const trimmedCss = css.replace(/\/\*.*?\*\//g, '').replace(/\n/g, '')
-  stringReplaceSourceMap.replace(beginIndex, endIndex, trimmedCss)
-  const replacedJs = js.replace(dummyCss, trimmedCss)
-  const replacedMap = JSON.stringify(
-    await stringReplaceSourceMap.generateSourceMap()
-  )
-  return [replacedJs, replacedMap]
+  return await injectCode(js, jsMap, trimmedCss, dummyCss)
 }
 
 export const groupJsMapCssFiles = (
