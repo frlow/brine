@@ -16,8 +16,8 @@ const apps = [
     loader: async () => (await import('./apps/svelte')).options,
   },
   {
-    meta: { attributes, tag: 'my-vanilla' },
-    loader: async () => (await import('./apps/vanilla')).options,
+    meta: { attributes, tag: 'my-tester' },
+    loader: async () => (await import('./apps/tester')).options,
   },
 ]
 

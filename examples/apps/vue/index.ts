@@ -7,7 +7,6 @@ const root = (props: any) => {
   const app = createApp({
     render: () => h(App, props),
   })
-  console.warn('Custom vue createApp')
   return app
 }
 

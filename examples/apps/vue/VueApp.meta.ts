@@ -1,6 +1,6 @@
 export const meta = {
-  emits: ["my-event"],
-  attributes: ["count","text","obj"],
+  emits: [],
+  attributes: ["count"],
   style: `.dummy-style{}`,
   tag: 'my-vue-app',
 }

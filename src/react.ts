@@ -15,7 +15,7 @@ export const createOptions = (
       self.props = {}
 
       meta.emits.forEach((e) => {
-        self.props[`on${camelize(e)}`] = (arg: any) => {
+        self.props[camelize(`on-${e}`)] = (arg: any) => {
           emit(e, arg)
         }
       })

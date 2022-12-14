@@ -113,11 +113,11 @@ export const testWrapper = (
       await defineWrapper(testCases.numProp, meta)
       document.body.innerHTML = `<test-number-prop role="test" num="6"></test-number-prop>`
       await new Promise((r) => setTimeout(() => r(''), 0))
-      const el = screen.getByRole('test')
-      expect(el.shadowRoot.innerHTML).toContain('7')
-      el.setAttribute('num', '4')
+      const el: any = screen.getByRole('test')
+      expect(el.shadowRoot.innerHTML).toContain('61')
+      el.num = 7
       await new Promise((r) => setTimeout(() => r(''), 0))
-      expect(el.shadowRoot.innerHTML).toContain('5')
+      expect(el.shadowRoot.innerHTML).toContain('8')
     })
     test('Object', async () => {
       const meta: WcWrapperOptionsMeta = {
@@ -129,11 +129,11 @@ export const testWrapper = (
       await defineWrapper(testCases.objProp, meta)
       document.body.innerHTML = `<test-object-prop role="test" obj='{"val": "aaa"}'></test-object-prop>`
       await new Promise((r) => setTimeout(() => r(''), 0))
-      const el = screen.getByRole('test')
-      expect(el.shadowRoot.innerHTML).toContain('aaa')
-      el.setAttribute('obj', '{"val": "bbb"}')
+      const el: any = screen.getByRole('test')
+      expect(el.shadowRoot.innerHTML).not.toContain('aaa')
+      el.obj = { val: 'aaa' }
       await new Promise((r) => setTimeout(() => r(''), 0))
-      expect(el.shadowRoot.innerHTML).toContain('bbb')
+      expect(el.shadowRoot.innerHTML).toContain('aaa')
     })
     test('Props available on mount', async () => {
       const meta: WcWrapperOptionsMeta = {

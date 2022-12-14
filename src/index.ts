@@ -1,5 +1,3 @@
-import { kebabize } from './utils/kebab.js'
-
 export type WcWrapperOptionsMeta = {
   attributes: string[]
   emits: string[]
@@ -17,8 +15,8 @@ export type WcWrapperOptions = {
 }
 export type WcWrapper = ReturnType<typeof createWrapper>
 
-export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
-  class extends HTMLElement {
+export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
+  const wrapper = class extends HTMLElement {
     self: any
     public static options: WcWrapperOptions = wrapperOptions
     get options(): WcWrapperOptions {
@@ -26,17 +24,17 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     }
 
     emit = (name: string, detail?: any) => {
-      this.self.dispatchEvent(new CustomEvent(kebabize(name), { detail }))
+      this.self.dispatchEvent(new CustomEvent(name, { detail }))
     }
 
     constructor() {
       super()
       this.self = this
       this.attachShadow({ mode: 'open' })
-      this.init()
+      this.initCallback()
     }
 
-    init() {
+    initCallback() {
       const styleTag = document.createElement('style')
       styleTag.innerHTML = this.options.style
       this.shadowRoot!.appendChild(styleTag)
@@ -48,9 +46,11 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-      const regex = /(^[0-9|\.|,]*$)|(^{.*}$)|(^\[.*\]$)/
-      const parsedNew = regex.test(newValue) ? JSON.parse(newValue) : newValue
-      this.options.attributeChangedCallback(this.self, name, parsedNew)
+      this.updateProp(name, newValue)
+    }
+
+    updateProp(name: string, value: any) {
+      this.options.attributeChangedCallback(this.self, name, value)
     }
 
     connectedCallback() {
@@ -62,6 +62,17 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) =>
       this.shadowRoot!.innerHTML = ''
     }
   }
+
+  wrapperOptions.attributes.forEach((attribute) =>
+    Object.defineProperty(wrapper.prototype, attribute, {
+      set: function (value: any) {
+        this.updateProp(attribute, value)
+      },
+    })
+  )
+
+  return wrapper
+}
 
 export const defineComponent = (wrapper: WcWrapper) => {
   if (!customElements.get(wrapper.options.tag))

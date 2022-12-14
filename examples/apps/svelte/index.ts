@@ -2,8 +2,8 @@ import { createOptions } from 'brinejs/svelte'
 import App from './SvelteApp.svelte'
 
 const meta = {
-  emits: ["my-event"],
-  attributes: ["count","obj","text"],
+  emits: [],
+  attributes: ["count"],
   style: `.dummy-style{}`,
   tag: 'my-svelte-app',
 }

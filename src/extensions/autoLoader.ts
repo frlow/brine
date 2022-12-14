@@ -48,8 +48,8 @@ export const createAutoLoaderWrapper = (
       }
     }
 
-    init() {
-      super.init()
+    initCallback() {
+      super.initCallback()
       const self: any = this.constructor
       self.load()
     }

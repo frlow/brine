@@ -11,7 +11,7 @@
   "scripts": {
     "build": "rm -r lib || true && tsc -p ./tsconfig.build.json && yarn build:cjs && cp README.md lib",
     "build:cjs": "node build-cjs.js",
-    "test": "yarn node --experimental-vm-modules $(yarn bin jest)",
+    "test": "cross-env NODE_ENV=production yarn node --experimental-vm-modules $(yarn bin jest)",
     "dev": "run-p -r \"dev:build watch\" \"dev:serve\"",
     "dev:build": "rm -r dist || true && tsx examples/build.ts",
     "dev:serve": "serve .",
@@ -19,6 +19,7 @@
     "npm-version": "yarn build && node version.js"
   },
   "devDependencies": {
+    "@lit-labs/react": "^1.1.1",
     "@testing-library/dom": "^8.19.0",
     "@tsconfig/svelte": "^3.0.0",
     "@types/glob": "^8.0.0",
@@ -27,6 +28,7 @@
     "@types/react-dom": "^18.0.9",
     "@types/ws": "^8.5.3",
     "chokidar": "^3.5.3",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.15.14",
     "esbuild-plugin-alias": "^0.2.1",
     "esbuild-plugin-vue3": "^0.3.0",

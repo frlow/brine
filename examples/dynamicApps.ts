@@ -15,8 +15,4 @@ export const apps = [
     meta: { ...baseMeta, tag: 'my-svelte-app' },
     url: `${basePath}/svelte/index.js`,
   },
-  {
-    meta: { ...baseMeta, tag: 'my-vanilla' },
-    url: `${basePath}/vanilla/index.js`,
-  },
 ]

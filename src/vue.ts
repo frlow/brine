@@ -17,7 +17,7 @@ export const createOptions = (
     const mountPoint = document.createElement('div')
     self.shadowRoot.appendChild(mountPoint)
     meta.emits.forEach(
-      (e) => (self.props[`on${camelize(e)}`] = (args: any) => emit(e, args))
+      (e) => (self.props[camelize(`on-${e}`)] = (args: any) => emit(e, args))
     )
     self.app =
       typeof app === 'function'

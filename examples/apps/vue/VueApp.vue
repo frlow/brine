@@ -1,29 +1,16 @@
 <template>
-  <div class="counter">{{ count }} {{ text }} {{ obj?.val }}</div>
-  <button @click="handle">Button</button>
-  <component is="slot" name="foo"></component>
-  <component is="slot"></component>
-  <Child/>
+  <h3 class="color">Vue {{count+1}}</h3>
+  <my-tester :obj="demo" text="vue" @my-event="ev=>log(ev)"></my-tester>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, onUnmounted} from 'vue'
-import Child from './Child.vue'
-
-onMounted(() => console.log("Vue Mount"))
-onUnmounted(() => console.log("Vue Unmount"))
-
-const handle = () => {
-  emit("my-event", "demo")
-}
-defineProps<{ count: number, text: string, obj: { val: string } }>()
-const emit = defineEmits<{
-  (e: 'my-event', detail: string): void
-}>()
+defineProps<{ count: number }>()
+const demo = {value: 8}
+const log = console.log
 </script>
 
 <style scoped>
-.counter {
-  color: firebrick;
+.color {
+  color: green;
 }
 </style>

@@ -70,7 +70,7 @@ describe('Web Component Wrapper', () => {
         el.id = 'button'
         el.onclick = (e) => {
           e.preventDefault()
-          emit('someName', 'someDetail')
+          emit('some-name', 'someDetail')
         }
         self.shadowRoot.appendChild(el)
       },

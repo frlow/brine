@@ -122,6 +122,7 @@ const start = async (mode: Mode) => {
               'examples/apps/react/ReactApp.tsx',
               'examples/apps/svelte/SvelteApp.svelte',
               'examples/apps/vue/VueApp.vue',
+              'examples/apps/tester/Tester.svelte',
             ],
             prefix
           )

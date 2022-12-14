@@ -36,30 +36,30 @@ describe('camel', () => {
   test('base', () => {
     const str = 'word'
     const result = camelize(str)
-    expect(result).toEqual('Word')
+    expect(result).toEqual('word')
   })
 
   test('kebab', () => {
     const str = 'kebab-word'
     const result = camelize(str)
-    expect(result).toEqual('KebabWord')
+    expect(result).toEqual('kebabWord')
   })
 
   test('camel', () => {
     const str = 'camelWord'
     const result = camelize(str)
-    expect(result).toEqual('CamelWord')
+    expect(result).toEqual('camelWord')
   })
 
   test('underscore', () => {
     const str = 'underscore_word'
     const result = camelize(str)
-    expect(result).toEqual('Underscore_word')
+    expect(result).toEqual('underscore_word')
   })
 
   test('numbers', () => {
     const str = 'word1word'
     const result = camelize(str)
-    expect(result).toEqual('Word1word')
+    expect(result).toEqual('word1word')
   })
 })

@@ -5,6 +5,8 @@ export const createTransplantableWrapper = (
 ): WcWrapper => {
   const wrapper = createWrapper(options)
   return class extends wrapper {
+    transplantProps: { [i: string]: any } = {}
+
     connectedCallback() {
       super.connectedCallback()
       const self: any = this.constructor
@@ -17,11 +19,16 @@ export const createTransplantableWrapper = (
       self.transplantable.splice(self.transplantable.indexOf(this), 1)
     }
 
+    updateProp(name: string, value: any) {
+      this.transplantProps[name] = value
+      super.updateProp(name, value)
+    }
+
     public reload() {
-      this.init()
-      Array.from(this.attributes)
-        .filter((d) => !d.name.startsWith('data-') && !d.name.startsWith('x-'))
-        .forEach((a) => this.attributeChangedCallback(a.name, '', a.value))
+      this.initCallback()
+      Object.entries(this.transplantProps).forEach(([key, value]) =>
+        super.updateProp(key, value)
+      )
       this.connectedCallback()
     }
 

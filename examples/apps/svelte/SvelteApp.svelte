@@ -1,27 +1,13 @@
-<div>{count} {text} {obj?.val}</div>
-<button class="button" on:click={()=>dispatch("my-event", "svelte demo")}>Button</button>
-<svelte:element this="slot" name="foo"/>
-<svelte:element this="slot"/>
-<Child></Child>
+<h3 class="color">Svelte {count + 1}</h3>
+<my-tester obj={demo} text="svelte" on:my-event={ev=>console.log(ev)}></my-tester>
 
 <script lang="ts">
-  import Child from "./Child.svelte";
-  import {createEventDispatcher, onMount, onDestroy} from 'svelte'
-
-  onMount(() => {
-    dispatch("my-event", "mount")
-    console.log("Svelte mount")
-    console.log(text, obj, count)
-  })
-  onDestroy(() => console.log("Svelte unmount"))
-  const dispatch = createEventDispatcher<{ "my-event": string }>()
   export let count: number = 12
-  export let obj: { val: string }
-  export let text: string
+  const demo = {value: 1}
 </script>
 
 <style>
-    .button {
-        color: aquamarine;
+    .color {
+        color: #a0392a;
     }
 </style>
