@@ -1,4 +1,5 @@
-export const meta = {
+import type { WcWrapperOptionsMeta } from 'brinejs'
+export const meta: WcWrapperOptionsMeta = {
   emits: [],
   attributes: ["count"],
   style: `.dummy-style{}`,

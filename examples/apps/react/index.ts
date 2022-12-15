@@ -1,7 +1,8 @@
 import { createOptions } from 'brinejs/react'
+import type { WcWrapperOptionsMeta } from 'brinejs'
 import App from './ReactApp.js'
 
-const meta = {
+const meta: WcWrapperOptionsMeta = {
   emits: [],
   attributes: ["count"],
   style: `.dummy-style{}`,

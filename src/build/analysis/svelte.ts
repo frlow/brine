@@ -51,7 +51,7 @@ function getEmits(sourceFile: ts.SourceFile): PropDefinition[] {
   if (!dispatch) return []
   const args = dispatch.typeArguments![0] as TypeLiteralNode
   const emits = args?.members.map((p) => ({
-    name: kebabize(p.name!.getText(sourceFile).replace(/\"/g, '')),
+    name: kebabize(p.name!.getText(sourceFile).replace(/["|']/g, '')),
     type: (p as any).type.getText(sourceFile),
   }))
   return emits
@@ -67,8 +67,8 @@ export const analyzeSvelteFile: AnalyzeFileFunction = async (
   await preprocess(code, {
     markup: ({ content }) => {
       slots = content
-        .match(/<svelte:element this="slot"(.*?)>/g)
-        ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
+        .match(/<svelte:element this=["|']slot["|'](.*?)>/g)
+        ?.map((d) => (d.match(/name=["|'](.*?)["|']/) || [])[1])
         .filter((d) => d)
     },
     script: ({ content }) => {

@@ -113,6 +113,7 @@ const start = async (mode: Mode) => {
           await writeIndexFile('examples/apps/react/ReactApp.tsx', prefix)
           await writeIndexFile('examples/apps/svelte/SvelteApp.svelte', prefix)
           await writeMetaFile('examples/apps/vue/VueApp.vue', prefix)
+          await writeIndexFile('examples/apps/tester/Tester.svelte', prefix)
           // ============================
 
           // ============================

@@ -46,7 +46,7 @@ export const analyzeJsxFile: AnalyzeFileFunction = async (filePath, code) => {
   const name = path.parse(filePath).name.split('.')[0]
   const slots = code
     .match(/<slot(.*?)>/g)
-    ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
+    ?.map((d) => (d.match(/name=["|'](.*?)["|']/) || [])[1])
     .filter((d) => d)
   const tag = kebabize(name)
   return {

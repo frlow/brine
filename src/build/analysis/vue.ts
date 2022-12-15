@@ -69,8 +69,8 @@ export const analyzeVueFile: AnalyzeFileFunction = async (filePath, code) => {
     ScriptTarget.ESNext
   )
   const slots = descriptor.template?.content
-    .match(/<component is="slot"(.*?)>/g)
-    ?.map((d) => (d.match(/name="(.*?)"/) || [])[1])
+    .match(/<component is=["|']slot["|'](.*?)>/g)
+    ?.map((d) => (d.match(/name=["|'](.*?)["|']/) || [])[1])
     .filter((d) => d)
   const props = getProps(sourceFile)
   const emits = getEmits(sourceFile)

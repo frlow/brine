@@ -29,7 +29,8 @@ export const generateMetaFile = async (
   prefixOrTag: string
 ) => {
   const meta = await generateMetaCode(file, framework, prefixOrTag)
-  return `export const meta = ${meta}`
+  return `import type { WcWrapperOptionsMeta } from 'brinejs'
+export const meta: WcWrapperOptionsMeta = ${meta}`
 }
 
 export const writeMetaFile = async (
