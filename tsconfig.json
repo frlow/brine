@@ -31,6 +31,9 @@
       ],
       "brinejs/extensions": [
         "./src/extensions/index.ts"
+      ],
+      "react-wrapper": [
+        "./dist/wrapper/reactWrappers.tsx"
       ]
     }
   },

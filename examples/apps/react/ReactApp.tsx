@@ -1,16 +1,16 @@
 import './ReactApp.css'
 import React from 'react'
-import { MyTester } from './Wrappers'
+import { Tester, VueApp } from 'react-wrapper'
 
 export default ({ count }: { count: number }) => {
   return (
     <div>
       <h3 className="color">React {count + 1}</h3>
-      <MyTester
-        obj={{ value: 4 }}
+      <Tester
+        obj={{ val: 4 }}
         text="react"
         onMyEvent={(ev) => console.log(ev)}
-      ></MyTester>
+      ></Tester>
     </div>
   )
 }

@@ -6,7 +6,7 @@
   import {createEventDispatcher, onDestroy} from 'svelte'
 
   export let text: string
-  export let obj: { val: string }
+  export let obj: { val: number }
   const dispatch = createEventDispatcher<{
     'my-event': string
   }>()

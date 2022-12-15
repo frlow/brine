@@ -154,6 +154,7 @@ const start = async (mode: Mode) => {
       // This is just for local dev
       aliasPlugin({
         brinejs: './src/index.ts',
+        'react-wrapper': './dist/wrapper/reactWrappers.tsx',
       }),
     ],
     watch: dev,
