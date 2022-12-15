@@ -21,4 +21,7 @@ export default {
   },
   extensionsToTreatAsEsm: ['.ts'],
   testPathIgnorePatterns: ['common.test.ts'],
+  globals: {
+    Uint8Array: Uint8Array,
+  },
 }
