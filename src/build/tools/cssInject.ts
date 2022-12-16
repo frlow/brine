@@ -16,8 +16,9 @@ export const injectCode = async (
   const stringReplaceSourceMap = new StringReplaceSourceMap(js, jsMap)
   const beginIndex = js.split(target)[0].length
   const endIndex = beginIndex + target.length
-  stringReplaceSourceMap.replace(beginIndex, endIndex, code)
-  const replacedJs = js.replace(target, code)
+  const escapedCode = code.replace(/"/g, '\\"')
+  stringReplaceSourceMap.replace(beginIndex, endIndex, escapedCode)
+  const replacedJs = js.replace(target, escapedCode)
   const replacedMap = JSON.stringify(
     await stringReplaceSourceMap.generateSourceMap()
   )
