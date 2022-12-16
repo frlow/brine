@@ -1,4 +1,5 @@
 import { injectCss } from './cssInject'
+import { jest } from '@jest/globals'
 
 describe('inject css', () => {
   test('', async () => {
@@ -16,6 +17,8 @@ console.log(style);
 `
     const code = `.demo{content: ""}`
     const [replacedJs] = await injectCss(source, map, code)
+    console.log = jest.fn()
     expect(() => eval(replacedJs)).not.toThrowError('Unexpected string')
+    expect(console.log).toHaveBeenCalledWith(code)
   })
 })
