@@ -1,11 +1,13 @@
 import { createOptions } from 'brinejs/svelte'
-import type { WcWrapperOptionsMeta } from 'brinejs'
+import { createWrapper, defineComponent, WcWrapperOptionsMeta } from 'brinejs'
 import App from './SvelteApp.svelte'
 
 const meta: WcWrapperOptionsMeta = {
-  emits: [],
-  attributes: ["count"],
+  emits: ['my-event'],
+  attributes: ['count'],
   style: `.dummy-style{}`,
-  tag: 'my-svelte-app',
+  tag: 'my-vue-app',
 }
-export const options = createOptions(App, meta)
+const options = createOptions(App, meta)
+const wrapper = createWrapper(options)
+defineComponent(wrapper)

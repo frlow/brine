@@ -1,5 +1,5 @@
 import { createOptions } from 'brinejs/svelte'
-import type { WcWrapperOptionsMeta } from 'brinejs'
+import { createWrapper, defineComponent, WcWrapperOptionsMeta } from 'brinejs'
 import App from './Tester.svelte'
 
 const meta: WcWrapperOptionsMeta = {
@@ -8,4 +8,6 @@ const meta: WcWrapperOptionsMeta = {
   style: `.dummy-style{}`,
   tag: 'my-tester',
 }
-export const options = createOptions(App, meta)
+const options = createOptions(App, meta)
+const wrapper = createWrapper(options)
+defineComponent(wrapper)

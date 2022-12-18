@@ -1,5 +1,5 @@
 import { createOptions } from 'brinejs/react'
-import type { WcWrapperOptionsMeta } from 'brinejs'
+import { createWrapper, defineComponent, WcWrapperOptionsMeta } from 'brinejs'
 import App from './ReactApp.js'
 
 const meta: WcWrapperOptionsMeta = {
@@ -8,4 +8,6 @@ const meta: WcWrapperOptionsMeta = {
   style: `.dummy-style{}`,
   tag: 'my-react-app',
 }
-export const options = createOptions(App, meta)
+const options = createOptions(App, meta)
+const wrapper = createWrapper(options)
+defineComponent(wrapper)

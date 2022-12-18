@@ -29,12 +29,12 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
 
     constructor() {
       super()
-      this.self = this
       this.attachShadow({ mode: 'open' })
       this.initCallback()
     }
 
     initCallback() {
+      this.self = this
       const styleTag = document.createElement('style')
       styleTag.innerHTML = this.options.style
       this.shadowRoot!.appendChild(styleTag)
@@ -53,6 +53,10 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
       this.options.attributeChangedCallback(this.self, name, value)
     }
 
+    getProp(name: string) {
+      return 9
+    }
+
     connectedCallback() {
       this.options.connected(this.self, this.emit)
     }
@@ -68,6 +72,9 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
       set: function (value: any) {
         this.updateProp(attribute, value)
       },
+      get: function () {
+        return this.getProp(attribute)
+      },
     })
   )
 
@@ -75,7 +82,5 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
 }
 
 export const defineComponent = (wrapper: WcWrapper) => {
-  if (!customElements.get(wrapper.options.tag))
-    customElements.define(wrapper.options.tag, wrapper)
-  else console.warn(`${wrapper.options.tag} is already loaded`)
+  customElements.define(wrapper.options.tag, wrapper)
 }

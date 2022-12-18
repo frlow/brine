@@ -34,14 +34,6 @@ import {
 } from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
 
-enum Mode {
-  standalone,
-  dev,
-  prod,
-  dynamic,
-  auto,
-}
-
 const effectPlugin = <T>(
   before: (options: BuildOptions) => Promise<T>,
   after: (options: BuildOptions, result: BuildResult, data: T) => Promise<void>
@@ -58,31 +50,14 @@ const effectPlugin = <T>(
   },
 })
 
-// =================
-// Set mode here
-const buildMode: Mode = Mode.auto
-// End mode setter
-// =================
-
 let lastBuild: string[] = []
-const start = async (mode: Mode) => {
+const start = async () => {
   const outbase = 'examples'
   const outdir = 'dist'
   const dev = process.argv[2] === 'watch'
   const prefix = 'my'
 
-  const entryPoints =
-    mode === Mode.standalone
-      ? glob.sync('examples/*App.ts')
-      : mode === Mode.dev
-      ? ['examples/dev.ts']
-      : mode === Mode.prod
-      ? ['examples/prod.ts']
-      : mode === Mode.dynamic
-      ? glob.sync('examples/apps/**/index.ts').concat('examples/dynamic.ts')
-      : mode === Mode.auto
-      ? ['examples/auto.ts']
-      : []
+  const entryPoints = ['examples/prod.ts']
   const hct = dev ? startHotComponentTransplantServer() : () => {}
   console.log(
     `Use the following code in console to start hot transplanting components\n===================\n`,
@@ -111,7 +86,7 @@ const start = async (mode: Mode) => {
           // ============================
           // Generate boilerplate
           await writeIndexFile('examples/apps/react/ReactApp.tsx', prefix)
-          await writeIndexFile('examples/apps/svelte/SvelteApp.svelte', prefix)
+          // await writeIndexFile('examples/apps/svelte/SvelteApp.svelte', prefix)
           await writeMetaFile('examples/apps/vue/VueApp.vue', prefix)
           await writeIndexFile('examples/apps/tester/Tester.svelte', prefix)
           // ============================
@@ -165,4 +140,4 @@ const start = async (mode: Mode) => {
     console.log(await analyzeMetafile(result.metafile))
   }
 }
-start(buildMode).then()
+start().then()

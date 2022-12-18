@@ -7,6 +7,7 @@ export const createOptions = (
   return {
     init: (self, emit) => {
       self.temp = {}
+      self.app = undefined
     },
     attributes: meta.attributes,
     attributeChangedCallback: (self, name, newValue) => {
