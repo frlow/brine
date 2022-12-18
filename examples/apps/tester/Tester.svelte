@@ -1,5 +1,5 @@
 <div>
-    <button on:click={()=>dispatch("my-event", `Hello from ${text}}`)}>{text}</button>
+    <button on:click={()=>dispatch("my-event", `Hello from ${text}`)}>{text}</button>
 </div>
 
 <script lang="ts">
