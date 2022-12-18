@@ -17,14 +17,13 @@ export type WcWrapper = ReturnType<typeof createWrapper>
 
 export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
   const wrapper = class extends HTMLElement {
-    self: any
     public static options: WcWrapperOptions = wrapperOptions
     get options(): WcWrapperOptions {
       return (this as any).constructor.options
     }
 
     emit = (name: string, detail?: any) => {
-      this.self.dispatchEvent(new CustomEvent(name, { detail }))
+      this.dispatchEvent(new CustomEvent(name, { detail }))
     }
 
     constructor() {
@@ -34,11 +33,10 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
 
     initCallback() {
-      this.self = this
       const styleTag = document.createElement('style')
       styleTag.innerHTML = this.options.style
       this.shadowRoot!.appendChild(styleTag)
-      this.options.init(this.self, this.emit)
+      this.options.init(this, this.emit)
     }
 
     static get observedAttributes() {
@@ -50,19 +48,19 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
 
     updateProp(name: string, value: any) {
-      this.options.attributeChangedCallback(this.self, name, value)
+      this.options.attributeChangedCallback(this, name, value)
     }
 
     getProp(name: string) {
-      return 9
+      return 5
     }
 
     connectedCallback() {
-      this.options.connected(this.self, this.emit)
+      this.options.connected(this, this.emit)
     }
 
     disconnectedCallback() {
-      this.options.disconnected(this.self)
+      this.options.disconnected(this)
       this.shadowRoot!.innerHTML = ''
     }
   }

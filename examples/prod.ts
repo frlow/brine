@@ -3,29 +3,35 @@ const createTransplantable = (constructor: any) =>
     static elements: any[] = []
 
     connectedCallback() {
-      super.connectedCallback()
+      if (super.connectedCallback) super.connectedCallback()
       const elements = Object.getPrototypeOf(this).constructor.elements
       elements.push(this)
     }
 
     disconnectedCallback() {
-      super.disconnectedCallback()
+      if (super.disconnectedCallback) super.disconnectedCallback()
       const elements = Object.getPrototypeOf(this).constructor.elements
       elements.splice(elements.indexOf(this), 1)
     }
 
     transplantRenew() {
-      if ('initCallback' in this) this.initCallback()
-      Object.entries(this.tempTranplantProps).forEach(
-        ([key, value]) => (this[key] = value)
+      const constr = Object.getPrototypeOf(this).constructor
+      const refreshed = new constr()
+      Object.entries(this.tempTranplantProps).forEach(([key, value]) =>
+        key in this
+          ? (refreshed[key] = value)
+          : refreshed.setAttribute(key, value.toString())
       )
       delete this.tempTranplantProps
+      this.shadowRoot.innerHTML = refreshed.shadowRoot.innerHTML
+      Object.assign(this, refreshed)
+      // if ('initCallback' in this) this.initCallback()
       this.connectedCallback()
     }
 
     transplantSendoff() {
       this.tempTranplantProps = {}
-      Object.getPrototypeOf(this).constructor.observedAttributes.forEach(
+      Object.getPrototypeOf(this).constructor.observedAttributes?.forEach(
         (attribute: string) =>
           (this.tempTranplantProps[attribute] =
             this[attribute] || this.getAttribute(attribute))
@@ -53,6 +59,7 @@ ce.define = (name: string, constructor: any, options: any) => {
 
 import('./apps/react')
 await import('./apps/tester')
-await import('./apps/vue')
+// await import('./apps/vue')
+customElements.define('my-vue-app', class extends HTMLElement {})
 await new Promise((r) => setTimeout(() => r(''), 3000))
 await import('./apps/svelte')
