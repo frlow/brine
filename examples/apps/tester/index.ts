@@ -1,5 +1,8 @@
 import { defineComponent } from 'brinejs/svelte'
 import App from './Tester.svelte'
-import { meta } from './Tester.meta.js'
-
-defineComponent(App, meta)
+defineComponent(App, {
+  emits: ["my-event"],
+  attributes: ["text","obj"],
+  style: `.dummy-style{}`,
+  tag: 'my-tester',
+})

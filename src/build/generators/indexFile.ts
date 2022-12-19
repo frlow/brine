@@ -10,14 +10,9 @@ export const generateIndexFile = async (
 ) => {
   const appPath = path.parse(file).base.replace(/\.[j|t]sx?/, '.js')
   const meta = await generateMetaCode(file, framework, prefixOrTag)
-  const code = `import { createOptions } from 'brinejs/${framework}'
-import { createWrapper, defineComponent, WcWrapperOptionsMeta } from 'brinejs'
+  const code = `import { defineComponent } from 'brinejs/${framework}'
 import App from './${appPath}'
-
-const meta: WcWrapperOptionsMeta = ${meta}
-const options = createOptions(App, meta)
-const wrapper = createWrapper(options)
-defineComponent(wrapper)
+defineComponent(App, ${meta})
 `
   return code
 }

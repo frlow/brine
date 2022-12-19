@@ -1,40 +1,77 @@
 import { createElement } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, Root } from 'react-dom/client'
 import { camelize } from './utils/kebab.js'
-import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
 
-export const createOptions = (
+export const defineComponent = (
   Component: (args: any) => JSX.Element,
-  meta: WcWrapperOptionsMeta
-): WcWrapperOptions => {
-  return {
-    init: (self, emit) => {
+  meta: {
+    attributes: string[]
+    emits: string[]
+    style: string
+    tag: string
+  }
+) => {
+  const wrapper = class extends HTMLElement {
+    private root: ShadowRoot
+    private app: Root
+    private props: any = {}
+
+    private render() {
+      this.app.render(createElement(Component, this.props))
+    }
+
+    constructor() {
+      super()
+      this.root = this.attachShadow({ mode: 'closed' })
+      const styleTag = document.createElement('style')
+      styleTag.innerHTML = meta.style
+      this.root.appendChild(styleTag)
       const container = document.createElement('div')
-      self.shadowRoot.appendChild(container)
-      self.app = createRoot(container)
-      self.props = {}
+      this.root.appendChild(container)
+      this.app = createRoot(container)
 
       meta.emits.forEach((e) => {
-        self.props[camelize(`on-${e}`)] = (arg: any) => {
-          emit(e, arg)
+        this.props[camelize(`on-${e}`)] = (arg: any) => {
+          this.emit(e, arg)
         }
       })
-      self.render = () => {
-        self.app.render(createElement(Component, self.props))
-      }
-    },
-    attributes: meta.attributes,
-    attributeChangedCallback: (self, name, newValue) => {
-      self.props[name] = newValue
-      self.render()
-    },
-    connected: (self, emit) => {
-      self.render()
-    },
-    disconnected: (self) => {
-      self.app.unmount()
-    },
-    style: meta.style,
-    tag: meta.tag,
+    }
+
+    static get observedAttributes() {
+      return meta.attributes || []
+    }
+
+    private setProp(name: string, value: any) {
+      this.props[name] = value
+      this.render()
+    }
+
+    private emit(name: string, detail?: any) {
+      this.dispatchEvent(
+        new CustomEvent(name, { detail, bubbles: true, cancelable: false })
+      )
+    }
+
+    connectedCallback() {
+      this.render()
+    }
+
+    disconnectedCallback() {
+      this.app.unmount()
+    }
+
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+      this.setProp(name, newValue)
+    }
   }
+
+  meta.attributes.forEach((attribute) =>
+    Object.defineProperty(wrapper.prototype, attribute, {
+      set: function (value: any) {
+        this.setProp(attribute, value)
+      },
+    })
+  )
+
+  customElements.define(meta.tag, wrapper)
 }

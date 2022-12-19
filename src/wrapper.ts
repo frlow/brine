@@ -1,23 +1,29 @@
 import { createComponent } from '@lit-labs/react'
 import React from 'react'
-import { kebabize } from './utils/kebab.js'
+import { camelize } from './utils/kebab.js'
 
-export const wrapWc =
-  <T>(tag: string) =>
-  (args: T): JSX.Element => {
-    const events = Object.keys(args)
-      .filter((d) => /on[A-Z]/.test(d))
-      .reduce(
-        (acc, cur) => ({ ...acc, [cur]: kebabize(cur).replace('on-', '') }),
-        {}
-      )
+export const wrapWc = <T>(tag: string, events: string[]) => {
+  const wrapper = {
+    instance: undefined as any,
+    get value() {
+      if (!this.instance) {
+        const eventNames = events.reduce(
+          (acc, cur) => ({ ...acc, [camelize(`on-${cur}`)]: cur }),
+          {}
+        )
 
-    const Wrapper = createComponent({
-      tagName: tag,
-      elementClass: customElements.get(tag),
-      react: React,
-      events,
-    })
-
-    return React.createElement(Wrapper, args) as any
+        this.instance = createComponent({
+          tagName: tag,
+          elementClass: customElements.get(tag),
+          react: React,
+          events: eventNames,
+        })
+      }
+      return this.instance
+    },
   }
+
+  return (args: T): JSX.Element => {
+    return React.createElement(wrapper.value, args) as any
+  }
+}

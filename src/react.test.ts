@@ -1,10 +1,10 @@
 import { testWrapper } from './common.test.js'
-import { createOptions } from './react.js'
+import { defineComponent } from './react.js'
 
 const i = "import React from 'react'; export default "
 describe('react', () => {
   testWrapper(
-    createOptions,
+    defineComponent,
     {
       stringText: `${i}()=><div>simple-string-text</div>`,
       stringProp: `${i}({text})=><div>{text}</div>`,

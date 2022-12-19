@@ -55,7 +55,9 @@ ${results
             (e) => `${camelize(`on-${e.name}`)}:(detail: ${e.type})=>void`
           )
         )
-        .join(', ')}}>('${r.tag}')`
+        .join(', ')}}>('${r.tag}', [${r.emits
+        .map((e) => `'${e.name}'`)
+        .join(', ')}])`
   )
   .join('\n')}`
   fs.writeFileSync(path.join(dist, 'reactWrappers.tsx'), code, 'utf8')
