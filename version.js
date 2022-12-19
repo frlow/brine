@@ -39,10 +39,6 @@ const packageJson = {
       require: './build/index.cjs',
       types: './build/index.d.ts',
     },
-    './extensions': {
-      import: './extensions/index.js',
-      types: './extensions/index.d.ts',
-    },
   },
 }
 

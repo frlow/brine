@@ -1,9 +1,11 @@
-import type { WcWrapperOptionsMeta } from './index.js'
-import { WcWrapperMeta } from './common.js'
-
 export const defineComponent = (
   component: any | ((element: HTMLElement, props: any) => any),
-  meta: WcWrapperMeta
+  meta: {
+    attributes: string[]
+    emits: string[]
+    style: string
+    tag: string
+  }
 ) => {
   const wrapper = class extends HTMLElement {
     private root: ShadowRoot
