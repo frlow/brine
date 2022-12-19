@@ -4,12 +4,14 @@ const createTransplantable = (tag: string) => {
   class Transplantable extends HTMLElement {
     private static elements: any[] = []
     private heart: any
-    private heartTag = tag
+    private static heartTag = tag
     private props: Record<string, any> = {}
 
     constructor() {
       super()
-      this.heart = document.createElement(this.heartTag)
+      this.heart = document.createElement(
+        Object.getPrototypeOf(this).constructor.heartTag
+      )
     }
 
     static get observedAttributes() {
@@ -43,8 +45,9 @@ const createTransplantable = (tag: string) => {
     }
 
     private transplant(tag: string) {
-      this.heartTag = tag
-      const newHeart = document.createElement(this.heartTag) as any
+      const newHeart = document.createElement(
+        Object.getPrototypeOf(this).constructor.heartTag
+      ) as any
       Object.entries(this.props).forEach(([key, value]) => {
         if (key in newHeart) newHeart[key] = value
         else newHeart.setAttribute(key, value.toString())
@@ -54,6 +57,7 @@ const createTransplantable = (tag: string) => {
     }
 
     public static transplant(tag: string) {
+      this.heartTag = tag
       this.elements.forEach((el) => el.transplant(tag))
     }
   }
@@ -72,14 +76,20 @@ const createTransplantable = (tag: string) => {
   return Transplantable
 }
 
-export const initTransplant = () => {
+export const initTransplant = (tags?: string[]) => {
   const ce = customElements as any
   ce.tempDefine = ce.define
   ce.define = (name: string, constructor: any, options: any) => {
+    if (tags && !tags.includes(name)) {
+      ce.tempDefine(name, constructor, options)
+      return
+    }
+
     const heartName = name + '-' + (Math.random() + 1).toString(36).substring(7)
     ce.tempDefine(heartName, constructor, options)
 
     const existing = ce.get(name) as any
+
     if (existing) existing.transplant(heartName)
     else ce.tempDefine(name, createTransplantable(heartName))
   }

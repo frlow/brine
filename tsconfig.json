@@ -29,6 +29,9 @@
       "brinejs/wrapper": [
         "./src/wrapper.ts"
       ],
+      "brinejs/transplant": [
+        "./src/transplant.ts"
+      ],
       "brinejs/extensions": [
         "./src/extensions/index.ts"
       ],

@@ -86,9 +86,9 @@ const start = async () => {
           // ============================
           // Generate boilerplate
           await writeIndexFile('examples/apps/react/ReactApp.tsx', prefix)
-          // await writeIndexFile('examples/apps/svelte/SvelteApp.svelte', prefix)
+          await writeMetaFile('examples/apps/svelte/SvelteApp.svelte', prefix)
           await writeMetaFile('examples/apps/vue/VueApp.vue', prefix)
-          await writeIndexFile('examples/apps/tester/Tester.svelte', prefix)
+          await writeMetaFile('examples/apps/tester/Tester.svelte', prefix)
           // ============================
 
           // ============================

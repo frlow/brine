@@ -30,6 +30,10 @@ const packageJson = {
       import: './wrapper.js',
       types: './wrapper.d.ts',
     },
+    './transplant': {
+      import: './transplant.js',
+      types: './transplant.d.ts',
+    },
     './build': {
       import: './build/index.js',
       require: './build/index.cjs',

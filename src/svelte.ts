@@ -1,43 +1,74 @@
-import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
+import type { WcWrapperOptionsMeta } from './index.js'
 
-export const createOptions = (
+export const defineComponent = (
   component: any | ((element: HTMLElement, props: any) => any),
   meta: WcWrapperOptionsMeta
-): WcWrapperOptions => {
-  return {
-    init: (self, emit) => {
-      self.temp = {}
-      self.app = undefined
-    },
-    attributes: meta.attributes,
-    attributeChangedCallback: (self, name, newValue) => {
-      if (self.app)
-        self.app.$$set({
-          [name]: newValue,
+) => {
+  const wrapper = class extends HTMLElement {
+    private root: ShadowRoot
+    private tempProps: Record<string, any> = {}
+    private app: any
+
+    constructor() {
+      super()
+      this.root = this.attachShadow({ mode: 'closed' })
+      const styleTag = document.createElement('style')
+      styleTag.innerHTML = meta.style
+      this.root.appendChild(styleTag)
+    }
+
+    static get observedAttributes() {
+      return meta.attributes || []
+    }
+
+    private setProp(name: string, value: any) {
+      if (this.app)
+        this.app.$$set({
+          [name]: value,
         })
-      else self.temp[name] = newValue
-    },
-    connected: (self, emit) => {
-      self.mountPoint = document.createElement('div')
-      self.app = component.toString().startsWith('class')
-        ? new component({ target: self.mountPoint, props: self.temp })
-        : component(self.mountPoint, self.temp)
-      delete self.temp
+      else this.tempProps[name] = value
+    }
+
+    private emit(name: string, detail?: any) {
+      this.dispatchEvent(
+        new CustomEvent(name, { detail, bubbles: true, cancelable: false })
+      )
+    }
+
+    connectedCallback() {
+      const mountPoint = document.createElement('div')
+      this.app = component.toString().startsWith('class')
+        ? new component({ target: mountPoint, props: this.tempProps })
+        : component(mountPoint, this.tempProps)
+      delete this.tempProps
       meta.emits.forEach(
         (e) =>
-          (self.app.$$.callbacks[e] = [
+          (this.app.$$.callbacks[e] = [
             (arg: any) => {
-              emit(e, arg.detail)
+              this.emit(e, arg.detail)
             },
           ])
       )
-      self.shadowRoot.appendChild(self.mountPoint)
-    },
-    disconnected: (self) => {
-      self.app.$$.on_disconnect?.forEach((f: any) => f())
-      self.app.$$.on_destroy?.forEach((f: any) => f())
-    },
-    style: meta.style,
-    tag: meta.tag,
+      this.root.appendChild(mountPoint)
+    }
+
+    disconnectedCallback() {
+      this.app.$$.on_disconnect?.forEach((f: any) => f())
+      this.app.$$.on_destroy?.forEach((f: any) => f())
+    }
+
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+      this.setProp(name, newValue)
+    }
   }
+
+  meta.attributes.forEach((attribute) =>
+    Object.defineProperty(wrapper.prototype, attribute, {
+      set: function (value: any) {
+        this.setProp(attribute, value)
+      },
+    })
+  )
+
+  customElements.define(meta.tag, wrapper)
 }
