@@ -23,7 +23,9 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
 
     emit = (name: string, detail?: any) => {
-      this.dispatchEvent(new CustomEvent(name, { detail }))
+      this.dispatchEvent(
+        new CustomEvent(name, { detail, bubbles: true, cancelable: false })
+      )
     }
 
     constructor() {
@@ -51,10 +53,6 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
       this.options.attributeChangedCallback(this, name, value)
     }
 
-    getProp(name: string) {
-      return 5
-    }
-
     connectedCallback() {
       this.options.connected(this, this.emit)
     }
@@ -69,9 +67,6 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     Object.defineProperty(wrapper.prototype, attribute, {
       set: function (value: any) {
         this.updateProp(attribute, value)
-      },
-      get: function () {
-        return this.getProp(attribute)
       },
     })
   )
