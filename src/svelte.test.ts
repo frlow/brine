@@ -1,5 +1,5 @@
 import { testWrapper } from './common.test.js'
-import { createOptions } from './svelte.js'
+import { defineComponent } from './svelte.js'
 import type { Plugin } from 'esbuild'
 import sveltePlugin from 'esbuild-svelte'
 import sveltePreprocess from 'svelte-preprocess'
@@ -11,7 +11,7 @@ const plugins: Plugin[] = [
 ]
 describe('svelte', () => {
   testWrapper(
-    createOptions,
+    defineComponent,
     {
       stringText: `<div>simple-string-text</div>`,
       stringProp: `<div>{text}</div><script>export let text</script>`,

@@ -1,9 +1,4 @@
-import {
-  createWrapper,
-  defineComponent,
-  WcWrapperOptions,
-  WcWrapperOptionsMeta,
-} from './index.js'
+import { WcWrapperOptionsMeta } from './index.js'
 import { Plugin, build } from 'esbuild'
 import path from 'path'
 import fs from 'fs'
@@ -20,10 +15,7 @@ export type WrapperTestCases = {
 }
 
 export const testWrapper = (
-  createOptions: (
-    component: any,
-    meta: WcWrapperOptionsMeta
-  ) => WcWrapperOptions,
+  defineComponent: (component: any, meta: WcWrapperOptionsMeta) => void,
   testCases: Partial<WrapperTestCases>,
   plugins: Plugin[],
   extension: string,
@@ -67,9 +59,9 @@ export const testWrapper = (
 
   async function defineWrapper(code: string, meta: WcWrapperOptionsMeta) {
     const app = await buildApp(code, 'TestApp' + extension, plugins)
-    const options = createOptions(app, meta)
-    const wrapper = createWrapper(options)
-    defineComponent(wrapper)
+    // const options = createOptions(app, meta)
+    // const wrapper = createWrapper(options)
+    defineComponent(app, meta)
   }
 
   test('Simple, component, should render text in component', async () => {
@@ -82,8 +74,8 @@ export const testWrapper = (
     await defineWrapper(testCases.stringText, meta)
     document.body.innerHTML = `<test-string-text role="test"></test-string-text>`
     await new Promise((r) => setTimeout(() => r(''), 0))
-    const el = screen.getByRole('test')
-    const innerHtml = el.shadowRoot.innerHTML
+    const el = screen.getByRole('test') as any
+    const innerHtml = el.root.innerHTML
     expect(innerHtml).toContain('simple-string-text')
   })
   describe('Props, should set and update', () => {
@@ -97,11 +89,11 @@ export const testWrapper = (
       await defineWrapper(testCases.stringProp, meta)
       document.body.innerHTML = `<test-string-prop role="test" text="aaa"></test-string-prop>`
       await new Promise((r) => setTimeout(() => r(''), 0))
-      const el = screen.getByRole('test')
-      expect(el.shadowRoot.innerHTML).toContain('aaa')
+      const el = screen.getByRole('test') as any
+      expect(el.root.innerHTML).toContain('aaa')
       el.setAttribute('text', 'bbb')
       await new Promise((r) => setTimeout(() => r(''), 0))
-      expect(el.shadowRoot.innerHTML).toContain('bbb')
+      expect(el.root.innerHTML).toContain('bbb')
     })
     test('Number', async () => {
       const meta: WcWrapperOptionsMeta = {
@@ -113,11 +105,11 @@ export const testWrapper = (
       await defineWrapper(testCases.numProp, meta)
       document.body.innerHTML = `<test-number-prop role="test" num="6"></test-number-prop>`
       await new Promise((r) => setTimeout(() => r(''), 0))
-      const el: any = screen.getByRole('test')
-      expect(el.shadowRoot.innerHTML).toContain('61')
+      const el: any = screen.getByRole('test') as any
+      expect(el.root.innerHTML).toContain('61')
       el.num = 7
       await new Promise((r) => setTimeout(() => r(''), 0))
-      expect(el.shadowRoot.innerHTML).toContain('8')
+      expect(el.root.innerHTML).toContain('8')
     })
     test('Object', async () => {
       const meta: WcWrapperOptionsMeta = {
@@ -129,11 +121,11 @@ export const testWrapper = (
       await defineWrapper(testCases.objProp, meta)
       document.body.innerHTML = `<test-object-prop role="test" obj='{"val": "aaa"}'></test-object-prop>`
       await new Promise((r) => setTimeout(() => r(''), 0))
-      const el: any = screen.getByRole('test')
-      expect(el.shadowRoot.innerHTML).not.toContain('aaa')
+      const el: any = screen.getByRole('test') as any
+      expect(el.root.innerHTML).not.toContain('aaa')
       el.obj = { val: 'aaa' }
       await new Promise((r) => setTimeout(() => r(''), 0))
-      expect(el.shadowRoot.innerHTML).toContain('aaa')
+      expect(el.root.innerHTML).toContain('aaa')
     })
     test('Props available on mount', async () => {
       const meta: WcWrapperOptionsMeta = {
@@ -165,9 +157,9 @@ export const testWrapper = (
       const callback = (e: any) => resolve(e)
       document.body.innerHTML = `<test-simple-event role="test"></test-simple-event>`
       await new Promise((r) => setTimeout(() => r(''), 0))
-      const el = screen.getByRole('test')
+      const el = screen.getByRole('test') as any
       el.addEventListener('my-event', callback)
-      el.shadowRoot.getElementById('button').click()
+      el.root.getElementById('button').click()
       const e = (await callbackPromise) as any
       expect(e.detail).toEqual('simple')
     })
