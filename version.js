@@ -10,10 +10,6 @@ const packageJson = {
   license: 'MIT',
   type: 'module',
   exports: {
-    '.': {
-      import: './index.js',
-      types: './index.d.ts',
-    },
     './vue': {
       import: './vue.js',
       types: './vue.d.ts',

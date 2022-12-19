@@ -7,11 +7,9 @@ import esbuild, {
 import vuePlugin from 'esbuild-plugin-vue3'
 import sveltePlugin from 'esbuild-svelte'
 import sveltePreprocess from 'svelte-preprocess'
-import glob from 'glob'
 import {
   // ==== hot reload ====
   startHotComponentTransplantServer,
-  hotReloadSnippet,
   // =============
 
   // ==== boilerplate generation ====
@@ -59,11 +57,6 @@ const start = async () => {
 
   const entryPoints = ['examples/prod.ts']
   const hct = dev ? startHotComponentTransplantServer() : () => {}
-  console.log(
-    `Use the following code in console to start hot transplanting components\n===================\n`,
-    hotReloadSnippet(),
-    `\n===================`
-  )
   const result = await esbuild.build({
     entryPoints,
     format: 'esm',

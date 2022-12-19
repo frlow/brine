@@ -14,9 +14,6 @@
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "brinejs": [
-        "./src/index.ts"
-      ],
       "brinejs/vue": [
         "./src/vue.ts"
       ],

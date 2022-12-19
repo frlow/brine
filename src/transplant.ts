@@ -78,9 +78,17 @@ const createTransplantable = (tag: string) => {
 
 export const initTransplant = (tags?: string[]) => {
   const ce = customElements as any
+  if (!tags) ce.tags = null
+  else if (ce.tags) {
+    ce.tags = ce.tags
+      .concat(...tags)
+      .filter((d: string, i: number, arr: string[]) => arr.indexOf(d) === i)
+  } else ce.tags = tags
+
+  if (ce.tempDefine) return
   ce.tempDefine = ce.define
   ce.define = (name: string, constructor: any, options: any) => {
-    if (tags && !tags.includes(name)) {
+    if (ce.tags && !ce.tags.includes(name)) {
       ce.tempDefine(name, constructor, options)
       return
     }
