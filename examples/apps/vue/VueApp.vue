@@ -1,6 +1,7 @@
 <template>
   <h3 class="color">Vue {{ count + 1 }}</h3>
   <my-tester :obj="demo" text="vue" @my-event="ev=>emit('my-event', ev.detail)"></my-tester>
+  <component is="slot"></component>
 </template>
 
 <script lang="ts" setup>

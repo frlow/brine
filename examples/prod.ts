@@ -17,7 +17,6 @@ const defineLoader = (tag: string, attributes: string[], onLoad: () => any) => {
     }
   )
 }
-
 const apps = [
   {
     name: 'my-vue-app',
@@ -41,7 +40,6 @@ const apps = [
   },
 ]
 apps.forEach((app) => defineLoader(app.name, app.attributes, app.loader))
-
 if (process.env.NODE_ENV === 'development')
   new WebSocket('ws://localhost:8080').onmessage = (ev) =>
     import(ev.data + `?t=${Date.now()}`)

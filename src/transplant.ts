@@ -1,79 +1,135 @@
-const createTransplantable = (tag: string) => {
-  const startAttributes = (customElements.get(tag) as any).observedAttributes
+import { setProp } from 'svelte-preprocess/dist/modules/utils.js'
 
-  class Transplantable extends HTMLElement {
+const createTransplantable = (componentClass: any) => {
+  const startAttributes = componentClass.observedAttributes
+
+  const prepareInnerClass = (classToPrepare: any) => {
+    Object.setPrototypeOf(
+      classToPrepare,
+      class {
+        dispatchEvent: (ev: Event) => void
+        attachShadow: (options: any) => Partial<ShadowRoot>
+        connectExternalRoot: (root: ShadowRoot) => void
+        transplantProps: {
+          externalRoot: ShadowRoot
+          shadowOptions: any
+          shadowChildren: any[]
+        }
+
+        constructor() {
+          const self = this
+          this.transplantProps = {
+            shadowChildren: [],
+          } as any
+          this.connectExternalRoot = (root) => {
+            self.transplantProps.externalRoot = root
+            self.transplantProps.shadowChildren.forEach((child) =>
+              root.appendChild(child)
+            )
+            self.transplantProps.shadowChildren = []
+          }
+          this.dispatchEvent = (ev) =>
+            self.transplantProps.externalRoot.host.dispatchEvent(ev)
+          this.attachShadow = (options) => {
+            self.transplantProps.shadowOptions = options
+            return {
+              appendChild<T extends Node>(node: T): T {
+                if (self.transplantProps.externalRoot)
+                  self.transplantProps.externalRoot.appendChild(node)
+                else self.transplantProps.shadowChildren.push(node)
+                return node
+              },
+            }
+          }
+        }
+      }
+    )
+    return class extends classToPrepare {}
+  }
+
+  const ret = class Transplantable extends HTMLElement {
     private static elements: any[] = []
-    private heart: any
-    private static heartTag = tag
-    private props: Record<string, any> = {}
+    private static innerClass: any = componentClass
+    private innerObj: any
+    private outerShadowRoot: ShadowRoot
+    private transplantTempProps: any = {}
 
     constructor() {
       super()
-      this.heart = document.createElement(
-        Object.getPrototypeOf(this).constructor.heartTag
-      )
+      this.refresh()
     }
 
     static get observedAttributes() {
       return startAttributes || []
     }
 
-    private setProp(name: string, value: any) {
-      if (name in this.heart) this.heart[name] = value
-      else this.heart.setAttribute(name, value.toString())
-      this.props[name] = value
+    connectedCallback() {
+      const elements = Object.getPrototypeOf(this).constructor.elements
+      elements.push(this)
+      if (this.innerObj.connectedCallback) this.innerObj.connectedCallback()
     }
 
-    private getProp(name: string) {
-      return this.heart[name]
+    disconnectedCallback() {
+      const elements = Object.getPrototypeOf(this).constructor.elements
+      elements.splice(elements.indexOf(this), 1)
+      if (this.innerObj.disconnectedCallback)
+        this.innerObj.disconnectedCallback()
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
       this.setProp(name, newValue)
     }
 
-    connectedCallback() {
-      const elements = Object.getPrototypeOf(this).constructor.elements
-      elements.push(this)
-      this.appendChild(this.heart)
+    setProp(attribute: string, value: any) {
+      this.transplantTempProps[attribute] = value
+      if (attribute in this.innerObj) this.innerObj[attribute] = value
+      else if (this.innerObj.attributeChangedCallback)
+        this.innerObj.attributeChangedCallback(attribute, null, value)
     }
 
-    disconnectedCallback() {
-      const elements = Object.getPrototypeOf(this).constructor.elements
-      elements.splice(elements.indexOf(this), 1)
-      this.removeChild(this.heart)
-    }
-
-    private transplant(tag: string) {
-      const newHeart = document.createElement(
-        Object.getPrototypeOf(this).constructor.heartTag
-      ) as any
-      Object.entries(this.props).forEach(([key, value]) => {
-        if (key in newHeart) newHeart[key] = value
-        else newHeart.setAttribute(key, value.toString())
+    private refresh() {
+      this.innerObj = new (prepareInnerClass(
+        Object.getPrototypeOf(this).constructor.innerClass
+      ))()
+      if (
+        this.innerObj.transplantProps.shadowOptions &&
+        !this.outerShadowRoot
+      ) {
+        this.outerShadowRoot = this.attachShadow(
+          this.innerObj.transplantProps.shadowOptions
+        )
+      }
+      if (this.outerShadowRoot)
+        this.innerObj.connectExternalRoot(this.outerShadowRoot)
+      Object.entries(this.transplantTempProps).forEach(([attribute, value]) => {
+        if (attribute in this.innerObj) this.innerObj[attribute] = value
+        else if (this.innerObj.attributeChangedCallback)
+          this.innerObj.attributeChangedCallback(attribute, null, value)
       })
-      this.heart.replaceWith(newHeart)
-      this.heart = newHeart
     }
 
-    public static transplant(tag: string) {
-      this.heartTag = tag
-      this.elements.forEach((el) => el.transplant(tag))
+    public static transplant(updatedClass: string) {
+      const proto = Object.getPrototypeOf(updatedClass)
+      if (proto !== HTMLElement) {
+        throw 'Not HTMLElement'
+      }
+      this.innerClass = updatedClass
+      const temp = [...this.elements]
+      temp.forEach((el) => el.disconnectedCallback())
+      temp.forEach((el) => el.refresh())
+      temp.forEach((el) => el.connectedCallback())
     }
   }
 
   startAttributes.forEach((attribute: string) =>
-    Object.defineProperty(Transplantable.prototype, attribute, {
+    Object.defineProperty(ret.prototype, attribute, {
       set: function (value: any) {
         this.setProp(attribute, value)
-      },
-      get: function () {
-        return this.getProp(attribute)
       },
     })
   )
 
-  return Transplantable
+  return ret
 }
 
 export const initTransplant = (tags?: string[]) => {
@@ -88,17 +144,10 @@ export const initTransplant = (tags?: string[]) => {
   if (ce.tempDefine) return
   ce.tempDefine = ce.define
   ce.define = (name: string, constructor: any, options: any) => {
-    if (ce.tags && !ce.tags.includes(name)) {
-      ce.tempDefine(name, constructor, options)
-      return
-    }
-
-    const heartName = name + '-' + (Math.random() + 1).toString(36).substring(7)
-    ce.tempDefine(heartName, constructor, options)
-
     const existing = ce.get(name) as any
-
-    if (existing) existing.transplant(heartName)
-    else ce.tempDefine(name, createTransplantable(heartName))
+    if (ce.tags && !ce.tags.includes(name))
+      ce.tempDefine(name, constructor, options)
+    if (existing) existing.transplant(constructor)
+    else ce.tempDefine(name, createTransplantable(constructor))
   }
 }

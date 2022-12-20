@@ -15,6 +15,7 @@
 <template x-if="show">
     <div style="border: solid 1px red; width: 100px;">
         <my-vue-app x-effect="$el.count=count">
+            <div>Inner</div>
         </my-vue-app>
         <my-svelte-app x-effect="$el.count=count">
         </my-svelte-app>
