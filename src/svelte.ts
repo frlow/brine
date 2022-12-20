@@ -5,7 +5,7 @@ export const createOptions = (
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {
-    init: (self, emit) => {
+    init: (self) => {
       self.temp = {}
     },
     attributes: meta.attributes,

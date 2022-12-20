@@ -28,7 +28,7 @@ export const createOptions = (
     self.app.mount(mountPoint)
   },
   disconnected: (self) => {
-    ;(self.app as App).unmount()
+    self.app.unmount()
   },
   style: meta.style,
   tag: meta.tag,

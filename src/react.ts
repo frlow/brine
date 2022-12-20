@@ -28,7 +28,7 @@ export const createOptions = (
       self.props[name] = newValue
       self.render()
     },
-    connected: (self, emit) => {
+    connected: (self) => {
       self.render()
     },
     disconnected: (self) => {
