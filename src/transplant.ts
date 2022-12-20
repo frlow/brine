@@ -1,5 +1,3 @@
-import { setProp } from 'svelte-preprocess/dist/modules/utils.js'
-
 const createTransplantable = (componentClass: any) => {
   const startAttributes = componentClass.observedAttributes
 
