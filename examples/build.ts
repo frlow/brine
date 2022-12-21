@@ -56,7 +56,11 @@ const start = async () => {
   const dev = process.argv[2] === 'watch'
   const prefix = 'my'
 
-  const hct = dev ? startHotComponentTransplantServer({}) : () => {}
+  const hct = dev
+    ? startHotComponentTransplantServer({
+        rootUrl: 'http://localhost:3000/dist',
+      })
+    : () => {}
   console.log(
     `Use the following code in console to start hot transplanting components\n===================\n`,
     hotReloadSnippet(),

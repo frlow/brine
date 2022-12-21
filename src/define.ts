@@ -73,7 +73,7 @@ export const baseDefine = (
   }
   let wrapper = createWrapper(options)
   if (extendFunction) wrapper = extendFunction(wrapper)
-  else if (process.env.NODE_ENV === 'production')
+  else if (process.env.NODE_ENV === 'development')
     wrapper = makeWrapperTransplantable(wrapper)
   customElements.define(tag, wrapper)
 }
