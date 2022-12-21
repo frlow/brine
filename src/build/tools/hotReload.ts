@@ -12,10 +12,15 @@ const simpleHash = (str: string) => {
   return new Uint32Array([hash])[0].toString(36)
 }
 
-export const startHotComponentTransplantServer = (
-  basePath: string,
-  port: number = 8080
-) => {
+export const startHotComponentTransplantServer = ({
+  port = 8080,
+  basePath = process.cwd(),
+  rootUrl = `ws://localhost:${port}`,
+}: {
+  port?: number
+  basePath?: string
+  rootUrl?: string
+}) => {
   const connections: WebSocket[] = []
   const startServer = async () => {
     const { WebSocketServer } = await import('ws')
@@ -34,7 +39,7 @@ export const startHotComponentTransplantServer = (
     paths
       .filter((path) => path.endsWith('.js'))
       .filter((path) => lastBuild[path] !== hashFile(path))
-      .map((path) => path.replace(basePath, ''))
+      .map((path) => path.replace(basePath, rootUrl))
       .forEach((url) => connections.forEach((ws) => ws.send(url)))
     lastBuild = paths
       .filter((path) => path.endsWith('.js'))
