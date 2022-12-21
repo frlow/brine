@@ -15,7 +15,7 @@ const simpleHash = (str: string) => {
 export const startHotComponentTransplantServer = ({
   port = 8080,
   basePath = process.cwd(),
-  rootUrl = `ws://localhost:${port}`,
+  rootUrl = `http://localhost:3000`,
 }: {
   port?: number
   basePath?: string
