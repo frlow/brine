@@ -1,5 +1,7 @@
 import type { WebSocket } from 'ws'
 import fs from 'fs'
+import path from 'path'
+import process from 'process'
 
 const hashFile = (path: string) => simpleHash(fs.readFileSync(path, 'utf8'))
 const simpleHash = (str: string) => {
@@ -14,7 +16,7 @@ const simpleHash = (str: string) => {
 
 export const startHotComponentTransplantServer = ({
   port = 8080,
-  basePath = process.cwd(),
+  basePath = path.join(process.cwd(), 'dist'),
   rootUrl = `http://localhost:3000`,
 }: {
   port?: number
