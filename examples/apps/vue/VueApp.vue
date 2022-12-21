@@ -1,6 +1,6 @@
 <template>
-  <h3 class="color">Vue {{count+1}}</h3>
-  <my-tester :obj="demo" text="vue" @my-event="ev=>log(ev)"></my-tester>
+  <h3 class="color">Vue {{ count + 1 }}</h3>
+  <my-tester :obj="demo" :text="`vue ${count}`" @my-event="ev=>log(ev)"></my-tester>
 </template>
 
 <script lang="ts" setup>

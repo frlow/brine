@@ -10,13 +10,13 @@ export const createOptions = (
   init: (self) => {
     self.props = reactive<any>({})
   },
-  attributeChangedCallback: (self, name, newValue) => {
+  attributeChangedCallback: (self, root, name, newValue) => {
     self.props[name] = newValue
   },
   attributes: meta.attributes,
-  connected: (self, emit) => {
+  connected: (self, root, emit) => {
     const mountPoint = document.createElement('div')
-    self.shadowRoot.appendChild(mountPoint)
+    root.appendChild(mountPoint)
     meta.emits.forEach(
       (e) => (self.props[camelize(`on-${e}`)] = (args: any) => emit(e, args))
     )
@@ -30,6 +30,7 @@ export const createOptions = (
   },
   disconnected: (self) => {
     self.app.unmount()
+    delete self.app
   },
   style: meta.style,
   tag: meta.tag,

@@ -8,7 +8,7 @@ export default ({ count }: { count: number }) => {
       <h3 className="color">React {count + 1}</h3>
       <Tester
         obj={{ val: 4 }}
-        text="react"
+        text={`react ${count}`}
         onMyEvent={(ev) => console.log(ev)}
       ></Tester>
     </div>

@@ -7,17 +7,31 @@ export type WcWrapperOptionsMeta = {
 export type WcWrapperOptions = {
   style: string
   tag: string
-  init: (self: any, emit: (name: string, detail?: any) => void) => void
+  init: (
+    self: any,
+    root: ShadowRoot,
+    emit: (name: string, detail?: any) => void
+  ) => void
   attributes?: string[]
-  attributeChangedCallback: (self: any, name: string, newValue: any) => void
-  connected: (self: any, emit: (name: string, detail?: any) => void) => void
-  disconnected: (self: any) => void
+  attributeChangedCallback: (
+    self: any,
+    root: ShadowRoot,
+    name: string,
+    newValue: any
+  ) => void
+  connected: (
+    self: any,
+    root: ShadowRoot,
+    emit: (name: string, detail?: any) => void
+  ) => void
+  disconnected: (self: any, root: ShadowRoot) => void
 }
 export type WcWrapper = ReturnType<typeof createWrapper>
 
 export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
   const wrapper = class extends HTMLElement {
-    self: any
+    private readonly self: any
+    private root: ShadowRoot
     public static options: WcWrapperOptions = wrapperOptions
     get options(): WcWrapperOptions {
       return (this as any).constructor.options
@@ -30,15 +44,15 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     constructor() {
       super()
       this.self = this
-      this.attachShadow({ mode: 'open' })
+      this.root = this.attachShadow({ mode: 'closed' })
       this.initCallback()
     }
 
     initCallback() {
       const styleTag = document.createElement('style')
       styleTag.innerHTML = this.options.style
-      this.shadowRoot!.appendChild(styleTag)
-      this.options.init(this.self, this.emit)
+      this.root!.appendChild(styleTag)
+      this.options.init(this.self, this.root, this.emit)
     }
 
     static get observedAttributes() {
@@ -50,16 +64,16 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
 
     updateProp(name: string, value: any) {
-      this.options.attributeChangedCallback(this.self, name, value)
+      this.options.attributeChangedCallback(this.self, this.root, name, value)
     }
 
     connectedCallback() {
-      this.options.connected(this.self, this.emit)
+      this.options.connected(this.self, this.root, this.emit)
     }
 
     disconnectedCallback() {
-      this.options.disconnected(this.self)
-      this.shadowRoot!.innerHTML = ''
+      this.options.disconnected(this.self, this.root)
+      this.root!.innerHTML = ''
     }
   }
 

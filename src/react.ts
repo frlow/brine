@@ -9,9 +9,9 @@ export const createOptions = (
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {
-    init: (self, emit) => {
+    init: (self, root, emit) => {
       const container = document.createElement('div')
-      self.shadowRoot.appendChild(container)
+      root.appendChild(container)
       self.app = createRoot(container)
       self.props = {}
 
@@ -25,7 +25,7 @@ export const createOptions = (
       }
     },
     attributes: meta.attributes,
-    attributeChangedCallback: (self, name, newValue) => {
+    attributeChangedCallback: (self, root, name, newValue) => {
       self.props[name] = newValue
       self.render()
     },
@@ -34,6 +34,7 @@ export const createOptions = (
     },
     disconnected: (self) => {
       self.app.unmount()
+      delete self.app
     },
     style: meta.style,
     tag: meta.tag,

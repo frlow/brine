@@ -10,14 +10,14 @@ export const createOptions = (
       self.temp = {}
     },
     attributes: meta.attributes,
-    attributeChangedCallback: (self, name, newValue) => {
+    attributeChangedCallback: (self, root, name, newValue) => {
       if (self.app)
         self.app.$$set({
           [name]: newValue,
         })
       else self.temp[name] = newValue
     },
-    connected: (self, emit) => {
+    connected: (self, root, emit) => {
       self.mountPoint = document.createElement('div')
       self.app = component.toString().startsWith('class')
         ? new component({ target: self.mountPoint, props: self.temp })
@@ -31,11 +31,12 @@ export const createOptions = (
             },
           ])
       )
-      self.shadowRoot.appendChild(self.mountPoint)
+      root.appendChild(self.mountPoint)
     },
     disconnected: (self) => {
       self.app.$$.on_disconnect?.forEach((f: any) => f())
       self.app.$$.on_destroy?.forEach((f: any) => f())
+      delete self.app
     },
     style: meta.style,
     tag: meta.tag,

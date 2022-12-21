@@ -13,7 +13,8 @@ export const defineComponent = (wrapper: WcWrapper) => {
 export const baseDefine = (
   createOptions: (...args: any[]) => WcWrapperOptions,
   component: any,
-  meta: WcWrapperOptionsMeta
+  meta: WcWrapperOptionsMeta,
+  wrapperFunction?: any
 ) => {
   const options = createOptions(component, meta)
   const registered = customElements.get(meta.tag) as any
@@ -22,9 +23,10 @@ export const baseDefine = (
     return
   }
   const wrapperFunc =
-    process.env.NODE_ENV === 'production'
+    wrapperFunction ||
+    (process.env.NODE_ENV === 'production'
       ? require('./index.js').createWrapper
-      : require('./extensions/transplant').createTransplantableWrapper
+      : require('./extensions/transplant').createTransplantableWrapper)
   const wrapper = wrapperFunc(options)
   customElements.define(meta.tag, wrapper)
 }

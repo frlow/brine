@@ -56,7 +56,7 @@ const start = async () => {
   const dev = process.argv[2] === 'watch'
   const prefix = 'my'
 
-  const hct = dev ? startHotComponentTransplantServer() : () => {}
+  const hct = dev ? startHotComponentTransplantServer(process.cwd()) : () => {}
   console.log(
     `Use the following code in console to start hot transplanting components\n===================\n`,
     hotReloadSnippet(),
@@ -71,7 +71,7 @@ const start = async () => {
     sourcemap: true,
     splitting: true,
     minify: false, //!dev,
-    treeShaking: true,
+    // treeShaking: true,
     define: { 'process.env.NODE_ENV': dev ? '"development"' : '"production"' },
     plugins: [
       vuePlugin() as Plugin,
@@ -120,7 +120,7 @@ const start = async () => {
 
           // ============================
           // Hot Component Transplant
-          hct(result.outputFiles.map((f) => f.path.replace(process.cwd(), '')))
+          hct(result.outputFiles.map((f) => f.path))
           // ============================
 
           console.log('Build time: ', Date.now() - startTime, 'ms')
