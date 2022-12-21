@@ -15,10 +15,10 @@ export const generateMetaCode = async (
     ? prefixOrTag
     : `${prefixOrTag}-${kebabize(ar.name)}`
   const meta = `{
-  emits: ${JSON.stringify(emits)},
-  attributes: ${JSON.stringify(attributes)},
-  style: \`.dummy-style{}\`,
-  tag: '${tag}',
+  emits: ${JSON.stringify(emits)} as string[],
+  attributes: ${JSON.stringify(attributes)} as string[],
+  style: \`.dummy-style{}\` as string,
+  tag: '${tag}' as string,
 }`
   return meta
 }
@@ -29,8 +29,7 @@ export const generateMetaFile = async (
   prefixOrTag: string
 ) => {
   const meta = await generateMetaCode(file, framework, prefixOrTag)
-  return `import type { WcWrapperOptionsMeta } from 'brinejs'
-export const meta: WcWrapperOptionsMeta = ${meta}`
+  return `export const meta = ${meta}`
 }
 
 export const writeMetaFile = async (

@@ -1,11 +1,9 @@
 import { define } from 'brinejs/svelte'
-import type { WcWrapperOptionsMeta } from 'brinejs'
 import App from './SvelteApp.svelte'
 
-const meta: WcWrapperOptionsMeta = {
-  emits: [],
-  attributes: ["count"],
-  style: `.dummy-style{}`,
-  tag: 'my-svelte-app',
-}
-define(App, meta)
+define(App, {
+  emits: [] as string[],
+  attributes: ["count"] as string[],
+  style: `.dummy-style{}` as string,
+  tag: 'my-svelte-app' as string,
+})
