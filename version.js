@@ -12,6 +12,7 @@ const packageJson = {
   exports: {
     '.': {
       import: './index.js',
+      require: './index.cjs',
       types: './index.d.ts',
     },
     './vue': {
@@ -30,14 +31,9 @@ const packageJson = {
       import: './wrapper.js',
       types: './wrapper.d.ts',
     },
-    './build': {
-      import: './build/index.js',
-      require: './build/index.cjs',
-      types: './build/index.d.ts',
-    },
-    './extensions': {
-      import: './extensions/index.js',
-      types: './extensions/index.d.ts',
+    './loader': {
+      import: './loader.js',
+      types: './loader.d.ts',
     },
   },
 }

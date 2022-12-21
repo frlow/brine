@@ -3,9 +3,9 @@ import esbuild from 'esbuild'
 esbuild
   .build({
     bundle: true,
-    entryPoints: ['src/build/index.ts'],
+    entryPoints: ['src/index.ts'],
     platform: 'node',
-    outfile: 'lib/build/index.cjs',
+    outfile: 'lib/index.cjs',
     external: [
       'ect',
       'mote',

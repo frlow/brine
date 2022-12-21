@@ -1,9 +1,6 @@
-import { createWrapper, WcWrapper, WcWrapperOptions } from '../index.js'
+import { WcWrapperOptions } from './common.js'
 
-export const createTransplantableWrapper = (
-  options: WcWrapperOptions
-): WcWrapper => {
-  const wrapper = createWrapper(options)
+export const makeWrapperTransplantable = (wrapper: any): any => {
   return class extends wrapper {
     transplantProps: { [i: string]: any } = {}
 

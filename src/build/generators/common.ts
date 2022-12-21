@@ -1,10 +1,10 @@
-import { Framework } from '../../utils/framework.js'
+import { Framework } from '../framework.js'
 import path from 'path'
 import type { AnalysisResult } from '../analysis/index.js'
 
 export { AnalysisResult }
-export * from '../../utils/kebab.js'
-export * from '../../utils/framework.js'
+export { camelize, kebabize } from '../../common.js'
+export * from '../framework.js'
 export { analyze } from '../analysis/index.js'
 
 export const parseFramework = (filePath: string): Framework => {

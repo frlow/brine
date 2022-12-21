@@ -31,7 +31,7 @@ import {
   writeWebTypes,
   writeReactWrappersFile,
   // ==============================
-} from '../src/build'
+} from '../src'
 import aliasPlugin from 'esbuild-plugin-alias'
 
 const effectPlugin = <T>(

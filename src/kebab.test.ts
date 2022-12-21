@@ -1,4 +1,4 @@
-import { camelize, kebabize } from './kebab.js'
+import { camelize, kebabize } from './common.js'
 
 describe('kebab', () => {
   test('base', () => {

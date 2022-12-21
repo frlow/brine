@@ -1,6 +1,6 @@
 import { createComponent } from '@lit-labs/react'
 import React from 'react'
-import { camelize } from './utils/kebab.js'
+import { camelize } from './common.js'
 
 export const wrapWc = <T>(tag: string, events: string[]) => {
   const wrapper = {

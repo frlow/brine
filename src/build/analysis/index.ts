@@ -1,11 +1,10 @@
 import { analyzeJsxFile } from './jsx.js'
 import { analyzeVueFile } from './vue.js'
 import { analyzeSvelteFile } from './svelte.js'
-import type { Framework } from '../../utils/framework.js'
+import type { Framework } from '../framework.js'
 
-export * from '../../utils/kebab.js'
-export * from '../../utils/findProp.js'
-export * from '../../utils/framework.js'
+export { kebabize, camelize } from '../../common.js'
+export * from '../framework.js'
 
 export type PropDefinition = {
   name: string

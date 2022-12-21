@@ -1,4 +1,4 @@
-import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
+import type { WcWrapperOptions, WcWrapperOptionsMeta } from './common.js'
 import { baseDefine } from './define.js'
 
 export const createOptions = (
@@ -46,4 +46,4 @@ export const createOptions = (
 export const define = (
   component: any | ((element: HTMLElement, props: any) => any),
   meta: WcWrapperOptionsMeta
-) => baseDefine(createOptions, component, meta)
+) => baseDefine(createOptions(component, meta), meta.tag)

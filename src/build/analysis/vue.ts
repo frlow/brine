@@ -7,14 +7,10 @@ import ts, {
   VariableStatement,
 } from 'typescript'
 import path from 'path'
-import {
-  AnalyzeFileFunction,
-  findProp,
-  PropDefinition,
-  kebabize,
-} from './index.js'
+import { AnalyzeFileFunction, PropDefinition, kebabize } from './index.js'
 import SyntaxKind = ts.SyntaxKind
 import ScriptTarget = ts.ScriptTarget
+import { findProp } from './findProp.js'
 
 const getProps = (sourceFile: SourceFile): PropDefinition[] => {
   if (!sourceFile.statements) return []

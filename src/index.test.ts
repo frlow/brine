@@ -1,6 +1,9 @@
 import { jest } from '@jest/globals'
-import { createWrapper, defineComponent, WcWrapperOptions } from './index.js'
+import type { WcWrapperOptions } from './common.js'
 import { screen } from '@testing-library/dom'
+import { baseDefine } from './define.js'
+import any = jasmine.any
+import anything = jasmine.anything
 
 describe('Web Component Wrapper', () => {
   beforeEach(() => {
@@ -21,14 +24,13 @@ describe('Web Component Wrapper', () => {
         const el = document.createElement('div')
         el.innerHTML = 'something'
         el.id = 'target'
-        self.shadowRoot.appendChild(el)
+        self.root.appendChild(el)
       },
     }
-    const wrapper = createWrapper(options)
-    defineComponent(wrapper)
+    baseDefine(options, options.tag)
     document.body.innerHTML = `<test-text role="text"></test-text>`
-    const textEl = screen.getByRole('text')
-    const text = textEl.shadowRoot.getElementById('target').innerHTML
+    const textEl = screen.getByRole('text') as any
+    const text = textEl.root.getElementById('target').innerHTML
     expect(text).toEqual('something')
     expect(connected).toHaveBeenCalled()
   })
@@ -44,13 +46,13 @@ describe('Web Component Wrapper', () => {
       disconnected: () => {},
       init: () => {},
     }
-    const wrapper = createWrapper(options)
-    defineComponent(wrapper)
+    baseDefine(options, options.tag)
     document.body.innerHTML = `<test-attribute role="text"></test-attribute>`
     const textEl = screen.getByRole('text')
     textEl.setAttribute('text', 'updated')
     expect(attributeChange).toHaveBeenCalledWith(
-      expect.objectContaining({}),
+      expect.anything(),
+      expect.anything(),
       'text',
       'updated'
     )
@@ -64,7 +66,7 @@ describe('Web Component Wrapper', () => {
       attributeChangedCallback: () => {},
       connected: () => {},
       disconnected: () => {},
-      init: (self, emit) => {
+      init: (self, root, emit) => {
         const el = document.createElement('button')
         el.innerHTML = 'button'
         el.id = 'button'
@@ -72,16 +74,15 @@ describe('Web Component Wrapper', () => {
           e.preventDefault()
           emit('some-name', 'someDetail')
         }
-        self.shadowRoot.appendChild(el)
+        self.root.appendChild(el)
       },
     }
-    const wrapper = createWrapper(options)
-    defineComponent(wrapper)
+    baseDefine(options, options.tag)
     document.body.innerHTML = `<test-emit role="text"></test-emit>`
-    const textEl = screen.getByRole('text')
+    const textEl = screen.getByRole('text') as any
     const eventListener = jest.fn()
     textEl.addEventListener('some-name', (e: any) => eventListener(e.detail))
-    textEl.shadowRoot.getElementById('button').click()
+    textEl.root.getElementById('button').click()
     expect(eventListener).toHaveBeenCalledWith('someDetail')
   })
 
@@ -97,8 +98,7 @@ describe('Web Component Wrapper', () => {
       disconnected,
       init: () => {},
     }
-    const wrapper = createWrapper(options)
-    defineComponent(wrapper)
+    baseDefine(options, options.tag)
     document.body.innerHTML = `<test-disconnect></test-disconnect>`
     expect(connected).toHaveBeenCalled()
     expect(disconnected).not.toHaveBeenCalled()

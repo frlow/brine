@@ -1,4 +1,4 @@
-import { defineAutoLoader } from 'brinejs/extensions'
+import { defineAutoLoader } from 'brinejs/loader'
 
 import('./apps/react')
 import('./apps/svelte')
