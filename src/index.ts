@@ -74,8 +74,4 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
   return wrapper
 }
 
-export const defineComponent = (wrapper: WcWrapper) => {
-  if (!customElements.get(wrapper.options.tag))
-    customElements.define(wrapper.options.tag, wrapper)
-  else console.warn(`${wrapper.options.tag} is already loaded`)
-}
+export { defineComponent } from './define'

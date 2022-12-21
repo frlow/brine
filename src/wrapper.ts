@@ -7,14 +7,15 @@ export const wrapWc = <T>(tag: string, events: string[]) => {
     instance: undefined as any,
     get value() {
       if (!this.instance) {
+        const elementClass = customElements.get(tag)
+        if (!elementClass) return undefined
         const eventNames = events.reduce(
           (acc, cur) => ({ ...acc, [camelize(`on-${cur}`)]: cur }),
           {}
         )
-
         this.instance = createComponent({
           tagName: tag,
-          elementClass: customElements.get(tag),
+          elementClass,
           react: React,
           events: eventNames,
         })
@@ -24,6 +25,9 @@ export const wrapWc = <T>(tag: string, events: string[]) => {
   }
 
   return (args: T): JSX.Element => {
-    return React.createElement(wrapper.value, args) as any
+    const wrapperValue = wrapper.value
+    return wrapperValue
+      ? (React.createElement(wrapper.value, args) as any)
+      : null
   }
 }

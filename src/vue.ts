@@ -1,6 +1,7 @@
 import { App, createApp, h, reactive } from '@vue/runtime-dom'
 import { camelize } from './utils/kebab.js'
 import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
+import { baseDefine } from './define.js'
 
 export const createOptions = (
   app: ((props: any) => App) | any,
@@ -33,3 +34,8 @@ export const createOptions = (
   style: meta.style,
   tag: meta.tag,
 })
+
+export const define = (
+  app: ((props: any) => App) | any,
+  meta: WcWrapperOptionsMeta
+) => baseDefine(createOptions, app, meta)

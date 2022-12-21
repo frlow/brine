@@ -2,6 +2,7 @@ import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { camelize } from './utils/kebab.js'
 import type { WcWrapperOptions, WcWrapperOptionsMeta } from './index.js'
+import { baseDefine } from './define'
 
 export const createOptions = (
   Component: (args: any) => JSX.Element,
@@ -38,3 +39,8 @@ export const createOptions = (
     tag: meta.tag,
   }
 }
+
+export const define = (
+  Component: (args: any) => JSX.Element,
+  meta: WcWrapperOptionsMeta
+) => baseDefine(createOptions, Component, meta)

@@ -7,7 +7,7 @@ import esbuild, {
 import vuePlugin from 'esbuild-plugin-vue3'
 import sveltePlugin from 'esbuild-svelte'
 import sveltePreprocess from 'svelte-preprocess'
-import glob from 'glob'
+import fs from 'fs'
 import {
   // ==== hot reload ====
   startHotComponentTransplantServer,
@@ -34,14 +34,6 @@ import {
 } from '../src/build'
 import aliasPlugin from 'esbuild-plugin-alias'
 
-enum Mode {
-  standalone,
-  dev,
-  prod,
-  dynamic,
-  auto,
-}
-
 const effectPlugin = <T>(
   before: (options: BuildOptions) => Promise<T>,
   after: (options: BuildOptions, result: BuildResult, data: T) => Promise<void>
@@ -58,31 +50,12 @@ const effectPlugin = <T>(
   },
 })
 
-// =================
-// Set mode here
-const buildMode: Mode = Mode.auto
-// End mode setter
-// =================
-
-let lastBuild: string[] = []
-const start = async (mode: Mode) => {
+const start = async () => {
   const outbase = 'examples'
   const outdir = 'dist'
   const dev = process.argv[2] === 'watch'
   const prefix = 'my'
 
-  const entryPoints =
-    mode === Mode.standalone
-      ? glob.sync('examples/*App.ts')
-      : mode === Mode.dev
-      ? ['examples/dev.ts']
-      : mode === Mode.prod
-      ? ['examples/prod.ts']
-      : mode === Mode.dynamic
-      ? glob.sync('examples/apps/**/index.ts').concat('examples/dynamic.ts')
-      : mode === Mode.auto
-      ? ['examples/auto.ts']
-      : []
   const hct = dev ? startHotComponentTransplantServer() : () => {}
   console.log(
     `Use the following code in console to start hot transplanting components\n===================\n`,
@@ -90,14 +63,15 @@ const start = async (mode: Mode) => {
     `\n===================`
   )
   const result = await esbuild.build({
-    entryPoints,
+    entryPoints: ['./examples/prod.ts'],
     format: 'esm',
     outdir: outdir,
     outbase,
     bundle: true,
     sourcemap: true,
     splitting: true,
-    minify: !dev,
+    minify: false, //!dev,
+    treeShaking: true,
     define: { 'process.env.NODE_ENV': dev ? '"development"' : '"production"' },
     plugins: [
       vuePlugin() as Plugin,
@@ -107,6 +81,7 @@ const start = async (mode: Mode) => {
       effectPlugin(
         async () => {
           const startTime = Date.now()
+          if (fs.existsSync('./dist')) fs.rmSync('./dist', { recursive: true })
 
           // ============================
           // Generate boilerplate
@@ -165,4 +140,4 @@ const start = async (mode: Mode) => {
     console.log(await analyzeMetafile(result.metafile))
   }
 }
-start(buildMode).then()
+start().then()

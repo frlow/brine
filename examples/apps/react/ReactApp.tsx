@@ -1,6 +1,6 @@
 import './ReactApp.css'
 import React from 'react'
-import { Tester, VueApp } from 'react-wrapper'
+import { Tester } from 'react-wrapper'
 
 export default ({ count }: { count: number }) => {
   return (

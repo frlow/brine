@@ -1,4 +1,4 @@
-import { createOptions } from 'brinejs/vue'
+import { define } from 'brinejs/vue'
 import App from './VueApp.vue'
 import { meta } from './VueApp.meta'
 import { createApp, h } from 'vue'
@@ -10,4 +10,4 @@ const root = (props: any) => {
   return app
 }
 
-export const options = createOptions(root, meta)
+define(root, meta)
