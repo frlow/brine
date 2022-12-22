@@ -133,7 +133,7 @@ describe('Web Component Wrapper', () => {
     )
   })
 
-  test('Kebab-cased attribute', async () => {
+  test('kebab-cased attribute', async () => {
     const attributeChangedCallback = jest.fn()
     const options: WcWrapperOptions = {
       ...dummyOptions,
@@ -151,7 +151,7 @@ describe('Web Component Wrapper', () => {
     )
   })
 
-  test('camelCased prop', async () => {
+  test('kebab-cased prop', async () => {
     const attributeChangedCallback = jest.fn()
     const options: WcWrapperOptions = {
       ...dummyOptions,
@@ -162,7 +162,7 @@ describe('Web Component Wrapper', () => {
     baseDefine(options, options.tag)
     document.body.innerHTML = `<camel-case-prop role="test"></camel-case-prop>`
     const el = screen.getByRole('test') as any
-    el.kebabName = 'some-attribute'
+    el['kebab-name'] = 'some-attribute'
     expect(attributeChangedCallback).toHaveBeenCalledWith(
       expect.anything(),
       expect.anything(),
