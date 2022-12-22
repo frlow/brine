@@ -16,7 +16,7 @@
     <div style="border: solid 1px red; width: 100px;">
         <my-vue-app x-effect="$el.count=count">
         </my-vue-app>
-        <my-svelte-app x-effect="$el.count=count" my-prop="test">
+        <my-svelte-app x-effect="$el.count=count" x-init="$el['my-prop']={example: 'inner'}">
         </my-svelte-app>
         <my-react-app x-effect="$el.count=count">
         </my-react-app>

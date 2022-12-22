@@ -46,11 +46,16 @@ const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-      this.updateProp(camelize(name), newValue)
+      this.updateProp(name, newValue)
     }
 
     updateProp(name: string, value: any) {
-      this.options.attributeChangedCallback(this.self, this.root, name, value)
+      this.options.attributeChangedCallback(
+        this.self,
+        this.root,
+        camelize(name),
+        value
+      )
     }
 
     connectedCallback() {
@@ -64,10 +69,9 @@ const createWrapper = (wrapperOptions: WcWrapperOptions) => {
   }
 
   wrapperOptions.attributes.forEach((attribute) => {
-    const camelName = camelize(attribute)
-    Object.defineProperty(wrapper.prototype, camelName, {
+    Object.defineProperty(wrapper.prototype, attribute, {
       set: function (value: any) {
-        this.updateProp(camelName, value)
+        this.updateProp(attribute, value)
       },
     })
   })
