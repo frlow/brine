@@ -49,7 +49,7 @@ ${results
   .map(
     (r) =>
       `export const ${r.name} = wrapWc<{${r.props
-        .map((p) => `${p.name}${p.optional ? '?' : ''}:${p.type}`)
+        .map((p) => `${camelize(p.name)}${p.optional ? '?' : ''}:${p.type}`)
         .concat(
           r.emits.map(
             (e) => `${camelize(`on-${e.name}`)}:(detail: ${e.type})=>void`

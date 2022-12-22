@@ -1,7 +1,20 @@
 import type { WcWrapperOptions } from './common.js'
 import { makeWrapperTransplantable } from './transplant.js'
+import { camelize } from './common.js'
+
+const validateOptions = (wrapperOptions: WcWrapperOptions) => {
+  const camelAttributes = wrapperOptions.attributes.filter((a) =>
+    /[A-Z]/.test(a)
+  )
+  if (camelAttributes.length > 0)
+    throw `Attributes cannot contain uppercase letters, use kebab-cased names instead.
+  The following attributes needs to have their names updated: ${camelAttributes.join(
+    ', '
+  )}`
+}
 
 const createWrapper = (wrapperOptions: WcWrapperOptions) => {
+  validateOptions(wrapperOptions)
   const wrapper = class extends HTMLElement {
     private readonly self: any
     private root: ShadowRoot
@@ -33,7 +46,7 @@ const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-      this.updateProp(name, newValue)
+      this.updateProp(camelize(name), newValue)
     }
 
     updateProp(name: string, value: any) {
@@ -50,13 +63,14 @@ const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
   }
 
-  wrapperOptions.attributes.forEach((attribute) =>
-    Object.defineProperty(wrapper.prototype, attribute, {
+  wrapperOptions.attributes.forEach((attribute) => {
+    const camelName = camelize(attribute)
+    Object.defineProperty(wrapper.prototype, camelName, {
       set: function (value: any) {
-        this.updateProp(attribute, value)
+        this.updateProp(camelName, value)
       },
     })
-  )
+  })
 
   return wrapper
 }
