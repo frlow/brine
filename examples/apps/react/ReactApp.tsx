@@ -10,6 +10,7 @@ export default ({ count }: { count: number }) => {
         obj={{ val: 4 }}
         text={`react ${count}`}
         onMyEvent={(ev) => console.log(ev)}
+        my-prop={{ prop: 'ReactProp' }}
       ></Tester>
     </div>
   )

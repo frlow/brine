@@ -1,6 +1,6 @@
 import { createComponent } from '@lit-labs/react'
 import React from 'react'
-import { camelize } from './common.js'
+import { camelize, kebabize } from './common.js'
 
 export const wrapWc = <T>(tag: string, events: string[]) => {
   const wrapper = {
@@ -26,8 +26,13 @@ export const wrapWc = <T>(tag: string, events: string[]) => {
 
   return (args: T): JSX.Element => {
     const wrapperValue = wrapper.value
+    const props = Object.entries(args).reduce((acc, [key, value]) => {
+      if (/on[A-Z]/.test(key)) acc[key] = value
+      else acc[kebabize(key)] = value
+      return acc
+    }, {} as any)
     return wrapperValue
-      ? (React.createElement(wrapper.value, args) as any)
+      ? (React.createElement(wrapper.value, props) as any)
       : null
   }
 }
