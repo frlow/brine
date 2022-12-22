@@ -10,20 +10,21 @@ export type PartialWcWrapperOptionsAlt = Partial<
 >
 
 export const defineAutoLoader = ({
-  tag,
-  attributes,
+  liteMeta,
   loader,
   alt,
 }: {
-  tag: string
-  attributes: string[]
+  liteMeta: {
+    tag: string
+    attributes: string[]
+  }
   loader: () => void
   alt?: PartialWcWrapperOptionsAlt
 }) => {
   const loaderOptions = {
     init: () => loader(),
-    tag,
-    attributes,
+    tag: liteMeta.tag,
+    attributes: liteMeta.attributes,
     connected: () => {},
     disconnected: () => {},
     style: '',
@@ -39,5 +40,5 @@ export const defineAutoLoader = ({
         },
       }
     : loaderOptions
-  baseDefine(options, tag, makeWrapperTransplantable)
+  baseDefine(options, liteMeta.tag, makeWrapperTransplantable)
 }

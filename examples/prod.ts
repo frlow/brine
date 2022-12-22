@@ -1,10 +1,10 @@
-import { defineAutoLoader } from 'brinejs/loader'
+import { defineAutoLoader } from 'brinejs/core'
 
 import('./apps/react')
 import('./apps/svelte')
 import('./apps/tester')
+
 defineAutoLoader({
-  tag: 'my-vue-app',
-  attributes: ['count'],
+  liteMeta: require('./apps/vue/VueApp.lite').lite,
   loader: () => import('./apps/vue'),
 })

@@ -30,6 +30,7 @@ import {
   writeVsCodeTypes,
   writeWebTypes,
   writeReactWrappersFile,
+  writeMetaLiteFile,
   // ==============================
 } from '../src'
 import aliasPlugin from 'esbuild-plugin-alias'
@@ -92,6 +93,7 @@ const start = async () => {
           await writeIndexFile('examples/apps/react/ReactApp.tsx', prefix)
           await writeIndexFile('examples/apps/svelte/SvelteApp.svelte', prefix)
           await writeMetaFile('examples/apps/vue/VueApp.vue', prefix)
+          await writeMetaLiteFile('examples/apps/vue/VueApp.vue', prefix)
           await writeIndexFile('examples/apps/tester/Tester.svelte', prefix)
           // ============================
 

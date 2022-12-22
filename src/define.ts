@@ -13,7 +13,7 @@ const validateOptions = (wrapperOptions: WcWrapperOptions) => {
   )}`
 }
 
-const createWrapper = (wrapperOptions: WcWrapperOptions) => {
+export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
   validateOptions(wrapperOptions)
   const wrapper = class extends HTMLElement {
     private readonly self: any

@@ -31,9 +31,9 @@ const packageJson = {
       import: './wrapper.js',
       types: './wrapper.d.ts',
     },
-    './loader': {
-      import: './loader.js',
-      types: './loader.d.ts',
+    './core': {
+      import: './core.js',
+      types: './core.d.ts',
     },
   },
 }

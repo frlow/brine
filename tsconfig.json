@@ -29,8 +29,8 @@
       "brinejs/wrapper": [
         "./src/wrapper.ts"
       ],
-      "brinejs/loader": [
-        "./src/loader.ts"
+      "brinejs/core": [
+        "./src/core.ts"
       ],
       "react-wrapper": [
         "./dist/wrapper/reactWrappers.tsx"

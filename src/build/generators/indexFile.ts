@@ -9,7 +9,7 @@ export const generateIndexFile = async (
   prefixOrTag: string
 ) => {
   const appPath = path.parse(file).base.replace(/\.[j|t]sx?/, '.js')
-  const meta = await generateMetaCode(file, framework, prefixOrTag)
+  const { meta } = await generateMetaCode(file, framework, prefixOrTag)
   const code = `import { define } from 'brinejs/${framework}'
 import App from './${appPath}'
 
