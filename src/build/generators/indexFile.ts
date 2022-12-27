@@ -1,4 +1,4 @@
-import { Framework, parseFramework } from './common.js'
+import { Framework, kebabize, parseFramework } from './common.js'
 import path from 'path'
 import fs from 'fs'
 import { generateMetaCode } from './metaFile.js'
@@ -26,7 +26,11 @@ export const writeIndexFile = async (
 ) => {
   const parsedFramework = framework || parseFramework(file)
   const code = await generateIndexFile(file, parsedFramework, prefixOrTag)
+  const name =
+    fileName || prefixOrTag.includes('-')
+      ? prefixOrTag
+      : `${prefixOrTag}${path.parse(file).name}`.toLowerCase()
   const dir = path.parse(file).dir
-  const target = path.join(dir, fileName || 'index.ts')
+  const target = path.join(dir, name + '.ts')
   fs.writeFileSync(target, code, 'utf8')
 }
