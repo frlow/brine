@@ -16,8 +16,8 @@ const validateOptions = (wrapperOptions: WcWrapperOptions) => {
 export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
   validateOptions(wrapperOptions)
   const wrapper = class extends HTMLElement {
-    private readonly self: any
-    private root: ShadowRoot
+    readonly self: any
+    readonly root: ShadowRoot
     public static options: WcWrapperOptions = wrapperOptions
     get options(): WcWrapperOptions {
       return (this as any).constructor.options

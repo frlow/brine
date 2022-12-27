@@ -9,7 +9,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "rm -r lib || true && tsc -p ./tsconfig.build.json && yarn build:cjs && cp README.md lib",
+    "build": "rm -rf lib && tsc -p ./tsconfig.build.json && yarn build:cjs && cp README.md lib",
     "build:cjs": "node build-cjs.js",
     "test": "cross-env NODE_ENV=production yarn node --experimental-vm-modules $(yarn bin jest)",
     "dev": "run-p -r \"dev:build watch\" \"dev:serve\"",
