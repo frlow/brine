@@ -59,9 +59,10 @@ const start = async () => {
 
   const hct = dev
     ? startHotComponentTransplantServer({
-        rootUrl: 'http://localhost:3000/dist',
-      })
-    : () => {}
+      rootUrl: 'http://localhost:3000/dist',
+    })
+    : () => {
+    }
   console.log(
     `Use the following code in console to start hot transplanting components\n===================\n`,
     hotReloadSnippet(),
@@ -69,7 +70,7 @@ const start = async () => {
   )
   const result = await esbuild.build({
     entryPoints: ['./examples/prod.ts'],
-    format: 'esm',
+    // format: 'esm',
     outdir: outdir,
     outbase,
     bundle: true,
@@ -77,7 +78,7 @@ const start = async () => {
     splitting: true,
     minify: false, //!dev,
     // treeShaking: true,
-    define: { 'process.env.NODE_ENV': dev ? '"development"' : '"production"' },
+    define: {'process.env.NODE_ENV': dev ? '"development"' : '"production"'},
     plugins: [
       vuePlugin() as Plugin,
       (sveltePlugin as any)({
@@ -86,7 +87,7 @@ const start = async () => {
       effectPlugin(
         async () => {
           const startTime = Date.now()
-          if (fs.existsSync('./dist')) fs.rmSync('./dist', { recursive: true })
+          if (fs.existsSync('./dist')) fs.rmSync('./dist', {recursive: true})
 
           // ============================
           // Generate boilerplate
@@ -139,8 +140,8 @@ const start = async () => {
       }),
     ],
     watch: dev,
-    write: false,
-    metafile: true,
+    // write: false,
+    // metafile: true,
   })
   if (!dev) {
     console.log(await analyzeMetafile(result.metafile))
