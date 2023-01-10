@@ -14,6 +14,7 @@ describe('react', () => {
       simpleEvent: `${i}({onMyEvent})=><button id="button" onClick={()=>onMyEvent('simple')}/>`,
     },
     [],
+    [],
     '.tsx',
     './src/tsconfig.test.react.json'
   )

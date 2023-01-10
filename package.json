@@ -31,6 +31,7 @@
     "cross-env": "^7.0.3",
     "esbuild": "^0.16.16",
     "esbuild-plugin-alias": "^0.2.1",
+    "esbuild-plugin-solid": "^0.4.2",
     "esbuild-plugin-vue3": "^0.3.1",
     "esbuild-svelte": "^0.7.3",
     "glob": "^8.0.3",

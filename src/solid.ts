@@ -1,7 +1,11 @@
-import {WcWrapperOptions, WcWrapperOptionsMeta, camelize} from './common.js'
-import {baseDefine} from './define.js'
-import {render, createComponent} from 'solid-js/web'
-import type {JSX} from 'solid-js'
+import {
+  WcWrapperOptionsMeta,
+  WcWrapperOptions,
+  baseDefine,
+  camelize,
+} from './core'
+import { render, createComponent } from 'solid-js/web'
+import { JSX, createRoot, createSignal } from 'solid-js'
 
 export const createOptions = (
   Component: (props: any) => JSX.Element,
@@ -9,18 +13,35 @@ export const createOptions = (
 ): WcWrapperOptions => {
   return {
     init: (self, root, emit) => {
-      self.props = {}
-      self.render = () => {
-        render(() => createComponent(Component, self.props), root)
-      }
+      self.signals = meta.attributes.reduce(
+        (acc, cur) => ({ ...acc, [cur]: createSignal() }),
+        {}
+      )
+      meta.emits.forEach((e) => {
+        self.signals[camelize(`on-${e}`)] = [
+          () => (arg: any) => {
+            emit(e, arg)
+          },
+        ]
+      })
     },
     attributes: meta.attributes,
     attributeChangedCallback: (self, root, name, newValue) => {
-      self.props[name] = newValue
-      self.render()
+      self.signals[name][1](newValue)
     },
-    connected: (self) => {
-      self.render()
+    connected: (self, root) => {
+      self.app = createRoot(() => {
+        const props = {}
+        Object.entries(self.signals).forEach(([key, value]: any) => {
+          Object.defineProperty(props, key, {
+            get() {
+              return value[0]()
+            },
+          })
+        })
+        return createComponent(Component, props)
+      })
+      render(() => self.app, root)
     },
     disconnected: (self) => {
       self.innerHTML = ''

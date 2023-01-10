@@ -22,6 +22,7 @@ describe('svelte', () => {
                     <button id="button" on:click={()=>d("my-event","simple")}></button>`,
     },
     plugins,
+    [],
     '.svelte'
   )
 })

@@ -22,6 +22,7 @@ export const testWrapper = (
   ) => WcWrapperOptions,
   testCases: Partial<WrapperTestCases>,
   plugins: Plugin[],
+  external: string[],
   extension: string,
   tsconfig?: string
 ) => {
@@ -29,7 +30,8 @@ export const testWrapper = (
   const buildApp = async (
     code: string,
     fileName: string,
-    plugins: Plugin[]
+    plugins: Plugin[],
+    external: string[]
   ): Promise<any> => {
     fs.mkdirSync(tempDir, { recursive: true })
     fs.writeFileSync(path.join(tempDir, fileName), code, 'utf8')
@@ -39,6 +41,7 @@ export const testWrapper = (
     )
     await build({
       entryPoints: [path.join(tempDir, fileName)],
+      external,
       bundle: true,
       format: 'esm',
       write: true,
@@ -62,25 +65,28 @@ export const testWrapper = (
   })
 
   async function defineWrapper(code: string, meta: WcWrapperOptionsMeta) {
-    const app = await buildApp(code, 'TestApp' + extension, plugins)
+    const app = await buildApp(code, 'TestApp' + extension, plugins, external)
     const options = createOptions(app, meta)
     baseDefine(options, options.tag)
   }
 
-  test('Simple, component, should render text in component', async () => {
-    const meta: WcWrapperOptionsMeta = {
-      tag: 'test-string-text',
-      style: '',
-      attributes: [],
-      emits: [],
-    }
-    await defineWrapper(testCases.stringText, meta)
-    document.body.innerHTML = `<test-string-text role="test"></test-string-text>`
-    await new Promise((r) => setTimeout(() => r(''), 0))
-    const el = screen.getByRole('test') as any
-    const innerHtml = el.root.innerHTML
-    expect(innerHtml).toContain('simple-string-text')
+  describe('Simple', () => {
+    test('Component, should render text in component', async () => {
+      const meta: WcWrapperOptionsMeta = {
+        tag: 'test-string-text',
+        style: '',
+        attributes: [],
+        emits: [],
+      }
+      await defineWrapper(testCases.stringText, meta)
+      document.body.innerHTML = `<test-string-text role="test"></test-string-text>`
+      await new Promise((r) => setTimeout(() => r(''), 0))
+      const el = screen.getByRole('test') as any
+      const innerHtml = el.root.innerHTML
+      expect(innerHtml).toContain('simple-string-text')
+    })
   })
+
   describe('Props, should set and update', () => {
     test('String', async () => {
       const meta: WcWrapperOptionsMeta = {
@@ -162,7 +168,8 @@ export const testWrapper = (
       await new Promise((r) => setTimeout(() => r(''), 0))
       const el = screen.getByRole('test') as any
       el.addEventListener('my-event', callback)
-      el.root.getElementById('button').click()
+      const button = el.root.getElementById('button')
+      button.click()
       const e = (await callbackPromise) as any
       expect(e.detail).toEqual('simple')
     })

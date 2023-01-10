@@ -18,6 +18,7 @@ const handle = ()=>emit("my-event","simple")
 </script>`,
     },
     plugins,
+    [],
     '.vue'
   )
 })
