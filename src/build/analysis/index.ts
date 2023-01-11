@@ -2,6 +2,8 @@ import { analyzeJsxFile } from './jsx.js'
 import { analyzeVueFile } from './vue.js'
 import { analyzeSvelteFile } from './svelte.js'
 import type { Framework } from '../framework.js'
+import { Simulate } from 'react-dom/test-utils'
+import canPlay = Simulate.canPlay
 
 export { kebabize, camelize } from '../../common.js'
 export * from '../framework.js'
@@ -29,11 +31,16 @@ export const analyze = async (
   file: string,
   code: string,
   framework: Framework
-) =>
-  ((
-    {
-      react: analyzeJsxFile,
-      vue: analyzeVueFile,
-      svelte: analyzeSvelteFile,
-    } as { [i: string]: AnalyzeFileFunction }
-  )[framework](file, code))
+) => {
+  switch (framework) {
+    case 'solid':
+    case 'react':
+      return analyzeJsxFile(file, code)
+    case 'vue':
+      return analyzeVueFile(file, code)
+    case 'svelte':
+      return analyzeSvelteFile(file, code)
+    default:
+      throw `${framework} not supported!`
+  }
+}

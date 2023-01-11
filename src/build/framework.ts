@@ -1,1 +1,1 @@
-export type Framework = 'react' | 'vue' | 'svelte'
+export type Framework = 'react' | 'vue' | 'svelte' | 'solid'
