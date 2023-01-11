@@ -21,6 +21,9 @@
       "brinejs/react": [
         "./src/react.ts"
       ],
+      "brinejs/solid": [
+        "./src/solid.ts"
+      ],
       "brinejs/svelte": [
         "./src/svelte.ts"
       ],

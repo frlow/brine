@@ -69,11 +69,14 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
   }
 
   wrapperOptions.attributes.forEach((attribute) => {
-    Object.defineProperty(wrapper.prototype, attribute, {
+    const setter = {
       set: function (value: any) {
         this.updateProp(attribute, value)
       },
-    })
+    }
+    Object.defineProperty(wrapper.prototype, attribute, setter)
+    if (camelize(attribute) !== attribute)
+      Object.defineProperty(wrapper.prototype, camelize(attribute), setter)
   })
 
   return wrapper

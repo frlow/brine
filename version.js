@@ -1,6 +1,5 @@
 import { spawnSync } from 'child_process'
 import fs from 'fs'
-import path from 'path'
 
 const packageJson = {
   name: 'brinejs',
@@ -26,6 +25,10 @@ const packageJson = {
     './svelte': {
       import: './svelte.js',
       types: './svelte.d.ts',
+    },
+    './solid': {
+      import: './solid.js',
+      types: './solid.d.ts',
     },
     './wrapper': {
       import: './wrapper.js',

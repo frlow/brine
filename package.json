@@ -9,17 +9,12 @@
     "lib"
   ],
   "scripts": {
+    "watch": "tsc -p ./tsconfig.build.json --watch",
     "build": "rm -rf lib && tsc -p ./tsconfig.build.json && yarn build:cjs && cp README.md lib",
     "build:cjs": "node build-cjs.js",
-    "test": "cross-env NODE_ENV=production yarn node --experimental-vm-modules $(yarn bin jest)",
-    "dev": "run-p -r \"dev:build watch\" \"dev:serve\"",
-    "dev:build": "rm -r dist || true && tsx examples/build.ts",
-    "dev:serve": "serve .",
-    "dev:prod": "yarn dev:build && yarn dev:serve",
-    "npm-version": "yarn build && node version.js"
+    "test": "cross-env NODE_ENV=production yarn node --experimental-vm-modules $(yarn bin jest)"
   },
   "devDependencies": {
-    "@lit-labs/react": "^1.1.1",
     "@testing-library/dom": "^8.19.1",
     "@tsconfig/svelte": "^3.0.0",
     "@types/glob": "^8.0.0",
@@ -30,7 +25,6 @@
     "chokidar": "^3.5.3",
     "cross-env": "^7.0.3",
     "esbuild": "^0.16.16",
-    "esbuild-plugin-alias": "^0.2.1",
     "esbuild-plugin-solid": "^0.4.2",
     "esbuild-plugin-vue3": "^0.3.1",
     "esbuild-svelte": "^0.7.3",
@@ -44,13 +38,15 @@
     "serve": "^14.1.2",
     "solid-js": "^1.6.8",
     "string-replace-source-map": "^1.3.0",
-    "svelte": "^3.55.0",
+    "svelte": "^3.55.1",
     "svelte-preprocess": "^5.0.0",
     "ts-jest": "^29.0.3",
     "tsx": "^3.12.2",
     "typescript": "^4.9.4",
-    "vue": "^3.2.45",
-    "ws": "^8.12.0"
+    "vue": "^3.2.45"
   },
-  "web-types": "./dist/web-types.json"
+  "web-types": "./dist/web-types.json",
+  "dependencies": {
+    "babel-preset-solid": "^1.6.7"
+  }
 }

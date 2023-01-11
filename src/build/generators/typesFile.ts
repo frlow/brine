@@ -30,11 +30,12 @@ export const generateTypes = (files: (TypeFile | string)[], prefix?: string) =>
 export type TypeFile = { path: string; tag?: string; framework: Framework }
 export const writeTypesFile = async (
   results: AnalysisResult[],
-  dist: string
+  dist: string,
+  filename?: string
 ) => {
   if (!fs.existsSync(dist)) fs.mkdirSync(dist, { recursive: true })
   fs.writeFileSync(
-    path.join(dist, 'types.json'),
+    path.join(dist, filename || 'types.json'),
     JSON.stringify(results, null, 2)
   )
 }
