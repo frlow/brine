@@ -117,3 +117,26 @@ export const writeWebTypes = async (
     'utf8'
   )
 }
+
+export const writeJSXIntrinsicElementsInterface = async (
+  results: AnalysisResult[],
+  dist: string
+) => {
+  const getProps = (ar: AnalysisResult) => {
+    const props = ar.props.map(
+      (p) => `"${p.name}"${p.optional ? '?' : ''}:${p.type}`
+    )
+    return props.join(', ')
+  }
+  if (!fs.existsSync(dist)) fs.mkdirSync(dist, { recursive: true })
+  const code = `export {}
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+${results.map((r) => `      "${r.tag}":{${getProps(r)}}`).join('\n')}
+    }
+  }
+}
+`
+  fs.writeFileSync(path.join(dist, 'jsxIntrinsicElements.d.ts'), code, 'utf8')
+}

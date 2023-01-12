@@ -13,12 +13,14 @@
     "build": "rm -rf lib && tsc -p ./tsconfig.build.json && yarn build:cjs && cp README.md lib",
     "build:cjs": "node build-cjs.js",
     "test": "cross-env NODE_ENV=production yarn node --experimental-vm-modules $(yarn bin jest)",
-    "npm-version": "yarn build && node version.js"
+    "npm-version": "yarn build && node version.js",
+    "example": "tsx examples/build.ts"
   },
   "devDependencies": {
     "@lit-labs/react": "^1.1.1",
     "@testing-library/dom": "^8.19.1",
     "@tsconfig/svelte": "^3.0.0",
+    "@types/express": "^4.17.15",
     "@types/glob": "^8.0.0",
     "@types/jest": "^29.2.5",
     "@types/react": "^18.0.26",
@@ -26,9 +28,11 @@
     "@types/ws": "^8.5.4",
     "cross-env": "^7.0.3",
     "esbuild": "^0.16.16",
+    "esbuild-plugin-alias": "^0.2.1",
     "esbuild-plugin-solid": "^0.4.2",
     "esbuild-plugin-vue3": "^0.3.1",
     "esbuild-svelte": "^0.7.3",
+    "express": "^4.18.2",
     "glob": "^8.0.3",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",

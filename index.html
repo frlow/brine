@@ -1,0 +1,28 @@
+<html>
+<head>
+    <style>
+        body {
+            background-color: #262641;
+            color: #dcd6d6;
+        }
+    </style>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script type="module" src="./dist/prod.js"></script>
+</head>
+<body x-data="{show: false, count: 0}">
+<button x-on:click="show=!show">Toggle</button>
+<button x-on:click="count=count+1;">Count</button>
+<template x-if="show">
+    <div style="border: solid 1px red; width: 100px;">
+        <my-vue-app x-effect="$el.count=count">
+        </my-vue-app>
+        <my-svelte-app x-effect="$el.count=count" x-init="$el['my-prop']={example: 'inner'}">
+        </my-svelte-app>
+        <my-react-app x-effect="$el.count=count">
+        </my-react-app>
+        <my-solid-app x-effect="$el.count=count">
+        </my-solid-app>
+    </div>
+</template>
+</body>
+</html>
