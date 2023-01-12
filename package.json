@@ -1,6 +1,6 @@
 {
   "name": "brinejs",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "repository": "https://github.com/frlow/brine",
   "author": "Fredrik Löwenhamn <fredrik.lowenhamn@gmail.com>",
   "license": "MIT",
@@ -45,7 +45,6 @@
     "typescript": "^4.9.4",
     "vue": "^3.2.45"
   },
-  "web-types": "./dist/web-types.json",
   "dependencies": {
     "babel-preset-solid": "^1.6.7"
   }
