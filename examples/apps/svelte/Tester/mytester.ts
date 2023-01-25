@@ -1,9 +1,4 @@
-import { define } from 'brinejs/svelte'
-import App from './Tester.svelte'
+import { autoDefine } from 'brinejs/svelte'
+import * as App from './Tester.svelte'
 
-define(App, {
-  emits: ["my-event"] as string[],
-  attributes: ["text","obj","my-prop"] as string[],
-  style: `.dummy-style{}` as string,
-  tag: 'my-tester' as string,
-})
+autoDefine({ tag: 'my-tester', customElementComponent: App })

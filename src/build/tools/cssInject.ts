@@ -25,15 +25,18 @@ export const injectCode = async (
   return [replacedJs, replacedMap]
 }
 
-export const injectCss = async (
-  js: string,
-  jsMap: string,
-  css?: string,
-  dummyCss: string = dummyStyle
-) => {
+export const injectCss = async (js: string, jsMap: string, css?: string) => {
   if (!css) return [js, jsMap]
   const trimmedCss = css.replace(/\/\*.*?\*\//g, '').replace(/\n/g, '')
-  return await injectCode(js, jsMap, trimmedCss, dummyCss)
+  if (js.includes('customElementComponent:')) {
+    return await injectCode(
+      js,
+      jsMap,
+      `style: '${trimmedCss}',customElementComponent:`,
+      'customElementComponent:'
+    )
+  }
+  return await injectCode(js, jsMap, trimmedCss, dummyStyle)
 }
 
 export const groupJsMapCssFiles = (

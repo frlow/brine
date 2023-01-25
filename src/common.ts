@@ -1,3 +1,5 @@
+import { App } from '@vue/runtime-dom'
+
 export type WcWrapperOptionsMeta = {
   attributes: string[]
   emits: string[]
@@ -25,6 +27,13 @@ export type WcWrapperOptions = {
     emit: (name: string, detail?: any) => void
   ) => void
   disconnected: (self: any, root: ShadowRoot) => void
+}
+
+export type AutoDefineOptions = {
+  customElementComponent: any
+  create?: (component: any, props: any) => any
+  tag: string
+  style?: string
 }
 
 export const camelize = (str: string) => {

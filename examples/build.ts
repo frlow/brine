@@ -8,31 +8,15 @@ import vuePlugin from 'esbuild-plugin-vue3'
 import sveltePlugin from 'esbuild-svelte'
 import sveltePreprocess from 'svelte-preprocess'
 import fs from 'fs'
+import glob from 'glob'
 import {
-  // ==== hot reload ====
   startHotComponentTransplantServer,
   hotReloadSnippet,
-  // =============
-
-  // ==== boilerplate generation ====
-  writeMetaFile,
   writeIndexFile,
-  // ================================
-
-  // ==== css injection ====
   groupJsMapCssFiles,
   writeJsMapCssGroup,
-  // =======================
-
-  // ==== type docs generation ====
-  generateTypes,
-  writeTypesFile,
-  writeVsCodeTypes,
-  writeWebTypes,
-  writeReactWrappersFile,
-  writeMetaLiteFile,
-  writeJSXIntrinsicElementsInterface,
-  // ==============================
+  writeAllTypesFiles,
+  brineSveltePreprocessor,
 } from 'brinejs'
 import aliasPlugin from 'esbuild-plugin-alias'
 import express from 'express'
@@ -82,7 +66,7 @@ const start = async () => {
     sourcemap: true,
     splitting: true,
     minify: !dev,
-    // treeShaking: true,
+    treeShaking: true,
     define: { 'process.env.NODE_ENV': dev ? '"development"' : '"production"' },
     plugins: [
       jsxPlugin,
@@ -90,7 +74,7 @@ const start = async () => {
         compilerOptions: { isCustomElement: (tag) => tag.startsWith('my-') },
       }),
       sveltePlugin({
-        preprocess: [sveltePreprocess()],
+        preprocess: [brineSveltePreprocessor, sveltePreprocess()],
       }),
       effectPlugin(
         async () => {
@@ -104,63 +88,29 @@ const start = async () => {
             prefix
           )
           await writeIndexFile(
-            'examples/apps/svelte/SvelteApp/SvelteApp.svelte',
-            prefix
-          )
-          await writeIndexFile('examples/apps/vue/VueApp/VueApp.vue', prefix)
-          await writeIndexFile(
             'examples/apps/solid/SolidApp/SolidApp.tsx',
             prefix,
             'solid'
           )
-          await writeMetaLiteFile('examples/apps/vue/VueApp/VueApp.vue', prefix)
-          await writeIndexFile(
-            'examples/apps/svelte/Tester/Tester.svelte',
-            prefix
-          )
-          // ============================
-
-          // ============================
-          // Generate type docs
-          const types = await generateTypes(
-            [
-              'examples/apps/react/ReactApp/ReactApp.tsx',
-              'examples/apps/solid/SolidApp/SolidApp.tsx',
-              'examples/apps/svelte/SvelteApp/SvelteApp.svelte',
-              'examples/apps/svelte/Tester/Tester.svelte',
-              'examples/apps/vue/VueApp/VueApp.vue',
-            ],
-            prefix
-          )
-          await writeTypesFile(types, 'dist')
-          await writeVsCodeTypes(types, 'dist')
-          await writeWebTypes(types, 'dist', {
+          await writeAllTypesFiles({
+            files: glob.sync('examples/**/*.@(vue|svelte|tsx)'),
+            prefix,
             name: 'example',
             version: '1.0.0',
+            outdir: 'dist',
           })
-          await writeReactWrappersFile(types, 'dist/wrapper')
-          await writeJSXIntrinsicElementsInterface(types, 'dist')
-          // ============================
           return startTime
         },
         async (options, result, startTime) => {
-          // ============================
-          // Css Injections
           await writeJsMapCssGroup(groupJsMapCssFiles(result.outputFiles))
-          // ============================
-
-          // ============================
-          // Hot Component Transplant
           hct(result.outputFiles.map((f) => f.path))
-          // ============================
-
           console.log('Build time: ', Date.now() - startTime, 'ms')
         }
       ),
       // This is just for local dev
       aliasPlugin({
         brinejs: './src',
-        'react-wrapper': './dist/wrapper/reactWrappers.tsx',
+        'react-wrapper': './dist/reactWrappers.tsx',
       }),
     ],
     watch: dev,

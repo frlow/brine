@@ -47,27 +47,27 @@ export const writeMetaFile = async (
   fs.writeFileSync(target, code, 'utf8')
 }
 
-export const generateMetaLiteFile = async (
-  file: string,
-  framework: Framework,
-  prefixOrTag: string
-) => {
-  const { data } = await generateMetaCode(file, framework, prefixOrTag)
-  return `export const lite = {tag: "${
-    data.tag
-  }", attributes: [${data.attributes.map((a) => `'${a}'`).join(',')}]}`
-}
+// export const generateMetaLiteFile = async (
+//   file: string,
+//   framework: Framework,
+//   prefixOrTag: string
+// ) => {
+//   const { data } = await generateMetaCode(file, framework, prefixOrTag)
+//   return `export const lite = {tag: "${
+//     data.tag
+//   }", attributes: [${data.attributes.map((a) => `'${a}'`).join(',')}]}`
+// }
 
-export const writeMetaLiteFile = async (
-  file: string,
-  prefixOrTag: string,
-  framework?: Framework,
-  fileName?: string
-) => {
-  const parsedFramework = framework || parseFramework(file)
-  const code = await generateMetaLiteFile(file, parsedFramework, prefixOrTag)
-  const parsed = path.parse(file)
-  const dir = parsed.dir
-  const target = path.join(dir, fileName || `${parsed.name}.lite.ts`)
-  fs.writeFileSync(target, code, 'utf8')
-}
+// export const writeMetaLiteFile = async (
+//   file: string,
+//   prefixOrTag: string,
+//   framework?: Framework,
+//   fileName?: string
+// ) => {
+//   const parsedFramework = framework || parseFramework(file)
+//   const code = await generateMetaLiteFile(file, parsedFramework, prefixOrTag)
+//   const parsed = path.parse(file)
+//   const dir = parsed.dir
+//   const target = path.join(dir, fileName || `${parsed.name}.lite.ts`)
+//   fs.writeFileSync(target, code, 'utf8')
+// }

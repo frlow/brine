@@ -4,7 +4,7 @@ import { WcWrapperOptions, WcWrapperOptionsMeta, camelize } from './common.js'
 import { baseDefine } from './define.js'
 
 export const createOptions = (
-  Component: (args: any) => JSX.Element,
+  Component: (args: any) => any,
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {

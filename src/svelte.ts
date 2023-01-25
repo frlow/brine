@@ -1,5 +1,10 @@
-import type { WcWrapperOptions, WcWrapperOptionsMeta } from './common.js'
+import type {
+  AutoDefineOptions,
+  WcWrapperOptions,
+  WcWrapperOptionsMeta,
+} from './common.js'
 import { baseDefine } from './define.js'
+import { kebabize } from './common.js'
 
 export const createOptions = (
   component: any | ((element: HTMLElement, props: any) => any),
@@ -19,17 +24,21 @@ export const createOptions = (
     },
     connected: (self, root, emit) => {
       self.mountPoint = document.createElement('div')
-      self.app = component.toString().startsWith('class')
-        ? new component({ target: self.mountPoint, props: self.temp })
-        : component(self.mountPoint, self.temp)
+      self.app = new component({ target: self.mountPoint, props: self.temp })
       delete self.temp
-      meta.emits.forEach(
-        (e) =>
-          (self.app.$$.callbacks[e] = [
-            (arg: any) => {
-              emit(e, arg.detail)
-            },
-          ])
+      self.app.$$.callbacks = new Proxy(
+        {},
+        {
+          get(target, prop) {
+            return [
+              (arg: any) => {
+                self.dispatchEvent(
+                  new CustomEvent(prop.toString(), { detail: arg.detail })
+                )
+              },
+            ]
+          },
+        }
       )
       root.appendChild(self.mountPoint)
     },
@@ -47,3 +56,17 @@ export const define = (
   component: any | ((element: HTMLElement, props: any) => any),
   meta: WcWrapperOptionsMeta
 ) => baseDefine(createOptions(component, meta), meta.tag)
+
+export const autoDefine = (options: AutoDefineOptions) => {
+  baseDefine(
+    createOptions(options.customElementComponent.default, {
+      emits: [],
+      style: options.style,
+      tag: options.tag,
+      attributes: options.customElementComponent.__props.map((p: string) =>
+        kebabize(p)
+      ),
+    }),
+    options.tag
+  )
+}

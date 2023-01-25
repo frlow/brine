@@ -7,6 +7,28 @@ import {
   Framework,
   AnalysisResult,
 } from './common.js'
+import glob from 'glob'
+
+export const writeAllTypesFiles = async (options: {
+  files: string[]
+  prefix: string
+  version: string
+  name: string
+  outdir: string
+}) => {
+  const types = await generateTypes(
+    glob.sync('examples/**/*.@(vue|svelte|tsx)'),
+    options.prefix
+  )
+  await writeTypesFile(types, options.outdir)
+  await writeVsCodeTypes(types, options.outdir)
+  await writeWebTypes(types, options.outdir, {
+    name: options.name,
+    version: options.version,
+  })
+  await writeReactWrappersFile(types, options.outdir)
+  await writeJSXIntrinsicElementsInterface(types, options.outdir)
+}
 
 export const generateTypes = (files: (TypeFile | string)[], prefix?: string) =>
   Promise.all(
