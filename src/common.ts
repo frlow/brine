@@ -1,5 +1,3 @@
-import { App } from '@vue/runtime-dom'
-
 export type WcWrapperOptionsMeta = {
   attributes: string[]
   emits: string[]
