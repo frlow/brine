@@ -12,7 +12,6 @@ import glob from 'glob'
 import {
   startHotComponentTransplantServer,
   hotReloadSnippet,
-  writeIndexFile,
   groupJsMapCssFiles,
   writeJsMapCssGroup,
   writeAllTypesFiles,
@@ -80,18 +79,6 @@ const start = async () => {
         async () => {
           const startTime = Date.now()
           if (fs.existsSync('./dist')) fs.rmSync('./dist', { recursive: true })
-
-          // ============================
-          // Generate boilerplate
-          await writeIndexFile(
-            'examples/apps/react/ReactApp/ReactApp.tsx',
-            prefix
-          )
-          await writeIndexFile(
-            'examples/apps/solid/SolidApp/SolidApp.tsx',
-            prefix,
-            'solid'
-          )
           await writeAllTypesFiles({
             files: glob.sync('examples/**/*.@(vue|svelte|tsx)'),
             prefix,

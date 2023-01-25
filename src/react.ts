@@ -1,6 +1,12 @@
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
-import { WcWrapperOptions, WcWrapperOptionsMeta, camelize } from './common.js'
+import {
+  WcWrapperOptions,
+  WcWrapperOptionsMeta,
+  camelize,
+  AutoDefineOptions,
+  kebabize,
+} from './common.js'
 import { baseDefine } from './define.js'
 
 export const createOptions = (
@@ -44,3 +50,22 @@ export const define = (
   Component: (args: any) => JSX.Element,
   meta: WcWrapperOptionsMeta
 ) => baseDefine(createOptions(Component, meta), meta.tag)
+
+export const autoDefine = (options: AutoDefineOptions) => {
+  const functionRegex = /^on[A-Z]/
+  const props = options.customElementComponent.__props
+    .filter((p: string) => !functionRegex.test(p))
+    .map((p: string) => kebabize(p))
+  const emits = options.customElementComponent.__props
+    .filter((p: string) => functionRegex.test(p))
+    .map((p: string) => kebabize(p))
+  baseDefine(
+    createOptions(options.customElementComponent.default, {
+      emits,
+      style: options.style,
+      tag: options.tag,
+      attributes: props,
+    }),
+    options.tag
+  )
+}

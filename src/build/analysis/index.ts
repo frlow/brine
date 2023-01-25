@@ -5,6 +5,7 @@ import type { Framework } from '../framework.js'
 
 export { kebabize, camelize } from '../../common.js'
 export * from '../framework.js'
+export * from './appendJsx.js'
 
 export type PropDefinition = {
   name: string

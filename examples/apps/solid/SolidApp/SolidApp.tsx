@@ -1,7 +1,11 @@
 import './SolidApp.css'
 import {} from 'solid-js'
 
-export default (props: { count: number }) => {
+export default (props: {
+  count: number
+  onMyEvent: () => void
+  myProp: number
+}) => {
   return (
     <div>
       <h3 class="color">Solid {props.count + 1}</h3>

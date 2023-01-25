@@ -24,5 +24,10 @@
         </my-solid-app>
     </div>
 </template>
+<script type="module">
+    new WebSocket('ws://localhost:8080').onmessage = async (ev) => {
+        import(ev.data + '?t=' + Date.now())
+    }
+</script>
 </body>
 </html>
