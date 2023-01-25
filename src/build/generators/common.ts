@@ -1,8 +1,6 @@
 import { Framework } from '../framework.js'
 import path from 'path'
 import type { AnalysisResult } from '../analysis/index.js'
-import fs from 'fs'
-import { generateMetaFile } from 'brinejs'
 
 export { AnalysisResult }
 export { camelize, kebabize } from '../../common.js'
