@@ -19,6 +19,7 @@ import {
 import aliasPlugin from 'esbuild-plugin-alias'
 import express from 'express'
 import { jsxPlugin } from './jsxPlugin'
+import path from 'path'
 
 const effectPlugin = <T>(
   before: (options: BuildOptions) => Promise<T>,
@@ -38,7 +39,7 @@ const effectPlugin = <T>(
     })
   },
 })
-
+let lastBuild = {} as any
 const start = async () => {
   const outbase = 'examples'
   const outdir = 'dist'
@@ -81,12 +82,22 @@ const start = async () => {
         async (options, result, startTime) => {
           await writeJsMapCssGroup(groupJsMapCssFiles(result.outputFiles))
           if (dev) {
-            wss('hmr', `http://localhost:3000/dist/prod.js?t=${Date.now()}`)
+            result.outputFiles
+              .filter((d) => d.path.endsWith('.js'))
+              .filter((d) => !lastBuild[d.path] || lastBuild[d.path] !== d.text)
+              .map((d) => path.parse(d.path).base)
+              .forEach((c) =>
+                wss('hmr', `http://localhost:3000/dist/${c}?t=${Date.now()}`)
+              )
             wss(
               'error',
               result.errors.length > 0
                 ? result.errors.map((e) => e.text).join('\n\n')
                 : null
+            )
+            lastBuild = result.outputFiles.reduce(
+              (acc, cur) => ({ ...acc, [cur.path]: cur.text }),
+              {}
             )
           }
           console.log('Build time: ', Date.now() - startTime, 'ms')
