@@ -12,7 +12,10 @@ export default (props: {
       <my-tester
         obj={{ val: 4 }}
         text={`solid ${props.count}`}
-        on:my-event={(ev: any) => console.log(ev)}
+        on:my-event={(ev: any) => {
+          console.log(ev)
+          props.onMyEvent(ev)
+        }}
         my-prop={{ prop: 'SolidProp' }}
       ></my-tester>
     </div>

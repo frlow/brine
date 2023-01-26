@@ -14,32 +14,25 @@ export const createOptions = (
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {
-    init: (self, root, emit) => {
+    init: (self) => {
       self.signals = meta.attributes.reduce(
         (acc, cur) => ({ ...acc, [cur]: createSignal() }),
         {}
       )
-      meta.emits.forEach((e) => {
-        self.signals[camelize(`on-${e}`)] = [
-          () => (arg: any) => {
-            emit(e, arg)
-          },
-        ]
-      })
     },
     attributes: meta.attributes,
     attributeChangedCallback: (self, root, name, newValue) => {
       self.signals[name][1](newValue)
     },
-    connected: (self, root) => {
+    connected: (self, root, emit) => {
       self.app = createRoot(() => {
-        const props = {}
-        Object.entries(self.signals).forEach(([key, value]: any) => {
-          Object.defineProperty(props, key, {
-            get() {
-              return value[0]()
-            },
-          })
+        const props = new Proxy(self.signals, {
+          get(target, prop: string) {
+            const regex = /on[A-Z]/
+            if (regex.test(prop))
+              return (detail: any) => emit(kebabize(prop.substring(2)), detail)
+            return target[prop][0]()
+          },
         })
         return createComponent(Component, props)
       })
@@ -63,12 +56,9 @@ export const autoDefine = (options: AutoDefineOptions) => {
   const props = options.customElementComponent.__props
     .filter((p: string) => !functionRegex.test(p))
     .map((p: string) => kebabize(p))
-  const emits = options.customElementComponent.__props
-    .filter((p: string) => functionRegex.test(p))
-    .map((p: string) => kebabize(p))
   baseDefine(
     createOptions(options.customElementComponent.default, {
-      emits,
+      emits: [],
       style: options.style,
       tag: options.tag,
       attributes: props,

@@ -10,8 +10,7 @@ import sveltePreprocess from 'svelte-preprocess'
 import fs from 'fs'
 import glob from 'glob'
 import {
-  startHotComponentTransplantServer,
-  hotReloadSnippet,
+  startWebSocketServer,
   groupJsMapCssFiles,
   writeJsMapCssGroup,
   writeAllTypesFiles,
@@ -46,17 +45,8 @@ const start = async () => {
   const dev = process.argv[2] === 'watch'
   const prefix = 'my'
 
-  const hct = dev
-    ? startHotComponentTransplantServer({
-        rootUrl: 'http://localhost:3000/dist',
-      })
-    : () => {}
-  console.log(
-    `Use the following code in console to start hot transplanting components\n===================\n`,
-    hotReloadSnippet(),
-    `\n===================`
-  )
-  const result = await esbuild.build({
+  const wss = dev ? startWebSocketServer() : undefined
+  const options: esbuild.BuildOptions = {
     entryPoints: ['./examples/prod.ts'],
     format: 'esm',
     outdir: outdir,
@@ -71,7 +61,7 @@ const start = async () => {
       jsxPlugin,
       vuePlugin({
         compilerOptions: { isCustomElement: (tag) => tag.startsWith('my-') },
-      }),
+      }) as any,
       sveltePlugin({
         preprocess: [brineSveltePreprocessor, sveltePreprocess()],
       }),
@@ -90,7 +80,15 @@ const start = async () => {
         },
         async (options, result, startTime) => {
           await writeJsMapCssGroup(groupJsMapCssFiles(result.outputFiles))
-          hct(result.outputFiles.map((f) => f.path))
+          if (dev) {
+            wss('hmr', `http://localhost:3000/dist/prod.js?t=${Date.now()}`)
+            wss(
+              'error',
+              result.errors.length > 0
+                ? result.errors.map((e) => e.text).join('\n\n')
+                : null
+            )
+          }
           console.log('Build time: ', Date.now() - startTime, 'ms')
         }
       ),
@@ -100,13 +98,15 @@ const start = async () => {
         'react-wrapper': './dist/reactWrappers.tsx',
       }),
     ],
-    watch: dev,
     write: false,
     metafile: true,
-  })
+  }
   if (!dev) {
+    const result = await esbuild.build(options)
     console.log(await analyzeMetafile(result.metafile))
   } else {
+    const context = await esbuild.context(options)
+    await context.watch()
     const app = express()
     app.use(express.static('.'))
     app.listen(3000)

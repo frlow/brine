@@ -1,6 +1,7 @@
 import { testWrapper } from './common.test.js'
 import { createOptions } from './solid.js'
 import { solidPlugin } from 'esbuild-plugin-solid'
+import { jsxPlugin } from '../examples/jsxPlugin'
 
 const i = `import {onMount} from 'solid-js'
 export default `
@@ -13,9 +14,9 @@ describe('solid', () => {
       numProp: `${i}(props)=><div>{props.num+1}</div>`,
       objProp: `${i}(props)=><div>{props.obj.val}</div>`,
       onMountProps: `${i}(props)=>{onMount(async ()=>console.log(props.text));return <p/>}`,
-      simpleEvent: `${i}(props)=><button id="button" onclick={()=>props.onMyEvent('simple')}/>`,
+      simpleEvent: `${i}(props)=><button id="button" onClick={()=>props.onMyEvent('simple')}/>`,
     },
-    [solidPlugin({ delegateEvents: false } as any)],
+    [jsxPlugin],
     ['solid-js'],
     '.tsx',
     './src/tsconfig.test.solid.json'
