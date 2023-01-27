@@ -18,7 +18,7 @@
         </my-vue-app>
         <my-svelte-app x-effect="$el.count=count" x-init="$el['my-prop']={example: 'inner'}">
         </my-svelte-app>
-        <my-react-app x-effect="$el.count=count">
+        <my-react-app x-effect="$el.count=count" x-on:my-event="console.log($event)">
         </my-react-app>
         <my-solid-app x-effect="$el.count=count">
         </my-solid-app>

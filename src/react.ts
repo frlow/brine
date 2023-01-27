@@ -56,9 +56,9 @@ export const autoDefine = (options: AutoDefineOptions) => {
   const props = options.customElementComponent.__props
     .filter((p: string) => !functionRegex.test(p))
     .map((p: string) => kebabize(p))
-  const emits = options.customElementComponent.__props
-    .filter((p: string) => functionRegex.test(p))
-    .map((p: string) => kebabize(p))
+  const emits = options.customElementComponent.__emits.map((p: string) =>
+    kebabize(p)
+  )
   baseDefine(
     createOptions(options.customElementComponent.default, {
       emits,
