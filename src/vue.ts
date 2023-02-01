@@ -59,7 +59,7 @@ export const define = (
 
 export const autoDefine = (options: AutoDefineOptions) => {
   const attributes = Object.keys(options.customElementComponent.props || {})
-  const emits = Object.keys(options.customElementComponent.emits || {})
+  const emits = options.customElementComponent.emits || []
   const style = options.style || ''
   baseDefine(
     createOptions(

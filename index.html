@@ -20,7 +20,7 @@
         </my-svelte-app>
         <my-react-app x-effect="$el.count=count" x-on:my-event="console.log($event)">
         </my-react-app>
-        <my-solid-app x-effect="$el.count=count">
+        <my-solid-app x-effect="$el.count=count" x-on:my-event="console.log($event)">
         </my-solid-app>
     </div>
 </template>
@@ -32,7 +32,19 @@
                 import(data.msg);
                 break
             case "error":
-                if (data.msg) console.error(data.msg)
+                let overlay = document.getElementById("error-overlay")
+                if (!data.msg && overlay) overlay.remove()
+                else if (data.msg) {
+                    if (!overlay) {
+                        overlay = document.createElement("div")
+                        overlay.id = "error-overlay"
+                        document.body.appendChild(overlay)
+                    }
+                    overlay.innerHTML = `<div style="z-index: 1000; position: fixed; top: 0; left:0;width: 100vw; height: 100vh;background-color: firebrick;color: white;display: flex; justify-content: center; align-items: center; flex-direction: column;">
+        <div style="font-size: 1.5rem;">Build error:</div>
+        <div style="white-space: pre-wrap;">${data.msg.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+</div>`
+                }
                 break
         }
     }
