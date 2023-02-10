@@ -13,6 +13,7 @@ export type WrapperTestCases = {
   objProp: string
   onMountProps: string
   simpleEvent: string
+  openClosed: string
 }
 
 export const testWrapper = (
@@ -84,6 +85,33 @@ export const testWrapper = (
       const el = screen.getByRole('test') as any
       const innerHtml = el.root.innerHTML
       expect(innerHtml).toContain('simple-string-text')
+    })
+
+    test('Should be able to set open shadow root', async () => {
+      const metaClosed: WcWrapperOptionsMeta = {
+        tag: 'test-open-closed-closed',
+        style: '',
+        attributes: [],
+        emits: [],
+      }
+      await defineWrapper(testCases.openClosed, metaClosed)
+      document.body.innerHTML = `<test-open-closed-closed role="test-closed"></test-open-closed-closed>`
+      await new Promise((r) => setTimeout(() => r(''), 0))
+      const elClosed = screen.getByRole('test-closed') as any
+      expect(elClosed.shadowRoot).toBeFalsy()
+
+      const metaOpen: WcWrapperOptionsMeta = {
+        tag: 'test-open-closed-open',
+        style: '',
+        attributes: [],
+        emits: [],
+        open: true,
+      }
+      await defineWrapper(testCases.openClosed, metaOpen)
+      document.body.innerHTML = `<test-open-closed-open role="test-open"></test-open-closed-open>`
+      await new Promise((r) => setTimeout(() => r(''), 0))
+      const elOpen = screen.getByRole('test-open') as any
+      expect(elOpen.shadowRoot).not.toBeFalsy()
     })
   })
 

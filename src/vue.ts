@@ -30,12 +30,6 @@ export const createOptions = (
       : createApp({
           render: () => h(component, self.props),
         })
-    // self.app =
-    //   typeof app === 'function'
-    //     ? app(self.props)
-    //     : createApp({
-    //         render: () => h(app, self.props),
-    //       })
     self.app.mount(mountPoint)
   },
   disconnected: (self) => {
@@ -44,6 +38,7 @@ export const createOptions = (
   },
   style: meta.style,
   tag: meta.tag,
+  open: meta.open,
 })
 
 export const define = (
@@ -69,6 +64,7 @@ export const autoDefine = (options: AutoDefineOptions) => {
         emits,
         tag: options.tag,
         style: style,
+        open: options.open,
       },
       options.create
     ),

@@ -30,7 +30,9 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     constructor() {
       super()
       this.self = this
-      this.root = this.attachShadow({ mode: 'closed' })
+      this.root = this.attachShadow({
+        mode: wrapperOptions.open ? 'open' : 'closed',
+      })
       this.initCallback()
     }
 

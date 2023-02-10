@@ -16,6 +16,7 @@ describe('vue', () => {
 const emit = defineEmits<{(e: 'my-event', id: string): void}>()
 const handle = ()=>emit("my-event","simple")
 </script>`,
+      openClosed: '<template><div>open-closed</div></template>',
     },
     plugins,
     [],

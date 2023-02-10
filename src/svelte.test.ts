@@ -20,6 +20,7 @@ describe('svelte', () => {
       onMountProps: `<script>import {onMount} from 'svelte'; onMount(() => console.log(text)); export let text</script>`,
       simpleEvent: `<script>import {createEventDispatcher} from 'svelte'; const d = createEventDispatcher()</script>
                     <button id="button" on:click={()=>d("my-event","simple")}></button>`,
+      openClosed: '<div>open-closed</div>',
     },
     plugins,
     [],

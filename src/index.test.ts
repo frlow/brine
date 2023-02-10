@@ -11,6 +11,7 @@ const dummyOptions: Pick<
   | 'connected'
   | 'disconnected'
   | 'init'
+  | 'open'
 > = {
   attributes: [],
   style: '',
@@ -18,6 +19,7 @@ const dummyOptions: Pick<
   connected: () => {},
   disconnected: () => {},
   init: () => {},
+  open: false,
 }
 
 describe('Web Component Wrapper', () => {
@@ -41,6 +43,7 @@ describe('Web Component Wrapper', () => {
         el.id = 'target'
         self.root.appendChild(el)
       },
+      open: false,
     }
     baseDefine(options, options.tag)
     document.body.innerHTML = `<test-text role="text"></test-text>`
@@ -60,6 +63,7 @@ describe('Web Component Wrapper', () => {
       connected: () => {},
       disconnected: () => {},
       init: () => {},
+      open: false,
     }
     baseDefine(options, options.tag)
     document.body.innerHTML = `<test-attribute role="text"></test-attribute>`
@@ -91,6 +95,7 @@ describe('Web Component Wrapper', () => {
         }
         self.root.appendChild(el)
       },
+      open: false,
     }
     baseDefine(options, options.tag)
     document.body.innerHTML = `<test-emit role="text"></test-emit>`
@@ -112,6 +117,7 @@ describe('Web Component Wrapper', () => {
       connected,
       disconnected,
       init: () => {},
+      open: false,
     }
     baseDefine(options, options.tag)
     document.body.innerHTML = `<test-disconnect></test-disconnect>`

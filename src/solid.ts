@@ -43,6 +43,7 @@ export const createOptions = (
     },
     style: meta.style,
     tag: meta.tag,
+    open: meta.open,
   }
 }
 

@@ -15,6 +15,7 @@ describe('solid', () => {
       objProp: `${i}(props)=><div>{props.obj.val}</div>`,
       onMountProps: `${i}(props)=>{onMount(async ()=>console.log(props.text));return <p/>}`,
       simpleEvent: `${i}(props)=><button id="button" onClick={()=>props.onMyEvent('simple')}/>`,
+      openClosed: `${i}()=><div>open-closed</div>`,
     },
     [jsxPlugin],
     ['solid-js'],

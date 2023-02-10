@@ -12,6 +12,7 @@ describe('react', () => {
       objProp: `${i}({obj})=><div>{obj.val}</div>`,
       onMountProps: `${i}({text})=>{console.log(text);return <p/>}`,
       simpleEvent: `${i}({onMyEvent})=><button id="button" onClick={()=>onMyEvent('simple')}/>`,
+      openClosed: `${i}()=><div>open-closed</div>`,
     },
     [],
     [],
