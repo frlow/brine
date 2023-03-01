@@ -30,13 +30,7 @@ export const createOptions = (
         {},
         {
           get(target, prop) {
-            return [
-              (arg: any) => {
-                self.dispatchEvent(
-                  new CustomEvent(prop.toString(), { detail: arg.detail })
-                )
-              },
-            ]
+            return [(arg: any) => emit(prop.toString(), arg.detail)]
           },
         }
       )
