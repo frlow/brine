@@ -1,13 +1,13 @@
 import './ReactApp.css'
 import React from 'react'
 
-export default ({
+export default function ReactApp({
   count,
   onMyEvent,
 }: {
   count: number
   onMyEvent: (ev: any) => void
-}) => {
+}) {
   return (
     <div>
       <h3 className="color">React {count + 1}</h3>
@@ -23,3 +23,5 @@ export default ({
     </div>
   )
 }
+ReactApp.__props = ['count']
+ReactApp.__emits = ['my-event']

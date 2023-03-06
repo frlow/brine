@@ -1,4 +1,4 @@
-import { createElement } from 'react'
+import { createElement, ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   WcWrapperOptions,
@@ -45,9 +45,13 @@ export const createOptions = (
   }
 }
 
-export const define = (options: AutoDefineOptions) => {
+export const define = (
+  options: AutoDefineOptions<
+    ((props: any) => ReactNode) & { __props?: string[]; __emits?: string[] }
+  >
+) => {
   baseDefine(
-    createOptions(options.customElementComponent.default, {
+    createOptions(options.customElementComponent, {
       emits: options.customElementComponent.__emits || [],
       style: options.style,
       tag: options.tag,

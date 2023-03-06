@@ -46,9 +46,13 @@ export const createOptions = (
   }
 }
 
-export const define = (options: AutoDefineOptions) => {
+export const define = (
+  options: AutoDefineOptions<
+    ((props: any) => JSX.Element) & { __props?: string[] }
+  >
+) => {
   baseDefine(
-    createOptions(options.customElementComponent.default, {
+    createOptions(options.customElementComponent, {
       style: options.style,
       tag: options.tag,
       attributes: options.customElementComponent.__props || [],

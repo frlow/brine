@@ -14,10 +14,11 @@ export const jsxPlugin: Plugin = {
 
   setup(build) {
     build.onLoad({ filter: /\.(t|j)sx$/ }, async (args) => {
-      const source = await appendJsxProps(
-        args.path,
-        await readFile(args.path, { encoding: 'utf-8' })
-      )
+      // const source = await appendJsxProps(
+      //   args.path,
+      //   await readFile(args.path, { encoding: 'utf-8' })
+      // )
+      const source = await readFile(args.path, { encoding: 'utf-8' })
       if (/import.*from.*solid-js/.test(source)) {
         const { name, ext } = parse(args.path)
         const filename = name + ext

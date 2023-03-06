@@ -1,11 +1,11 @@
 import './SolidApp.css'
 import {} from 'solid-js'
 
-export default (props: {
+export default function SolidApp(props: {
   count: number
   onMyEvent: () => void
   myProp: number
-}) => {
+}) {
   return (
     <div>
       <h3 class="color">Solid {props.count + 1}</h3>
@@ -21,3 +21,4 @@ export default (props: {
     </div>
   )
 }
+SolidApp.__props = ['count', 'my-prop']

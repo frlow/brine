@@ -32,8 +32,8 @@ export type WcWrapperOptions = {
   shadowRootMode: shadowRootMode
 }
 
-export type AutoDefineOptions = {
-  customElementComponent: any
+export type AutoDefineOptions<T = any> = {
+  customElementComponent: T
   create?: (props: any) => any
   tag: string
   style?: string

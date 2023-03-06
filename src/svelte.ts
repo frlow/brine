@@ -7,7 +7,7 @@ import { baseDefine } from './define.js'
 import { kebabize } from './common.js'
 
 export const createOptions = (
-  component: any | ((element: HTMLElement, props: any) => any),
+  component: any,
   meta: WcWrapperOptionsMeta
 ): WcWrapperOptions => {
   return {
@@ -57,9 +57,10 @@ export const define = (options: AutoDefineOptions) => {
     createOptions(options.customElementComponent.default, {
       style: options.style,
       tag: options.tag,
-      attributes: options.customElementComponent.__props.map((p: string) =>
-        kebabize(p)
-      ),
+      attributes:
+        options.customElementComponent.__props?.map((p: string) =>
+          kebabize(p)
+        ) || [],
       shadowRootMode: options.shadowRootMode,
     })
   )
