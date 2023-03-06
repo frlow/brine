@@ -1,7 +1,7 @@
 import './ReactApp.css'
 import React from 'react'
 
-export default function ReactApp({
+export default function ({
   count,
   onMyEvent,
 }: {
@@ -23,5 +23,5 @@ export default function ReactApp({
     </div>
   )
 }
-ReactApp.__props = ['count']
-ReactApp.__emits = ['my-event']
+// ReactApp.__props = ['count']
+// ReactApp.__emits = ['my-event']
