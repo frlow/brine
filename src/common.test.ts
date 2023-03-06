@@ -68,7 +68,7 @@ export const testWrapper = (
   async function defineWrapper(code: string, meta: WcWrapperOptionsMeta) {
     const app = await buildApp(code, 'TestApp' + extension, plugins, external)
     const options = createOptions(app, meta)
-    baseDefine(options, options.tag)
+    baseDefine(options)
   }
 
   describe('Simple', () => {

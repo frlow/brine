@@ -1,7 +1,7 @@
-import { autoDefine } from 'brinejs/react'
+import { define } from 'brinejs/react'
 import * as App from './ReactApp.js'
 
-autoDefine({
+define({
   tag: 'my-react-app',
   customElementComponent: App,
   shadowRootMode: 'none',

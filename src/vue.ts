@@ -8,9 +8,9 @@ import {
 import { baseDefine } from './define.js'
 
 export const createOptions = (
-  component: any,
+  // component: any,
   meta: WcWrapperOptionsMeta,
-  createCustom?: (component: any, props: any) => App
+  createCustom: (props: any) => App
 ): WcWrapperOptions => ({
   init: (self) => {
     self.props = reactive<any>({})
@@ -25,11 +25,7 @@ export const createOptions = (
     meta.emits.forEach(
       (e) => (self.props[camelize(`on-${e}`)] = (args: any) => emit(e, args))
     )
-    self.app = createCustom
-      ? createCustom(component, self.props)
-      : createApp({
-          render: () => h(component, self.props),
-        })
+    self.app = createCustom(self.props)
     self.app.mount(mountPoint)
   },
   disconnected: (self) => {
@@ -41,24 +37,31 @@ export const createOptions = (
   shadowRootMode: meta.shadowRootMode,
 })
 
-export const define = (
-  app: ((props: any) => App) | any,
-  meta: WcWrapperOptionsMeta
-) => {
-  const creteApp =
-    typeof app === 'function'
-      ? (_: unknown, props: any) => app(props)
-      : undefined
-  baseDefine(createOptions(app, meta, creteApp), meta.tag)
-}
+// export const define = (
+//   app: ((props: any) => App) | any,
+//   meta: WcWrapperOptionsMeta
+// ) => {
+//   const isFunction = typeof app === 'function'
+//   autoDefine({
+//     tag: meta.tag,
+//     shadowRootMode: meta.shadowRootMode,
+//     create: isFunction ? app : undefined,
+//     style: meta.style,
+//     customElementComponent: isFunction
+//       ? {
+//           props: meta.attributes,
+//           emits: meta.emits,
+//         }
+//       : app,
+//   })
+// }
 
-export const autoDefine = (options: AutoDefineOptions) => {
+export const define = (options: AutoDefineOptions) => {
   const attributes = Object.keys(options.customElementComponent.props || {})
   const emits = options.customElementComponent.emits || []
   const style = options.style || ''
   baseDefine(
     createOptions(
-      options.customElementComponent,
       {
         attributes,
         emits,
@@ -66,8 +69,11 @@ export const autoDefine = (options: AutoDefineOptions) => {
         style: style,
         shadowRootMode: options.shadowRootMode,
       },
-      options.create
-    ),
-    options.tag
+      options.create ||
+        ((props) =>
+          createApp({
+            render: () => h(options.customElementComponent, props),
+          }))
+    )
   )
 }

@@ -40,9 +40,11 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
 
     initCallback() {
-      const styleTag = document.createElement('style')
-      styleTag.innerHTML = this.options.style
-      this.root!.appendChild(styleTag)
+      if (this.options.style) {
+        const styleTag = document.createElement('style')
+        styleTag.innerHTML = this.options.style
+        this.root!.appendChild(styleTag)
+      }
       this.options.init(this.self, this.root, this.emit)
     }
 
@@ -87,19 +89,11 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
   return wrapper
 }
 
-export const baseDefine = (
-  options: WcWrapperOptions,
-  tag: string,
-  extendFunction?: any
-) => {
-  const registered = customElements.get(tag) as any
-  if (registered?.transplant) {
-    registered.transplant(options)
-    return
-  }
+export const baseDefine = (options: WcWrapperOptions) => {
+  const registered = customElements.get(options.tag) as any
+  if (registered?.transplant) return registered.transplant(options)
   let wrapper = createWrapper(options)
-  if (extendFunction) wrapper = extendFunction(wrapper)
-  else if (process.env.NODE_ENV === 'development')
+  if (process.env.NODE_ENV === 'development')
     wrapper = makeWrapperTransplantable(wrapper)
-  customElements.define(tag, wrapper)
+  customElements.define(options.tag, wrapper)
 }

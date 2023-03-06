@@ -1,6 +1,6 @@
 export type WcWrapperOptionsMeta = {
   attributes: string[]
-  emits: string[]
+  emits?: string[]
   style: '.dummy-style{}' | string
   tag: string
   shadowRootMode?: shadowRootMode
@@ -9,7 +9,7 @@ export type WcWrapperOptionsMeta = {
 export type shadowRootMode = 'open' | 'closed' | 'none'
 
 export type WcWrapperOptions = {
-  style: string
+  style?: string
   tag: string
   init: (
     self: any,
@@ -34,7 +34,7 @@ export type WcWrapperOptions = {
 
 export type AutoDefineOptions = {
   customElementComponent: any
-  create?: (component: any, props: any) => any
+  create?: (props: any) => any
   tag: string
   style?: string
   shadowRootMode?: shadowRootMode

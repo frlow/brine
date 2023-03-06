@@ -1,11 +1,17 @@
 import { testWrapper } from './common.test.js'
 import { createOptions } from './vue.js'
 import vuePlugin from 'esbuild-plugin-vue3'
+import { createApp, h } from '@vue/runtime-dom'
 
 const plugins: any[] = [vuePlugin()]
 describe('vue', () => {
   testWrapper(
-    createOptions,
+    (component, meta) =>
+      createOptions(meta, (props) =>
+        createApp({
+          render: () => h(component, props),
+        })
+      ),
     {
       stringText: `<template><div>simple-string-text</div></template>`,
       stringProp: `<template><div>{{text}}</div></template><script setup lang="ts">defineProps<{text:string}>()</script>`,

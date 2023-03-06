@@ -5,7 +5,6 @@ import {
   WcWrapperOptionsMeta,
   camelize,
   AutoDefineOptions,
-  kebabize,
 } from './common.js'
 import { baseDefine } from './define.js'
 
@@ -47,27 +46,14 @@ export const createOptions = (
   }
 }
 
-export const define = (
-  Component: (args: any) => JSX.Element,
-  meta: WcWrapperOptionsMeta
-) => baseDefine(createOptions(Component, meta), meta.tag)
-
-export const autoDefine = (options: AutoDefineOptions) => {
-  const functionRegex = /^on[A-Z]/
-  const props = options.customElementComponent.__props
-    .filter((p: string) => !functionRegex.test(p))
-    .map((p: string) => kebabize(p))
-  const emits = options.customElementComponent.__emits.map((p: string) =>
-    kebabize(p)
-  )
+export const define = (options: AutoDefineOptions) => {
   baseDefine(
     createOptions(options.customElementComponent.default, {
-      emits,
+      emits: options.customElementComponent.__emits || [],
       style: options.style,
       tag: options.tag,
-      attributes: props,
+      attributes: options.customElementComponent.__props || [],
       shadowRootMode: options.shadowRootMode,
-    }),
-    options.tag
+    })
   )
 }

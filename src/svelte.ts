@@ -47,22 +47,20 @@ export const createOptions = (
   }
 }
 
-export const define = (
-  component: any | ((element: HTMLElement, props: any) => any),
-  meta: WcWrapperOptionsMeta
-) => baseDefine(createOptions(component, meta), meta.tag)
+// export const define = (
+//   component: any | ((element: HTMLElement, props: any) => any),
+//   meta: WcWrapperOptionsMeta
+// ) => baseDefine(createOptions(component, meta))
 
-export const autoDefine = (options: AutoDefineOptions) => {
+export const define = (options: AutoDefineOptions) => {
   baseDefine(
     createOptions(options.customElementComponent.default, {
-      emits: [],
       style: options.style,
       tag: options.tag,
       attributes: options.customElementComponent.__props.map((p: string) =>
         kebabize(p)
       ),
       shadowRootMode: options.shadowRootMode,
-    }),
-    options.tag
+    })
   )
 }

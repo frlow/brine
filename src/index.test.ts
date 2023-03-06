@@ -45,7 +45,7 @@ describe('Web Component Wrapper', () => {
       },
       shadowRootMode: 'closed',
     }
-    baseDefine(options, options.tag)
+    baseDefine(options)
     document.body.innerHTML = `<test-text role="text"></test-text>`
     const textEl = screen.getByRole('text') as any
     const text = textEl.root.getElementById('target').innerHTML
@@ -65,7 +65,7 @@ describe('Web Component Wrapper', () => {
       init: () => {},
       shadowRootMode: 'closed',
     }
-    baseDefine(options, options.tag)
+    baseDefine(options)
     document.body.innerHTML = `<test-attribute role="text"></test-attribute>`
     const textEl = screen.getByRole('text')
     textEl.setAttribute('text', 'updated')
@@ -97,7 +97,7 @@ describe('Web Component Wrapper', () => {
       },
       shadowRootMode: 'closed',
     }
-    baseDefine(options, options.tag)
+    baseDefine(options)
     document.body.innerHTML = `<test-emit role="text"></test-emit>`
     const textEl = screen.getByRole('text') as any
     const eventListener = jest.fn()
@@ -119,7 +119,7 @@ describe('Web Component Wrapper', () => {
       init: () => {},
       shadowRootMode: 'closed',
     }
-    baseDefine(options, options.tag)
+    baseDefine(options)
     document.body.innerHTML = `<test-disconnect></test-disconnect>`
     expect(connected).toHaveBeenCalled()
     expect(disconnected).not.toHaveBeenCalled()
@@ -133,7 +133,7 @@ describe('Web Component Wrapper', () => {
       tag: 'camel-case',
       attributes: ['camelCase'],
     }
-    expect(() => baseDefine(options, options.tag)).toThrowError(
+    expect(() => baseDefine(options)).toThrowError(
       `Attributes cannot contain uppercase letters, use kebab-cased names instead.
   The following attributes needs to have their names updated: camelCase`
     )
@@ -147,7 +147,7 @@ describe('Web Component Wrapper', () => {
       attributes: ['kebab-name'],
       attributeChangedCallback,
     }
-    baseDefine(options, options.tag)
+    baseDefine(options)
     document.body.innerHTML = `<kebab-case-attribute kebab-name="some-attribute"></kebab-case-attribute>`
     expect(attributeChangedCallback).toHaveBeenCalledWith(
       expect.anything(),
@@ -165,7 +165,7 @@ describe('Web Component Wrapper', () => {
       attributes: ['kebab-name'],
       attributeChangedCallback,
     }
-    baseDefine(options, options.tag)
+    baseDefine(options)
     document.body.innerHTML = `<camel-case-prop role="test"></camel-case-prop>`
     const el = screen.getByRole('test') as any
     el['kebab-name'] = 'some-attribute'
