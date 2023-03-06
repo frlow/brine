@@ -3,8 +3,11 @@ export type WcWrapperOptionsMeta = {
   emits: string[]
   style: '.dummy-style{}' | string
   tag: string
-  open?: boolean
+  shadowRootMode?: shadowRootMode
 }
+
+export type shadowRootMode = 'open' | 'closed' | 'none'
+
 export type WcWrapperOptions = {
   style: string
   tag: string
@@ -26,7 +29,7 @@ export type WcWrapperOptions = {
     emit: (name: string, detail?: any) => void
   ) => void
   disconnected: (self: any, root: ShadowRoot) => void
-  open: boolean
+  shadowRootMode: shadowRootMode
 }
 
 export type AutoDefineOptions = {
@@ -34,7 +37,7 @@ export type AutoDefineOptions = {
   create?: (component: any, props: any) => any
   tag: string
   style?: string
-  open?: boolean
+  shadowRootMode?: shadowRootMode
 }
 
 export const camelize = (str: string) => {

@@ -105,7 +105,7 @@ export const testWrapper = (
         style: '',
         attributes: [],
         emits: [],
-        open: true,
+        shadowRootMode: 'open',
       }
       await defineWrapper(testCases.openClosed, metaOpen)
       document.body.innerHTML = `<test-open-closed-open role="test-open"></test-open-closed-open>`

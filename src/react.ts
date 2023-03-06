@@ -43,7 +43,7 @@ export const createOptions = (
     },
     style: meta.style,
     tag: meta.tag,
-    open: meta.open,
+    shadowRootMode: meta.shadowRootMode,
   }
 }
 
@@ -66,6 +66,7 @@ export const autoDefine = (options: AutoDefineOptions) => {
       style: options.style,
       tag: options.tag,
       attributes: props,
+      shadowRootMode: options.shadowRootMode,
     }),
     options.tag
   )

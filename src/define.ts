@@ -17,7 +17,7 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
   validateOptions(wrapperOptions)
   const wrapper = class extends HTMLElement {
     readonly self: any
-    readonly root: ShadowRoot
+    readonly root: any
     public static options: WcWrapperOptions = wrapperOptions
     get options(): WcWrapperOptions {
       return (this as any).constructor.options
@@ -30,9 +30,12 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     constructor() {
       super()
       this.self = this
-      this.root = this.attachShadow({
-        mode: wrapperOptions.open ? 'open' : 'closed',
-      })
+      this.root =
+        wrapperOptions.shadowRootMode === 'none'
+          ? this
+          : this.attachShadow({
+              mode: wrapperOptions.shadowRootMode || 'closed',
+            })
       this.initCallback()
     }
 

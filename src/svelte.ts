@@ -43,7 +43,7 @@ export const createOptions = (
     },
     style: meta.style,
     tag: meta.tag,
-    open: meta.open,
+    shadowRootMode: meta.shadowRootMode,
   }
 }
 
@@ -61,6 +61,7 @@ export const autoDefine = (options: AutoDefineOptions) => {
       attributes: options.customElementComponent.__props.map((p: string) =>
         kebabize(p)
       ),
+      shadowRootMode: options.shadowRootMode,
     }),
     options.tag
   )
