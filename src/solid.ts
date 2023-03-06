@@ -2,7 +2,6 @@ import {
   WcWrapperOptionsMeta,
   WcWrapperOptions,
   baseDefine,
-  camelize,
   AutoDefineOptions,
   kebabize,
 } from './core'
@@ -50,7 +49,6 @@ export const createOptions = (
 export const define = (options: AutoDefineOptions) => {
   baseDefine(
     createOptions(options.customElementComponent.default, {
-      emits: options.customElementComponent.__emits || [],
       style: options.style,
       tag: options.tag,
       attributes: options.customElementComponent.__props || [],

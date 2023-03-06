@@ -8,7 +8,6 @@ import {
 import { baseDefine } from './define.js'
 
 export const createOptions = (
-  // component: any,
   meta: WcWrapperOptionsMeta,
   createCustom: (props: any) => App
 ): WcWrapperOptions => ({
@@ -22,7 +21,7 @@ export const createOptions = (
   connected: (self, root, emit) => {
     const mountPoint = document.createElement('div')
     root.appendChild(mountPoint)
-    meta.emits.forEach(
+    meta.emits?.forEach(
       (e) => (self.props[camelize(`on-${e}`)] = (args: any) => emit(e, args))
     )
     self.app = createCustom(self.props)

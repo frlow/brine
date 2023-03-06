@@ -77,7 +77,6 @@ export const testWrapper = (
         tag: 'test-string-text',
         style: '',
         attributes: [],
-        emits: [],
       }
       await defineWrapper(testCases.stringText, meta)
       document.body.innerHTML = `<test-string-text role="test"></test-string-text>`
@@ -92,7 +91,6 @@ export const testWrapper = (
         tag: 'test-open-closed-closed',
         style: '',
         attributes: [],
-        emits: [],
       }
       await defineWrapper(testCases.openClosed, metaClosed)
       document.body.innerHTML = `<test-open-closed-closed role="test-closed"></test-open-closed-closed>`
@@ -104,7 +102,6 @@ export const testWrapper = (
         tag: 'test-open-closed-open',
         style: '',
         attributes: [],
-        emits: [],
         shadowRootMode: 'open',
       }
       await defineWrapper(testCases.openClosed, metaOpen)
@@ -121,7 +118,6 @@ export const testWrapper = (
         tag: 'test-string-prop',
         style: '',
         attributes: ['text'],
-        emits: [],
       }
       await defineWrapper(testCases.stringProp, meta)
       document.body.innerHTML = `<test-string-prop role="test" text="aaa"></test-string-prop>`
@@ -137,7 +133,6 @@ export const testWrapper = (
         tag: 'test-number-prop',
         style: '',
         attributes: ['num'],
-        emits: [],
       }
       await defineWrapper(testCases.numProp, meta)
       document.body.innerHTML = `<test-number-prop role="test" num="6"></test-number-prop>`
@@ -153,7 +148,6 @@ export const testWrapper = (
         tag: 'test-object-prop',
         style: '',
         attributes: ['obj'],
-        emits: [],
       }
       await defineWrapper(testCases.objProp, meta)
       document.body.innerHTML = `<test-object-prop role="test" obj='{"val": "aaa"}'></test-object-prop>`
@@ -169,7 +163,6 @@ export const testWrapper = (
         tag: 'test-on-mount-prop',
         style: '',
         attributes: ['text'],
-        emits: [],
       }
       await defineWrapper(testCases.onMountProps, meta)
       const log = jest.spyOn(console, 'log').mockImplementation(() => {})

@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client'
 import {
   WcWrapperOptions,
   WcWrapperOptionsMeta,
-  camelize,
   AutoDefineOptions,
+  camelize,
 } from './common.js'
 import { baseDefine } from './define.js'
 
@@ -18,8 +18,7 @@ export const createOptions = (
       root.appendChild(container)
       self.app = createRoot(container)
       self.props = {}
-
-      meta.emits.forEach((e) => {
+      meta.emits?.forEach((e) => {
         self.props[camelize(`on-${e}`)] = (arg: any) => {
           emit(e, arg)
         }
