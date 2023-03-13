@@ -55,7 +55,13 @@ export const createOptions = (
 //   })
 // }
 
-export const define = (options: AutoDefineOptions) => {
+type VueDefineProps =
+  | 'customElementComponent'
+  | 'style'
+  | 'tag'
+  | 'create'
+  | 'shadowRootMode'
+export const define = (options: Pick<AutoDefineOptions, VueDefineProps>) => {
   const attributes = Object.keys(options.customElementComponent.props || {})
   const emits = options.customElementComponent.emits || []
   const style = options.style || ''

@@ -38,6 +38,8 @@ export type AutoDefineOptions<T = any> = {
   tag: string
   style?: string
   shadowRootMode?: shadowRootMode
+  attributes?: string[]
+  emits?: string[]
 }
 
 export const camelize = (str: string) => {

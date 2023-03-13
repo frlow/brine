@@ -46,16 +46,24 @@ export const createOptions = (
   }
 }
 
+type SolidDefineProps =
+  | 'customElementComponent'
+  | 'tag'
+  | 'style'
+  | 'shadowRootMode'
+  | 'attributes'
 export const define = (
-  options: AutoDefineOptions<
-    ((props: any) => JSX.Element) & { __props?: string[] }
+  options: Pick<
+    AutoDefineOptions<((props: any) => JSX.Element) & { __props?: string[] }>,
+    SolidDefineProps
   >
 ) => {
   baseDefine(
     createOptions(options.customElementComponent, {
       style: options.style,
       tag: options.tag,
-      attributes: options.customElementComponent.__props || [],
+      attributes:
+        options.customElementComponent.__props || options.attributes || [],
       shadowRootMode: options.shadowRootMode,
     })
   )

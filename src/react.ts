@@ -45,17 +45,28 @@ export const createOptions = (
   }
 }
 
+type ReactDefineProps =
+  | 'customElementComponent'
+  | 'tag'
+  | 'emits'
+  | 'style'
+  | 'shadowRootMode'
+  | 'attributes'
 export const define = (
-  options: AutoDefineOptions<
-    ((props: any) => ReactNode) & { __props?: string[]; __emits?: string[] }
+  options: Pick<
+    AutoDefineOptions<
+      ((props: any) => ReactNode) & { __props?: string[]; __emits?: string[] }
+    >,
+    ReactDefineProps
   >
 ) => {
   baseDefine(
     createOptions(options.customElementComponent, {
-      emits: options.customElementComponent.__emits || [],
+      emits: options.customElementComponent.__emits || options.emits || [],
       style: options.style,
       tag: options.tag,
-      attributes: options.customElementComponent.__props || [],
+      attributes:
+        options.customElementComponent.__props || options.attributes || [],
       shadowRootMode: options.shadowRootMode,
     })
   )

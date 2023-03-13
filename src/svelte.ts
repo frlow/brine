@@ -52,7 +52,12 @@ export const createOptions = (
 //   meta: WcWrapperOptionsMeta
 // ) => baseDefine(createOptions(component, meta))
 
-export const define = (options: AutoDefineOptions) => {
+type SvelteDefineProps =
+  | 'customElementComponent'
+  | 'style'
+  | 'tag'
+  | 'shadowRootMode'
+export const define = (options: Pick<AutoDefineOptions, SvelteDefineProps>) => {
   baseDefine(
     createOptions(options.customElementComponent.default, {
       style: options.style,
