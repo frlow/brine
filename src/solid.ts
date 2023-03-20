@@ -24,7 +24,8 @@ export const createOptions = (
       self.signals[name][1](newValue)
     },
     connected: (self, root, emit) => {
-      self.app = createRoot(() => {
+      const app = createRoot((dispose) => {
+        self.dispose = dispose
         const props = new Proxy(self.signals, {
           get(target, prop: string) {
             const regex = /on[A-Z]/
@@ -35,9 +36,10 @@ export const createOptions = (
         })
         return createComponent(Component, props)
       })
-      render(() => self.app, root)
+      render(() => app, root)
     },
     disconnected: (self) => {
+      self.dispose()
       self.innerHTML = ''
     },
     style: meta.style,
