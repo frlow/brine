@@ -1,4 +1,4 @@
-import { analyzeJsxFile } from './jsx'
+import { analyzeJsxFile } from './jsx.js'
 
 export const appendJsxProps = async (filePath: string, source: string) => {
   const ar = await analyzeJsxFile(filePath, source)
