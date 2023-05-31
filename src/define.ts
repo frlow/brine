@@ -40,11 +40,6 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
 
     initCallback() {
-      if (this.options.style) {
-        const styleTag = document.createElement('style')
-        styleTag.innerHTML = this.options.style
-        this.root!.appendChild(styleTag)
-      }
       this.options.init(this.self, this.root, this.emit)
     }
 
@@ -66,6 +61,11 @@ export const createWrapper = (wrapperOptions: WcWrapperOptions) => {
     }
 
     connectedCallback() {
+      if (this.options.style) {
+        const styleTag = document.createElement('style')
+        styleTag.innerHTML = this.options.style
+        this.root!.appendChild(styleTag)
+      }
       this.options.connected(this.self, this.root, this.emit)
     }
 
